@@ -36,19 +36,33 @@ def get_image_urls(movie_details):
 
 
 def get_random_popular_movies(api_key, count=50):
-    """Retrieve a list of random popular movies from TMDB."""
-    url = "https://api.themoviedb.org/3/movie/popular"
-    params = {"api_key": api_key, "page": 1}
+    """Retrieve a list of random popular movies that most people have likely heard of."""
+    url = "https://api.themoviedb.org/3/discover/movie"
+    params = {
+        "api_key": api_key,
+        "sort_by": "popularity.desc",
+        "vote_count.gte": 1000,  # Ensures movies have significant viewership
+        "vote_average.gte": 6.0,  # Ensures decent quality
+        "page": 1
+    }
     response = requests.get(url, params=params)
     if response.status_code != 200:
         raise Exception("Failed to fetch popular movies")
+    
     data = response.json()
     total_pages = data.get("total_pages", 1)
-    max_pages = min(total_pages, 500)
+    max_pages = min(total_pages, 100)  # First 100 pages will have the most popular movies
+    
     movies = {}
     while len(movies) < count:
         random_page = random.randint(1, max_pages)
-        params = {"api_key": api_key, "page": random_page}
+        params = {
+            "api_key": api_key,
+            "sort_by": "popularity.desc",
+            "vote_count.gte": 1000,
+            "vote_average.gte": 6.0,
+            "page": random_page
+        }
         response = requests.get(url, params=params)
         if response.status_code == 200:
             page_data = response.json()
@@ -60,6 +74,7 @@ def get_random_popular_movies(api_key, count=50):
                     movies[movie_id] = movie
                 if len(movies) >= count:
                     break
+    
     detailed_movies = []
     for movie in movies.values():
         movie_id = movie.get("id")
@@ -97,7 +112,7 @@ def write_movies_to_csv(movies, output_csv):
 
 def main():
     parser = argparse.ArgumentParser(description="TMDB API Utility: Retrieve random popular movies and output to CSV")
-    parser.add_argument("--output_csv", type=str, default="movie_data_output.csv", help="Output CSV filename (saved in this folder)")
+    parser.add_argument("--output_csv", type=str, default="popular_movies_output.csv", help="Output CSV filename (saved in this folder)")
     parser.add_argument("--count", type=int, default=50, help="Number of random popular movies to retrieve")
     args = parser.parse_args()
 
