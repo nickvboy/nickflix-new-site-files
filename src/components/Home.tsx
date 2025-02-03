@@ -21,25 +21,25 @@ import {
 // Movie data constants
 const FEATURED_MOVIES = [
   {
-    id: 1,
-    title: "Sonic the Hedgehog",
-    description: "Powered with incredible speed, Sonic The Hedgehog embraces his new home on Earth. That is, until Sonic sparks the attention of super-villain Dr. Robotnik. Now it's super-villain vs. super-sonic in an all-out race across the globe to stop Robotnik from using Sonic's unique power for world domination.",
-    image: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?auto=format&fit=crop&w=2400&q=80",
-    rating: "8.5",
+    id: 65650,
+    title: "The Good Doctor",
+    description: "Dr. Martin Blake, who has spent his life looking for respect, meets an 18-year-old patient named Diane, suffering from a kidney infection, and gets a much-needed boost of self-esteem. However, when her health starts improving, Martin fears losing her, so he begins tampering with her treatment, keeping Diane sick and in the hospital right next to him.",
+    image: "https://image.tmdb.org/t/p/original/jPlyFmmh9rHQqIuRtEv0gCsOVPK.jpg",
+    rating: "N/A",
   },
   {
-    id: 2,
-    title: "Dune",
-    description: "A noble family becomes embroiled in a war for control over the galaxy's most valuable asset while its heir becomes troubled by visions of a dark future.",
-    image: "https://images.unsplash.com/photo-1547957930-456228e8ee73?auto=format&fit=crop&w=2400&q=80",
-    rating: "8.9",
+    id: 675353,
+    title: "Sonic the Hedgehog 2",
+    description: "After settling in Green Hills, Sonic is eager to prove he has what it takes to be a true hero. His test comes when Dr. Robotnik returns, this time with a new partner, Knuckles, in search for an emerald that has the power to destroy civilizations. Sonic teams up with his own sidekick, Tails, and together they embark on a globe-trotting journey to find the emerald before it falls into the wrong hands.",
+    image: "https://image.tmdb.org/t/p/original/8wwXPG22aNMpPGuXnfm3galoxbI.jpg",
+    rating: "N/A",
   },
   {
-    id: 3,
-    title: "The Batman",
-    description: "When the Riddler, a sadistic serial killer, begins murdering key political figures in Gotham, Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
-    image: "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?auto=format&fit=crop&w=2400&q=80",
-    rating: "9.1",
+    id: 157336,
+    title: "Interstellar",
+    description: "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
+    image: "https://image.tmdb.org/t/p/original/vgnoBSVzWAV9sNQUORaDGvDp7wx.jpg",
+    rating: "N/A",
   },
 ];
 
@@ -309,12 +309,14 @@ export function Home() {
             {FEATURED_MOVIES.map((movie) => (
               <CarouselItem key={movie.id}>
                 <div className="relative">
-                  <AspectRatio ratio={2.7/1}>
-                    <img
-                      src={movie.image}
-                      alt={movie.title}
-                      className="w-full h-full object-cover"
-                    />
+                  <AspectRatio ratio={16/9}>
+                    <div className="relative w-full h-full">
+                      <img
+                        src={movie.image}
+                        alt={movie.title}
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                      />
+                    </div>
                   </AspectRatio>
                   <div className="absolute inset-0 bg-gradient-to-t from-bg-100 via-bg-100/50 to-transparent" />
                   <div className="absolute bottom-16 left-16 right-16">
