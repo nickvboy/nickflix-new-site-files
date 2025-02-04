@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Ticket, Clock, Users, Brain, MousePointerClick, CheckCircle } from "lucide-react";
+import { Ticket, Clock, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function SignUp() {
@@ -125,13 +125,13 @@ export function SignUp() {
                 <p className="text-small text-text-200">Interactive seat map that updates in real time.</p>
               </div>
 
-              {/* Effortless Ticket Booking (second instance) */}
+              {/* Loyalty Rewards */}
               <div className="flex flex-col items-center text-center space-y-2">
                 <div className="bg-bg-200 p-4 rounded-lg">
-                  <Clock className="w-8 h-8 text-accent-200" />
+                  <Gift className="w-8 h-8 text-accent-200" />
                 </div>
-                <h3 className="text-h4 text-text-100">Effortless Ticket Booking</h3>
-                <p className="text-small text-text-200">Find movies, select seats, and check out in seconds.</p>
+                <h3 className="text-h4 text-text-100">Loyalty Rewards</h3>
+                <p className="text-small text-text-200">Earn points on every purchase and unlock exclusive discounts and perks.</p>
               </div>
             </div>
           </div>

@@ -50,9 +50,6 @@ export function Navbar() {
               <a href="/genres" className="text-text-100 hover:text-accent-200 transition-colors">
                 Genres
               </a>
-              <Link to="/about" className="text-text-100 hover:text-accent-200 transition-colors">
-                Pricing
-              </Link>
             </div>
           </div>
 

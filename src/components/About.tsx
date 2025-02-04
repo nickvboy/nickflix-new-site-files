@@ -16,7 +16,7 @@ export function About() {
             className="w-24 h-24 rounded-full object-cover"
           />
           <div>
-            <h2 className="text-h4 text-text-100">John Doe</h2>
+            <h2 className="text-h4 text-text-100">Nicholas Villiers</h2>
             <p className="text-small text-text-200">Founder & CEO</p>
           </div>
         </div>

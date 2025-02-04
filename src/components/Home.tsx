@@ -312,15 +312,13 @@ export function Home() {
             {FEATURED_MOVIES.map((movie) => (
               <CarouselItem key={movie.id}>
                 <div className="relative">
-                  <AspectRatio ratio={16/9}>
-                    <div className="relative w-full h-full">
-                      <img
-                        src={movie.image}
-                        alt={movie.title}
-                        className="absolute inset-0 w-full h-full object-cover object-center"
-                      />
-                    </div>
-                  </AspectRatio>
+                  <div className="relative w-full h-[550px]">
+                    <img
+                      src={movie.image}
+                      alt={movie.title}
+                      className="absolute inset-0 w-full h-full object-cover object-center"
+                    />
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-bg-100 via-bg-100/50 to-transparent" />
                   <div className="absolute bottom-16 left-16 right-16">
                     <div className="flex items-center gap-2 mb-2">
@@ -438,7 +436,7 @@ export function Home() {
           className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-smooth"
         >
           {RECOMMENDED_MOVIES.map((movie) => (
-            <MoviePoster key={movie.id} movie={movie} className="min-w-[200px]" />
+            <MoviePoster key={movie.id} movie={movie} className="w-[200px]" />
           ))}
         </div>
       </section>
