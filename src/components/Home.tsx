@@ -80,6 +80,36 @@ const RECOMMENDED_MOVIES = [
     image: "https://image.tmdb.org/t/p/w500/6fXuGEb7EqGmAeUodxm7l5ELPZ.jpg",
     year: "1993",
   },
+  {
+    id: 1084244,
+    title: "Toy Story 5",
+    image: "https://image.tmdb.org/t/p/w500/i4UtdsApMwXQkGD2mBDroJSJZsk.jpg",
+    year: "2026",
+  },
+  {
+    id: 315635,
+    title: "Spider-Man: Homecoming",
+    image: "https://image.tmdb.org/t/p/w500/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg",
+    year: "2017",
+  },
+  {
+    id: 20352,
+    title: "Despicable Me",
+    image: "https://image.tmdb.org/t/p/w500/9lOloREsAhBu0pEtU0BgeR1rHyo.jpg",
+    year: "2010",
+  },
+  {
+    id: 585083,
+    title: "Hotel Transylvania: Transformania",
+    image: "https://image.tmdb.org/t/p/w500/teCy1egGQa0y8ULJvlrDHQKnxBL.jpg",
+    year: "2022",
+  },
+  {
+    id: 507089,
+    title: "Five Nights at Freddy's",
+    image: "https://image.tmdb.org/t/p/w500/4dKRTUylqwXQ4VJz0BS84fqW2wa.jpg",
+    year: "2023",
+  }
 ];
 
 const THEATER_MOVIES = [
@@ -169,7 +199,7 @@ interface Movie {
 function MoviePoster({ movie, className = "" }: { movie: Movie; className?: string }) {
   return (
     <div className={`flex flex-col gap-2 group relative ${className}`}>
-      <AspectRatio ratio={2/3}>
+      <AspectRatio ratio={2/3} className="w-full">
         <img
           src={movie.image}
           alt={movie.title}
@@ -436,7 +466,7 @@ export function Home() {
           className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-smooth"
         >
           {RECOMMENDED_MOVIES.map((movie) => (
-            <MoviePoster key={movie.id} movie={movie} className="w-[200px]" />
+            <MoviePoster key={movie.id} movie={movie} className="min-w-[160px] w-[160px] flex-shrink-0" />
           ))}
         </div>
       </section>
