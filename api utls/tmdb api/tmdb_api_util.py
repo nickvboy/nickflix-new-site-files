@@ -7,6 +7,27 @@ import requests
 import random
 
 
+def ensure_directory_exists(path):
+    """Create directory if it doesn't exist."""
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
+def download_image(url, save_path):
+    """Download image from URL and save it to specified path."""
+    if not url:
+        return None
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            with open(save_path, 'wb') as f:
+                f.write(response.content)
+            return save_path
+        return None
+    except:
+        return None
+
+
 def get_api_key():
     """Retrieve the TMDB API key from the environment variable TMDB_API_KEY."""
     api_key = os.getenv('TMDB_API_KEY')
@@ -87,26 +108,64 @@ def get_random_popular_movies(api_key, count=50):
 
 
 def write_movies_to_csv(movies, output_csv):
-    """Write movie data to CSV file in the same folder as this script."""
+    """Write movie data to CSV file and download images."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     output_path = os.path.join(script_dir, output_csv)
+    
+    # Create image directories
+    images_base_dir = os.path.join(script_dir, "movie_images")
+    posters_dir = os.path.join(images_base_dir, "posters")
+    banners_dir = os.path.join(images_base_dir, "banners")
+    ensure_directory_exists(posters_dir)
+    ensure_directory_exists(banners_dir)
+    
+    # Create .gitignore in the movie_images directory
+    gitignore_path = os.path.join(images_base_dir, ".gitignore")
+    with open(gitignore_path, 'w') as f:
+        f.write("# Ignore image files in this directory and subdirectories\n")
+        f.write("*.jpg\n")
+        f.write("*.jpeg\n")
+        f.write("*.png\n")
+        f.write("*.gif\n")
+        f.write("*.webp\n")
+    
     with open(output_path, 'w', newline='', encoding='utf-8') as f_out:
         writer = csv.writer(f_out)
-        header = ["title", "id", "release_date", "overview", "genres", "poster_url", "backdrop_url"]
+        header = ["title", "id", "release_date", "overview", "genres", "poster_url", "backdrop_url", "local_poster_path", "local_banner_path"]
         writer.writerow(header)
         
         for movie in movies:
+            movie_id = movie.get("id", "")
+            title = movie.get("title", "").replace(" ", "_")  # Use for filename
             genres_data = movie.get("genres")
             genres = ', '.join([g.get("name") for g in genres_data]) if genres_data else ""
             poster_url, backdrop_url = get_image_urls(movie)
+            
+            # Download and save images
+            poster_filename = f"{movie_id}_{title}_poster.jpg"
+            banner_filename = f"{movie_id}_{title}_banner.jpg"
+            poster_save_path = os.path.join(posters_dir, poster_filename)
+            banner_save_path = os.path.join(banners_dir, banner_filename)
+            
+            local_poster_path = download_image(poster_url, poster_save_path)
+            local_banner_path = download_image(backdrop_url, banner_save_path)
+            
+            # Convert to relative paths for CSV
+            if local_poster_path:
+                local_poster_path = os.path.relpath(local_poster_path, script_dir)
+            if local_banner_path:
+                local_banner_path = os.path.relpath(local_banner_path, script_dir)
+            
             writer.writerow([
                 movie.get("title", ""),
-                movie.get("id", ""),
+                movie_id,
                 movie.get("release_date", ""),
                 movie.get("overview", ""),
                 genres,
                 poster_url,
-                backdrop_url
+                backdrop_url,
+                local_poster_path or "",
+                local_banner_path or ""
             ])
 
 

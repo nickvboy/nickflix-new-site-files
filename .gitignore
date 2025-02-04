@@ -23,4 +23,20 @@ dist-ssr
 *.sln
 *.sw?
 
+# Environment Variables
 .env
+.env.local
+.env.*.local
+!.env.example
+
+# Movie Images Directory - only ignore images in this specific directory
+api\ utls/tmdb\ api/movie_images/**/*.jpg
+api\ utls/tmdb\ api/movie_images/**/*.jpeg
+api\ utls/tmdb\ api/movie_images/**/*.png
+api\ utls/tmdb\ api/movie_images/**/*.gif
+api\ utls/tmdb\ api/movie_images/**/*.webp
+
+# Keep the movie_images directory structure
+!api\ utls/tmdb\ api/movie_images/
+!api\ utls/tmdb\ api/movie_images/posters/
+!api\ utls/tmdb\ api/movie_images/banners/
