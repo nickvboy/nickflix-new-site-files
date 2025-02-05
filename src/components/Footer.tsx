@@ -10,7 +10,7 @@ export function Footer() {
             {/* Logo */}
             <div className="flex items-center gap-3">
               <img
-                src="https://i.postimg.cc/c1gyWqs1/nickflix.png"
+                src="https://mail.google.com/mail/u/0?ui=2&ik=9bae6faecf&attid=0.1&permmsgid=msg-a:r-7152086092968704690&th=194d2da24a2ab01d&view=fimg&fur=ip&permmsgid=msg-a:r-7152086092968704690&sz=s0-l75-ft&attbid=ANGjdJ-3GqqdNMs2oOrNSDMI_V8e2-TeCJgaPQ_YgWH_4lqDiROxRh9AQF6NungU7rdNG7bXB_wWvD1WMR-ubIkJsrq3b7AC-tsDMDI1QomU6MfOHW4Y1cOytOq8VEo&disp=emb&realattid=ii_m6qzn5cn0&zw"
                 alt="Nickflix Logo"
                 className="h-12 w-auto object-contain"
               />

@@ -34,22 +34,22 @@ export function Navbar() {
           <div className="flex items-center gap-8">
             <a href="/" className="flex items-center gap-2">
               <img
-                src="https://i.postimg.cc/c1gyWqs1/nickflix.png"
+                src="https://mail.google.com/mail/u/0?ui=2&ik=9bae6faecf&attid=0.1&permmsgid=msg-a:r-7152086092968704690&th=194d2da24a2ab01d&view=fimg&fur=ip&permmsgid=msg-a:r-7152086092968704690&sz=s0-l75-ft&attbid=ANGjdJ-3GqqdNMs2oOrNSDMI_V8e2-TeCJgaPQ_YgWH_4lqDiROxRh9AQF6NungU7rdNG7bXB_wWvD1WMR-ubIkJsrq3b7AC-tsDMDI1QomU6MfOHW4Y1cOytOq8VEo&disp=emb&realattid=ii_m6qzn5cn0&zw"
                 alt="Nickflix Logo"
                 className="h-10 w-auto object-contain"
               />
               <span className="text-h3 text-text-100 font-bold">NICKFLIX</span>
             </a>
             <div className="hidden md:flex items-center gap-6">
-              <a href="/movies" className="text-text-100 hover:text-accent-200 transition-colors">
+              <Link to="/movies" className="text-text-100 hover:text-accent-200 transition-colors">
                 Movies
-              </a>
-              <a href="/coming-soon" className="text-text-100 hover:text-accent-200 transition-colors">
+              </Link>
+              <Link to="/coming-soon" className="text-text-100 hover:text-accent-200 transition-colors">
                 Coming Soon
-              </a>
-              <a href="/genres" className="text-text-100 hover:text-accent-200 transition-colors">
+              </Link>
+              <Link to="/genres" className="text-text-100 hover:text-accent-200 transition-colors">
                 Genres
-              </a>
+              </Link>
             </div>
           </div>
 

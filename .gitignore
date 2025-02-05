@@ -40,3 +40,6 @@ api\ utls/tmdb\ api/movie_images/**/*.webp
 !api\ utls/tmdb\ api/movie_images/
 !api\ utls/tmdb\ api/movie_images/posters/
 !api\ utls/tmdb\ api/movie_images/banners/
+
+# FTP deployment
+.env

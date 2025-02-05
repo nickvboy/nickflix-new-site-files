@@ -197,13 +197,16 @@ interface Movie {
 }
 
 function MoviePoster({ movie, className = "" }: { movie: Movie; className?: string }) {
+  // Check if this is a recommended movie by checking if the className includes the min-width
+  const isRecommended = className?.includes('min-w-[160px]');
+  
   return (
-    <div className={`flex flex-col gap-2 group relative ${className}`}>
+    <div className={`flex flex-col gap-1 group relative ${className}`}>
       <AspectRatio ratio={2/3} className="w-full">
         <img
           src={movie.image}
           alt={movie.title}
-          className="w-full h-full object-cover rounded-[20px] transition-transform hover:scale-105"
+          className={`w-full h-full object-cover rounded-[20px] transition-transform ${isRecommended ? 'hover:scale-105' : ''}`}
         />
         <Sheet>
           <SheetTrigger asChild>
@@ -476,7 +479,7 @@ export function Home() {
         <h2 className="text-h3 text-text-100 mb-8">Out In Your Theater Now</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {THEATER_MOVIES.map((movie) => (
-            <MoviePoster key={movie.id} movie={movie} />
+            <MoviePoster key={movie.id} movie={movie} className="w-full px-0" />
           ))}
         </div>
         <div className="flex justify-center mt-8">

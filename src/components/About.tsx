@@ -29,7 +29,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Nicholas Villiers",
     role: "Founder & CEO",
-    imageUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a",
+    imageUrl: "https://mail.google.com/mail/u/0?ui=2&ik=9bae6faecf&attid=0.1&permmsgid=msg-a:r-6407363204738639897&th=194d2b5dabf0ec65&view=att&disp=safe&realattid=194d2b5d2b2ebfc94901&zw",
     imageAlt: "Nicholas Villiers"
   },
   {

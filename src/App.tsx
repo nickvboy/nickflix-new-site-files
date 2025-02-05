@@ -6,6 +6,7 @@ import { SignIn } from "@/components/SignIn";
 import { Home } from "@/components/Home";
 import { About } from "@/components/About";
 import { UnderConstruction } from "@/components/UnderConstruction";
+import { ComingSoon } from "./components/ComingSoon";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/about" element={<About />} />
+        <Route path="/coming-soon" element={<ComingSoon />} />
         <Route path="*" element={<UnderConstruction />} />
       </Routes>
       <Footer />
@@ -23,4 +25,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

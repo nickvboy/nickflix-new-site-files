@@ -1,11 +1,12 @@
-import React from 'react';
+import { FC } from 'react';
 
-export function UnderConstruction() {
+export const UnderConstruction: FC = () => {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-bg-100">
-      <h1 className="text-3xl font-bold text-white">
-        Page Under Construction
-      </h1>
-    </main>
+    <div className="min-h-screen bg-bg-100 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-text-100 mb-4">Under Construction</h1>
+        <p className="text-text-200">This page is currently under development. Please check back later.</p>
+      </div>
+    </div>
   );
-} 
+}; 

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Ticket, Clock, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
+import { Ticket, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function SignUp() {
