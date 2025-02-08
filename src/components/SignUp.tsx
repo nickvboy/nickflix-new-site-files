@@ -2,9 +2,63 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Ticket, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function SignUp() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+    password: ""
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/register.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          username: formData.username,
+          full_name: `${formData.firstName} ${formData.lastName}`.trim()
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Registration successful! Please sign in.');
+        navigate('/signin');
+      } else {
+        toast.error(data.message || 'Registration failed');
+      }
+    } catch (error) {
+      toast.error('An error occurred. Please try again.');
+      console.error('Registration error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-bg-100 pt-16">
       <div className="max-w-[1200px] mx-auto p-8">
@@ -13,7 +67,7 @@ export function SignUp() {
           {/* Sign up form - Will appear first on mobile */}
           <div className="w-full md:order-2 md:w-[400px]">
             <Card className="border-none shadow-xl bg-bg-200 p-6">
-              <div className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="text-center">
                   <h2 className="text-h4 text-text-100 mb-1">Join For Free</h2>
                   <p className="text-small text-text-200">*Indicates a required field</p>
@@ -22,47 +76,66 @@ export function SignUp() {
                 <div className="space-y-4">
                   <div>
                     <Input 
+                      name="firstName"
                       placeholder="First Name*"
                       required
+                      value={formData.firstName}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
                     />
                   </div>
                   <div>
                     <Input 
+                      name="lastName"
                       placeholder="Last Name"
+                      value={formData.lastName}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
                     />
                   </div>
                   <div>
                     <Input 
+                      name="email"
                       placeholder="Email*"
                       type="email"
                       required
+                      value={formData.email}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
                     />
                   </div>
                   <div>
                     <Input 
+                      name="username"
                       placeholder="Username*"
                       required
+                      minLength={8}
+                      value={formData.username}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
                     />
                     <p className="text-xs text-text-200 mt-1">*Use 8 or more characters</p>
                   </div>
                   <div>
                     <Input 
+                      name="password"
                       type="password"
-                      placeholder="Password"
+                      placeholder="Password*"
                       required
+                      minLength={8}
+                      value={formData.password}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
                     />
                   </div>
                 </div>
 
                 <Button 
+                  type="submit"
+                  disabled={isLoading}
                   className="w-full bg-accent-100 hover:bg-primary-200 text-text-100"
                 >
-                  Join Now
+                  {isLoading ? 'Creating Account...' : 'Join Now'}
                 </Button>
 
                 <p className="text-small text-center text-text-200">
@@ -71,7 +144,7 @@ export function SignUp() {
                     SIGN IN
                   </Link>
                 </p>
-              </div>
+              </form>
             </Card>
           </div>
 

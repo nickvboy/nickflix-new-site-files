@@ -7,10 +7,12 @@ import { Home } from "@/components/Home";
 import { About } from "@/components/About";
 import { UnderConstruction } from "@/components/UnderConstruction";
 import { ComingSoon } from "./components/ComingSoon";
+import { Toaster } from 'sonner';
 
 function App() {
   return (
     <>
+      <Toaster position="top-right" richColors />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

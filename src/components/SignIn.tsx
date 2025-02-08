@@ -2,9 +2,61 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Ticket, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function SignIn() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(data.user));
+        toast.success('Successfully signed in!');
+        navigate('/'); // Redirect to home page
+      } else {
+        toast.error(data.message || 'Invalid email or password');
+      }
+    } catch (error) {
+      console.error('Sign in error:', error);
+      toast.error('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-bg-100 pt-16">
       <div className="max-w-[1200px] mx-auto p-8">
@@ -13,7 +65,7 @@ export function SignIn() {
           {/* Sign in form - Will appear first on mobile */}
           <div className="w-full md:order-2 md:w-[400px]">
             <Card className="border-none shadow-xl bg-bg-200 p-6">
-              <div className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="text-center">
                   <h2 className="text-h4 text-text-100 mb-1">Welcome Back</h2>
                   <p className="text-small text-text-200">Sign in to continue</p>
@@ -22,25 +74,36 @@ export function SignIn() {
                 <div className="space-y-4">
                   <div>
                     <Input 
-                      placeholder="Email or Username"
+                      type="email"
+                      name="email"
+                      placeholder="Email"
                       required
+                      value={formData.email}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
+                      disabled={isLoading}
                     />
                   </div>
                   <div>
                     <Input 
                       type="password"
+                      name="password"
                       placeholder="Password"
                       required
+                      value={formData.password}
+                      onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
 
                 <Button 
+                  type="submit"
+                  disabled={isLoading}
                   className="w-full bg-accent-100 hover:bg-primary-200 text-text-100"
                 >
-                  Sign In
+                  {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
 
                 <div className="space-y-4 text-center">
@@ -54,7 +117,7 @@ export function SignIn() {
                     </Link>
                   </p>
                 </div>
-              </div>
+              </form>
             </Card>
           </div>
 

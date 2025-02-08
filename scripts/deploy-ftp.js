@@ -17,7 +17,7 @@ async function deployToFTP() {
 
     try {
         await client.access({
-            host: "f29-preview.awardspace.net",
+            host: process.env.FTP_HOST || "f29-preview.awardspace.net",
             user: process.env.FTP_USERNAME,
             password: process.env.FTP_PASSWORD,
             port: 21,
@@ -27,14 +27,15 @@ async function deployToFTP() {
         console.log('Connected to FTP server');
 
         const buildDir = path.join(__dirname, '..', 'dist');
+        const publicDir = path.join(__dirname, '..', 'public');
         
         if (!fs.existsSync(buildDir)) {
             throw new Error('Build directory not found. Please run build command first.');
         }
 
-        // Navigate to the hostname directory (nickflix1.atwebpages.com)
+        // Navigate to the hostname directory
         console.log('Navigating to site directory...');
-        await client.cd('nickflix1.atwebpages.com');
+        await client.cd(process.env.FTP_SITE_DIR || 'nickflix2.atwebpages.com');
 
         // Clear existing files (optional)
         console.log('Clearing existing files...');
@@ -44,8 +45,12 @@ async function deployToFTP() {
             console.log('No existing files to clear or error clearing:', err.message);
         }
 
-        // Upload the entire build directory
-        console.log('Starting file upload...');
+        // Upload the PHP files first
+        console.log('Uploading PHP files...');
+        await client.uploadFromDir(publicDir);
+
+        // Upload the build directory contents
+        console.log('Uploading build files...');
         await client.uploadFromDir(buildDir);
         
         console.log('Deployment completed successfully!');
@@ -54,8 +59,7 @@ async function deployToFTP() {
         if (err.code === 530) {
             console.log('Authentication failed. Please check your credentials.');
         } else if (err.code === 550) {
-            console.log('Directory access error. Check if the directory "nickflix1.atwebpages.com" exists in your FTP root.');
-            console.log('You might need to create it first in the Awardspace control panel.');
+            console.log('Directory access error. Check if the directory exists in your FTP root.');
         }
     } finally {
         client.close();

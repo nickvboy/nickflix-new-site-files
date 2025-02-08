@@ -44,6 +44,7 @@ const teamMembers: TeamMember[] = [
     imageUrl: "https://fgcu360.com/wp-content/uploads/sites/1/2022/06/STEM-FGLSAMP-Villers-640.jpg",
     imageAlt: "Nicholas Villiers"
   },
+
   
   
 ];
