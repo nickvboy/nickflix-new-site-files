@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ChevronLeft, ChevronRight, Ticket } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -18,193 +18,37 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-// Movie data constants
-const FEATURED_MOVIES = [
-  {
-    id: 65650,
-    title: "The Good Doctor",
-    description: "Dr. Martin Blake, who has spent his life looking for respect, meets an 18-year-old patient named Diane, suffering from a kidney infection, and gets a much-needed boost of self-esteem. However, when her health starts improving, Martin fears losing her, so he begins tampering with her treatment, keeping Diane sick and in the hospital right next to him.",
-    image: "https://image.tmdb.org/t/p/original/jPlyFmmh9rHQqIuRtEv0gCsOVPK.jpg",
-    rating: "N/A",
-  },
-  {
-    id: 675353,
-    title: "Sonic the Hedgehog 2",
-    description: "After settling in Green Hills, Sonic is eager to prove he has what it takes to be a true hero. His test comes when Dr. Robotnik returns, this time with a new partner, Knuckles, in search for an emerald that has the power to destroy civilizations. Sonic teams up with his own sidekick, Tails, and together they embark on a globe-trotting journey to find the emerald before it falls into the wrong hands.",
-    image: "https://image.tmdb.org/t/p/original/8wwXPG22aNMpPGuXnfm3galoxbI.jpg",
-    rating: "N/A",
-  },
-  {
-    id: 157336,
-    title: "Interstellar",
-    description: "The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.",
-    image: "https://image.tmdb.org/t/p/original/vgnoBSVzWAV9sNQUORaDGvDp7wx.jpg",
-    rating: "N/A",
-  },
-];
-
-const RECOMMENDED_MOVIES = [
-  {
-    id: 447404,
-    title: "Pokémon Detective Pikachu",
-    image: "https://image.tmdb.org/t/p/w500/uhWvnFgg3BNlcUz0Re1HfQqIcCD.jpg",
-    year: "2019",
-  },
-  {
-    id: 281338,
-    title: "War for the Planet of the Apes",
-    image: "https://image.tmdb.org/t/p/w500/mMA1qhBFgZX8O36qPPTC016kQl1.jpg",
-    year: "2017",
-  },
-  {
-    id: 795514,
-    title: "The Fallout",
-    image: "https://image.tmdb.org/t/p/w500/4ByHl9XRKR2iXbvF0ZilMRD1RcL.jpg",
-    year: "2021",
-  },
-  {
-    id: 364689,
-    title: "Ferdinand",
-    image: "https://image.tmdb.org/t/p/w500/rMm94JsRfcOPiPVsTRcBiiVBOhz.jpg",
-    year: "2017",
-  },
-  {
-    id: 268896,
-    title: "Pacific Rim: Uprising",
-    image: "https://image.tmdb.org/t/p/w500/nFWhttU8PM50t25NPdy7PE7rv3G.jpg",
-    year: "2018",
-  },
-  {
-    id: 864,
-    title: "Cool Runnings",
-    image: "https://image.tmdb.org/t/p/w500/6fXuGEb7EqGmAeUodxm7l5ELPZ.jpg",
-    year: "1993",
-  },
-  {
-    id: 1084244,
-    title: "Toy Story 5",
-    image: "https://image.tmdb.org/t/p/w500/i4UtdsApMwXQkGD2mBDroJSJZsk.jpg",
-    year: "2026",
-  },
-  {
-    id: 315635,
-    title: "Spider-Man: Homecoming",
-    image: "https://image.tmdb.org/t/p/w500/c24sv2weTHPsmDa7jEMN0m2P3RT.jpg",
-    year: "2017",
-  },
-  {
-    id: 20352,
-    title: "Despicable Me",
-    image: "https://image.tmdb.org/t/p/w500/9lOloREsAhBu0pEtU0BgeR1rHyo.jpg",
-    year: "2010",
-  },
-  {
-    id: 585083,
-    title: "Hotel Transylvania: Transformania",
-    image: "https://image.tmdb.org/t/p/w500/teCy1egGQa0y8ULJvlrDHQKnxBL.jpg",
-    year: "2022",
-  },
-  {
-    id: 507089,
-    title: "Five Nights at Freddy's",
-    image: "https://image.tmdb.org/t/p/w500/4dKRTUylqwXQ4VJz0BS84fqW2wa.jpg",
-    year: "2023",
-  }
-];
-
-const THEATER_MOVIES = [
-  {
-    id: 787699,
-    title: "Wonka",
-    image: "https://image.tmdb.org/t/p/w500/qhb1qOilapbapxWQn9jtRCMwXJF.jpg",
-    year: "2023",
-  },
-  {
-    id: 137,
-    title: "Groundhog Day",
-    image: "https://image.tmdb.org/t/p/w500/gCgt1WARPZaXnq523ySQEUKinCs.jpg",
-    year: "1993",
-  },
-  {
-    id: 99861,
-    title: "Avengers: Age of Ultron",
-    image: "https://image.tmdb.org/t/p/w500/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
-    year: "2015",
-  },
-  {
-    id: 14574,
-    title: "The Boy in the Striped Pyjamas",
-    image: "https://image.tmdb.org/t/p/w500/sLwYSEVVV3r047cjrpRAbGgNsfL.jpg",
-    year: "2008",
-  },
-  {
-    id: 337404,
-    title: "Cruella",
-    image: "https://image.tmdb.org/t/p/w500/wToO8opxkGwKgSfJ1JK8tGvkG6U.jpg",
-    year: "2021",
-  },
-  {
-    id: 760883,
-    title: "Blood Red Sky",
-    image: "https://image.tmdb.org/t/p/w500/v7aOJKI5vxCHotHvN8O7SR6SpP6.jpg",
-    year: "2021",
-  },
-  {
-    id: 20526,
-    title: "TRON: Legacy",
-    image: "https://image.tmdb.org/t/p/w500/vuifSABRpSnxCAOxEnWpNbZSXpp.jpg",
-    year: "2010",
-  },
-  {
-    id: 1710,
-    title: "Copycat",
-    image: "https://image.tmdb.org/t/p/w500/oMgwJb016znNZcpDR20eXxZoW8A.jpg",
-    year: "1995",
-  },
-  {
-    id: 11197,
-    title: "Evil",
-    image: "https://image.tmdb.org/t/p/w500/a4qQlHDWshHGEbJWfCoKKlzgsh.jpg",
-    year: "2003",
-  },
-  {
-    id: 260513,
-    title: "Incredibles 2",
-    image: "https://image.tmdb.org/t/p/w500/9lFKBtaVIhP7E2Pk0IY1CwTKTMZ.jpg",
-    year: "2018",
-  },
-  {
-    id: 1688,
-    title: "Conquest of the Planet of the Apes",
-    image: "https://image.tmdb.org/t/p/w500/lZ1pUxJCO14ObrhDuxTBuYm0tjN.jpg",
-    year: "1972",
-  },
-  {
-    id: 105864,
-    title: "The Good Dinosaur",
-    image: "https://image.tmdb.org/t/p/w500/8RSkxOO80btfKjyiC5ZiTaCHIT8.jpg",
-    year: "2015",
-  },
-];
-
+// Movie interface
 interface Movie {
   id: number;
   title: string;
-  image: string;
+  image?: string;
+  poster_path?: string;
+  backdrop_path?: string;
   year?: string;
+  release_date?: string;
   description?: string;
+  overview?: string;
   rating?: string;
+  vote_average?: number;
 }
 
 function MoviePoster({ movie, className = "" }: { movie: Movie; className?: string }) {
   // Check if this is a recommended movie by checking if the className includes the min-width
   const isRecommended = className?.includes('min-w-[160px]');
   
+  // Determine the image URL
+  const imageUrl = movie.image || 
+    (movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '');
+  
+  // Extract year from release_date if available
+  const year = movie.year || (movie.release_date ? movie.release_date.substring(0, 4) : '');
+  
   return (
     <div className={`flex flex-col gap-1 group relative ${className}`}>
       <AspectRatio ratio={2/3} className="w-full">
         <img
-          src={movie.image}
+          src={imageUrl}
           alt={movie.title}
           className={`w-full h-full object-cover rounded-[20px] transition-transform ${isRecommended ? 'hover:scale-105' : ''}`}
         />
@@ -269,6 +113,7 @@ function MoviePoster({ movie, className = "" }: { movie: Movie; className?: stri
                   </div>
                 </div>
               </div>
+              
               <div className="space-y-4">
                 <h3 className="text-h4">Payment Information</h3>
                 <input
@@ -307,9 +152,9 @@ function MoviePoster({ movie, className = "" }: { movie: Movie; className?: stri
           </SheetContent>
         </Sheet>
       </AspectRatio>
-      <div className="px-1">
-        <h3 className="text-text-100 font-semibold truncate">{movie.title}</h3>
-        <p className="text-text-200 text-sm">{movie.year}</p>
+      <div className="mt-2">
+        <h3 className="text-text-100 font-medium truncate">{movie.title}</h3>
+        {year && <p className="text-text-200 text-sm">{year}</p>}
       </div>
     </div>
   );
@@ -317,6 +162,71 @@ function MoviePoster({ movie, className = "" }: { movie: Movie; className?: stri
 
 export function Home() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [featuredMovies, setFeaturedMovies] = useState<Movie[]>([]);
+  const [recommendedMovies, setRecommendedMovies] = useState<Movie[]>([]);
+  const [theaterMovies, setTheaterMovies] = useState<Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch('/movie_data/movies_data.json');
+        if (!response.ok) {
+          throw new Error('Failed to fetch movie data');
+        }
+        
+        const data = await response.json();
+        
+        // Select 3 random movies with backdrops for featured section
+        const moviesWithBackdrops = data.filter((movie: any) => 
+          movie.backdrop_path && movie.overview && movie.overview.length > 50
+        );
+        const randomFeatured = getRandomItems(moviesWithBackdrops, 3).map((movie: any) => ({
+          id: movie.id,
+          title: movie.title || movie.original_title,
+          description: movie.overview,
+          image: `https://image.tmdb.org/t/p/original${movie.backdrop_path}`,
+          rating: movie.vote_average ? `${movie.vote_average.toFixed(1)}/10` : 'N/A',
+        }));
+        
+        // Select random movies for recommended section
+        const randomRecommended = getRandomItems(data, 11).map((movie: any) => ({
+          id: movie.id,
+          title: movie.title || movie.original_title,
+          poster_path: movie.poster_path,
+          release_date: movie.release_date,
+        }));
+        
+        // Select random movies for theater section
+        const randomTheater = getRandomItems(data, 12).map((movie: any) => ({
+          id: movie.id,
+          title: movie.title || movie.original_title,
+          poster_path: movie.poster_path,
+          release_date: movie.release_date,
+        }));
+        
+        setFeaturedMovies(randomFeatured);
+        setRecommendedMovies(randomRecommended);
+        setTheaterMovies(randomTheater);
+      } catch (error) {
+        console.error('Error fetching movie data:', error);
+        // Fallback to empty arrays if there's an error
+        setFeaturedMovies([]);
+        setRecommendedMovies([]);
+        setTheaterMovies([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchMovies();
+  }, []);
+  
+  // Helper function to get random items from an array
+  const getRandomItems = (array: any[], count: number) => {
+    const shuffled = [...array].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
 
   const scrollMovies = (direction: 'left' | 'right') => {
     if (!scrollContainerRef.current) return;
@@ -333,6 +243,15 @@ export function Home() {
     });
   };
 
+  // Show loading state if data is still being fetched
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-bg-100 flex items-center justify-center">
+        <div className="text-text-100">Loading movies...</div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-bg-100">
       {/* Featured Movies Carousel */}
@@ -342,7 +261,7 @@ export function Home() {
           align: "start",
         }}>
           <CarouselContent>
-            {FEATURED_MOVIES.map((movie) => (
+            {featuredMovies.map((movie) => (
               <CarouselItem key={movie.id}>
                 <div className="relative">
                   <div className="relative w-full h-[550px]">
@@ -468,7 +387,7 @@ export function Home() {
           ref={scrollContainerRef}
           className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide scroll-smooth"
         >
-          {RECOMMENDED_MOVIES.map((movie) => (
+          {recommendedMovies.map((movie) => (
             <MoviePoster key={movie.id} movie={movie} className="min-w-[160px] w-[160px] flex-shrink-0" />
           ))}
         </div>
@@ -478,7 +397,7 @@ export function Home() {
       <section className="max-w-[1400px] mx-auto px-4 py-12">
         <h2 className="text-h3 text-text-100 mb-8">Out In Your Theater Now</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {THEATER_MOVIES.map((movie) => (
+          {theaterMovies.map((movie) => (
             <MoviePoster key={movie.id} movie={movie} className="w-full px-0" />
           ))}
         </div>
