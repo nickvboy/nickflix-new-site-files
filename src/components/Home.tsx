@@ -9,6 +9,7 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ChevronLeft, ChevronRight, Ticket } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -46,121 +47,124 @@ function MoviePoster({ movie, className = "" }: { movie: Movie; className?: stri
   
   return (
     <div className={`flex flex-col gap-1 group relative ${className}`}>
-      <AspectRatio ratio={2/3} className="w-full overflow-hidden rounded-[20px]">
-        <div className="relative w-full h-full">
-          <div className="absolute inset-0 transform transition-all duration-300 group-hover:scale-105">
-            <img
-              src={imageUrl}
-              alt={movie.title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-bg-100/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <Link to={`/movie/${movie.id}`} className="w-full h-full">
+        <AspectRatio ratio={2/3} className="w-full overflow-hidden rounded-[20px]">
+          <div className="relative w-full h-full">
+            <div className="absolute inset-0 transform transition-all duration-300 group-hover:scale-105">
+              <img
+                src={imageUrl}
+                alt={movie.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg-100/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button 
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 bg-primary-300 hover:bg-primary-200 text-bg-100 rounded-full px-6 transition-all duration-300 flex items-center gap-2 opacity-0 group-hover:opacity-100"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Ticket className="w-4 h-4" />
+                  Get Tickets
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="bg-bg-200 border-primary-200 text-text-100 z-[var(--z-modal)]">
+                <SheetHeader>
+                  <SheetTitle className="text-text-100">Purchase Tickets</SheetTitle>
+                  <SheetDescription className="text-text-200">
+                    Select your tickets for {movie.title}
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-8 space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-h4">Showtime</h3>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["12:30 PM", "3:00 PM", "5:30 PM", "8:00 PM", "10:30 PM"].map((time) => (
+                        <Button
+                          key={time}
+                          variant="outline"
+                          className="border-primary-200 text-text-100 hover:bg-primary-200/20"
+                        >
+                          {time}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-h4">Tickets</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span>Adult ($14.99)</span>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="icon" className="h-8 w-8">-</Button>
+                          <span className="w-8 text-center">0</span>
+                          <Button variant="outline" size="icon" className="h-8 w-8">+</Button>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Child ($9.99)</span>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="icon" className="h-8 w-8">-</Button>
+                          <span className="w-8 text-center">0</span>
+                          <Button variant="outline" size="icon" className="h-8 w-8">+</Button>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Senior ($12.99)</span>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="icon" className="h-8 w-8">-</Button>
+                          <span className="w-8 text-center">0</span>
+                          <Button variant="outline" size="icon" className="h-8 w-8">+</Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h3 className="text-h4">Payment Information</h3>
+                    <input
+                      type="text"
+                      placeholder="Cardholder Name"
+                      className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Card Number"
+                      className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
+                    />
+                    <div className="flex gap-4">
+                      <input
+                        type="text"
+                        placeholder="Expiry Date (MM/YY)"
+                        className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
+                      />
+                      <input
+                        type="text"
+                        placeholder="CVV"
+                        className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
+                      />
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-primary-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-h4">Total</span>
+                      <span className="text-h4">$0.00</span>
+                    </div>
+                    <Button className="w-full bg-primary-300 hover:bg-primary-200 text-bg-100 rounded-full">
+                      Continue to Seats
+                    </Button>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button 
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-8 group-hover:translate-y-0 bg-primary-300 hover:bg-primary-200 text-bg-100 rounded-full px-6 transition-all duration-300 flex items-center gap-2 opacity-0 group-hover:opacity-100"
-              >
-                <Ticket className="w-4 h-4" />
-                Get Tickets
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="bg-bg-200 border-primary-200 text-text-100 z-[var(--z-modal)]">
-              <SheetHeader>
-                <SheetTitle className="text-text-100">Purchase Tickets</SheetTitle>
-                <SheetDescription className="text-text-200">
-                  Select your tickets for {movie.title}
-                </SheetDescription>
-              </SheetHeader>
-              <div className="mt-8 space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-h4">Showtime</h3>
-                  <div className="grid grid-cols-3 gap-2">
-                    {["12:30 PM", "3:00 PM", "5:30 PM", "8:00 PM", "10:30 PM"].map((time) => (
-                      <Button
-                        key={time}
-                        variant="outline"
-                        className="border-primary-200 text-text-100 hover:bg-primary-200/20"
-                      >
-                        {time}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <h3 className="text-h4">Tickets</h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span>Adult ($14.99)</span>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8">-</Button>
-                        <span className="w-8 text-center">0</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8">+</Button>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Child ($9.99)</span>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8">-</Button>
-                        <span className="w-8 text-center">0</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8">+</Button>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Senior ($12.99)</span>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" className="h-8 w-8">-</Button>
-                        <span className="w-8 text-center">0</span>
-                        <Button variant="outline" size="icon" className="h-8 w-8">+</Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-4">
-                  <h3 className="text-h4">Payment Information</h3>
-                  <input
-                    type="text"
-                    placeholder="Cardholder Name"
-                    className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Card Number"
-                    className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
-                  />
-                  <div className="flex gap-4">
-                    <input
-                      type="text"
-                      placeholder="Expiry Date (MM/YY)"
-                      className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
-                    />
-                    <input
-                      type="text"
-                      placeholder="CVV"
-                      className="block w-full px-4 py-2 bg-bg-100 border border-primary-200 rounded-md text-text-100 focus:outline-none focus:ring-1 focus:ring-primary-200"
-                    />
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-primary-200">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-h4">Total</span>
-                    <span className="text-h4">$0.00</span>
-                  </div>
-                  <Button className="w-full bg-primary-300 hover:bg-primary-200 text-bg-100 rounded-full">
-                    Continue to Seats
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+        </AspectRatio>
+        <div className="mt-2">
+          <h3 className="text-text-100 font-medium truncate">{movie.title}</h3>
+          {year && <p className="text-text-200 text-sm">{year}</p>}
         </div>
-      </AspectRatio>
-      <div className="mt-2">
-        <h3 className="text-text-100 font-medium truncate">{movie.title}</h3>
-        {year && <p className="text-text-200 text-sm">{year}</p>}
-      </div>
+      </Link>
     </div>
   );
 }

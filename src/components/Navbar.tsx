@@ -11,6 +11,14 @@ import { useEffect, useState } from "react";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [dropdownScrollState, setDropdownScrollState] = useState(false);
+  // Example user for profile card
+  const exampleUser = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    avatar: "https://ui-avatars.com/api/?name=John+Doe&background=0D8ABC&color=fff",
+    membership: "Premium"
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +29,13 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleDropdownOpen = (open: boolean) => {
+    if (open) {
+      // Capture current scroll state when dropdown opens
+      setDropdownScrollState(isScrolled);
+    }
+  };
 
   return (
     <nav 
@@ -68,23 +83,66 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="text-text-100 hover:text-accent-200">
               <Ticket className="w-5 h-5" />
             </Button>
-            <DropdownMenu>
+            <DropdownMenu onOpenChange={handleDropdownOpen}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-text-100 hover:text-accent-200">
                   <User className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-bg-200 border-primary-200">
-                <DropdownMenuItem asChild>
-                  <Link to="/signin" className="text-text-100 hover:text-accent-200 cursor-pointer">
-                    Sign In
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/signup" className="text-text-100 hover:text-accent-200 cursor-pointer">
-                    Join Now
-                  </Link>
-                </DropdownMenuItem>
+              <DropdownMenuContent 
+                align="end" 
+                className={`w-64 ${
+                  dropdownScrollState ? 'bg-bg-300/50 backdrop-blur-sm' : 'bg-bg-300'
+                } border-primary-200/20 p-0 shadow-lg transition-colors duration-200`}
+              >
+                {/* Profile Card (Placeholder) */}
+                <div className="p-4 border-b border-primary-200/20">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-accent-200 flex items-center justify-center text-white font-medium">
+                      JD
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-text-100">John Doe</div>
+                      <div className="text-xs text-text-200">john.doe@example.com</div>
+                      <div className="mt-1">
+                        <span className="inline-block text-xs px-2 py-0.5 rounded-full bg-bg-200/80 text-text-100">
+                          Premium
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-1">
+                  <DropdownMenuItem asChild className="py-2 px-4 text-text-100 hover:bg-bg-200/50">
+                    <Link to="/profile">
+                      My Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="py-2 px-4 text-text-100 hover:bg-bg-200/50">
+                    <Link to="/tickets">
+                      My Tickets
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="py-2 px-4 text-text-100 hover:bg-bg-200/50">
+                    <Link to="/watchlist">
+                      My Watchlist
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <div className="my-1 h-px bg-primary-200/20"></div>
+
+                  <DropdownMenuItem asChild className="py-2 px-4 text-text-100 hover:bg-bg-200/50">
+                    <Link to="/signin">
+                      Sign In
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="py-2 px-4 text-text-100 hover:bg-bg-200/50">
+                    <Link to="/signup">
+                      Join Now
+                    </Link>
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

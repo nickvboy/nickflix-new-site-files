@@ -7,6 +7,7 @@ import { Home } from "@/components/Home";
 import { About } from "@/components/About";
 import { UnderConstruction } from "@/components/UnderConstruction";
 import { ComingSoon } from "./components/ComingSoon";
+import { MovieDetails } from "@/components/MovieDetails";
 import { Toaster } from 'sonner';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/about" element={<About />} />
         <Route path="/coming-soon" element={<ComingSoon />} />
+        <Route path="/movie/:id" element={<MovieDetails />} />
         <Route path="*" element={<UnderConstruction />} />
       </Routes>
       <Footer />

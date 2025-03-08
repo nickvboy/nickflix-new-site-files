@@ -16,6 +16,7 @@ async function deployToFTP() {
     client.ftp.verbose = true;
 
     try {
+        console.log('Connecting to AwardSpace FTP server...');
         await client.access({
             host: process.env.FTP_HOST || "f29-preview.awardspace.net",
             user: process.env.FTP_USERNAME,
@@ -24,7 +25,7 @@ async function deployToFTP() {
             secure: false
         });
 
-        console.log('Connected to FTP server');
+        console.log('Connected to AwardSpace FTP server');
 
         const buildDir = path.join(__dirname, '..', 'dist');
         const publicDir = path.join(__dirname, '..', 'public');
@@ -35,31 +36,68 @@ async function deployToFTP() {
 
         // Navigate to the hostname directory
         console.log('Navigating to site directory...');
-        await client.cd(process.env.FTP_SITE_DIR || 'nickflix2.atwebpages.com');
+        await client.cd(process.env.FTP_SITE_DIR || '');
+        
+        // List the current directory to verify
+        console.log('Current directory contents:');
+        const currentDirContents = await client.list();
+        console.log(currentDirContents);
 
-        // Clear existing files (optional)
+        // Clear existing files (if needed)
         console.log('Clearing existing files...');
         try {
-            await client.clearWorkingDir();
+            // Don't delete the PHP handler file
+            const files = await client.list();
+            for (const file of files) {
+                // Skip important files like .htaccess or specific PHP files if needed
+                if (file.name !== '.htaccess' && file.name !== 'index.php') {
+                    if (file.isDirectory) {
+                        await client.removeDir(file.name);
+                    } else {
+                        await client.remove(file.name);
+                    }
+                }
+            }
         } catch (err) {
-            console.log('No existing files to clear or error clearing:', err.message);
+            console.log('Error clearing files:', err.message);
         }
 
-        // Upload the PHP files first
-        console.log('Uploading PHP files...');
-        await client.uploadFromDir(publicDir);
+        // Upload the public directory first (if it exists)
+        if (fs.existsSync(publicDir)) {
+            console.log('Uploading public files...');
+            await client.uploadFromDir(publicDir);
+        }
 
         // Upload the build directory contents
         console.log('Uploading build files...');
         await client.uploadFromDir(buildDir);
         
-        console.log('Deployment completed successfully!');
+        // Create .htaccess for React routing (SPA)
+        console.log('Creating .htaccess for React routing...');
+        const htaccessContent = `
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+`;
+        
+        // Create temporary .htaccess file
+        const tempHtaccessPath = path.join(__dirname, 'temp-htaccess');
+        fs.writeFileSync(tempHtaccessPath, htaccessContent);
+        await client.uploadFrom(tempHtaccessPath, '.htaccess');
+        fs.unlinkSync(tempHtaccessPath);
+        
+        console.log('Deployment to AwardSpace completed successfully!');
     } catch (err) {
         console.error('Error during deployment:', err);
         if (err.code === 530) {
-            console.log('Authentication failed. Please check your credentials.');
+            console.log('Authentication failed. Please check your AwardSpace credentials.');
         } else if (err.code === 550) {
-            console.log('Directory access error. Check if the directory exists in your FTP root.');
+            console.log('Directory access error. Check if the directory exists in your AwardSpace FTP root.');
         }
     } finally {
         client.close();
