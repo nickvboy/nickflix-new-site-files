@@ -12,6 +12,7 @@ export function SignIn() {
     password: ""
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,34 +25,36 @@ export function SignIn() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setIsLoading(true);
 
     try {
-      const response = await fetch('/login.php', {
+      const response = await fetch('https://charlesvillier.com/nickflix-new-site-files/public/login.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
 
       const data = await response.json();
 
       if (data.success) {
-        // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(data.user));
+        // Save user profile data to localStorage
+        localStorage.setItem('userProfile', JSON.stringify(data.user));
+        // Trigger storage event for other tabs/components
+        window.dispatchEvent(new Event('storage'));
         toast.success('Successfully signed in!');
         navigate('/'); // Redirect to home page
       } else {
-        toast.error(data.message || 'Invalid email or password');
+        setError(data.message || 'Login failed. Please try again.');
       }
     } catch (error) {
-      console.error('Sign in error:', error);
-      toast.error('An error occurred. Please try again.');
+      console.error('Login error:', error);
+      setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }

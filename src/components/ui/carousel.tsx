@@ -17,6 +17,8 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: 'horizontal' | 'vertical';
   setApi?: (api: CarouselApi) => void;
+  autoScroll?: boolean;
+  autoScrollInterval?: number;
 };
 
 type CarouselContextProps = {
@@ -26,6 +28,8 @@ type CarouselContextProps = {
   scrollNext: () => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
+  autoScroll?: boolean;
+  autoScrollInterval?: number;
 } & CarouselProps;
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
@@ -52,6 +56,8 @@ const Carousel = React.forwardRef<
       plugins,
       className,
       children,
+      autoScroll = false,
+      autoScrollInterval = 5000,
       ...props
     },
     ref
@@ -65,6 +71,7 @@ const Carousel = React.forwardRef<
     );
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
     const [canScrollNext, setCanScrollNext] = React.useState(false);
+    const autoScrollRef = React.useRef<NodeJS.Timeout | null>(null);
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) {
@@ -82,6 +89,47 @@ const Carousel = React.forwardRef<
     const scrollNext = React.useCallback(() => {
       api?.scrollNext();
     }, [api]);
+
+    // Auto-scroll functionality
+    React.useEffect(() => {
+      if (!api || !autoScroll) return;
+
+      const startAutoScroll = () => {
+        stopAutoScroll();
+        autoScrollRef.current = setInterval(() => {
+          if (api.canScrollNext()) {
+            api.scrollNext();
+          } else {
+            api.scrollTo(0);
+          }
+        }, autoScrollInterval);
+      };
+
+      const stopAutoScroll = () => {
+        if (autoScrollRef.current) {
+          clearInterval(autoScrollRef.current);
+          autoScrollRef.current = null;
+        }
+      };
+
+      // Start auto-scroll
+      startAutoScroll();
+
+      // Stop on user interaction
+      const element = carouselRef.current;
+      if (element) {
+        element.addEventListener('pointerdown', stopAutoScroll);
+        element.addEventListener('pointerup', startAutoScroll);
+
+        return () => {
+          stopAutoScroll();
+          element.removeEventListener('pointerdown', stopAutoScroll);
+          element.removeEventListener('pointerup', startAutoScroll);
+        };
+      }
+
+      return () => stopAutoScroll();
+    }, [api, autoScroll, autoScrollInterval, carouselRef]);
 
     const handleKeyDown = React.useCallback(
       (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -130,6 +178,8 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
+          autoScroll,
+          autoScrollInterval,
         }}
       >
         <div

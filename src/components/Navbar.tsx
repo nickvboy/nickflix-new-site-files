@@ -41,14 +41,17 @@ export function Navbar() {
               <span className="text-h3 text-text-100 font-bold">NICKFLIX</span>
             </a>
             <div className="hidden md:flex items-center gap-6">
-              <Link to="/movies" className="text-text-100 hover:text-accent-200 transition-colors">
-                Movies
+              <Link to="/movies" className="text-text-100 hover:text-accent-200 transition-colors relative group">
+                <span>Movies</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-200 group-hover:animate-nav-underline" />
               </Link>
-              <Link to="/coming-soon" className="text-text-100 hover:text-accent-200 transition-colors">
-                Coming Soon
+              <Link to="/coming-soon" className="text-text-100 hover:text-accent-200 transition-colors relative group">
+                <span>Coming Soon</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-200 group-hover:animate-nav-underline" />
               </Link>
-              <Link to="/genres" className="text-text-100 hover:text-accent-200 transition-colors">
-                Genres
+              <Link to="/genres" className="text-text-100 hover:text-accent-200 transition-colors relative group">
+                <span>Genres</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent-200 group-hover:animate-nav-underline" />
               </Link>
             </div>
           </div>

@@ -12,9 +12,11 @@ export function SignUp() {
     lastName: "",
     email: "",
     username: "",
-    password: ""
+    password: "",
+    confirmPassword: ""
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,10 +29,18 @@ export function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setIsLoading(true);
 
+    // Form validation
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch('/register.php', {
+      const response = await fetch('https://charlesvillier.com/nickflix-new-site-files/public/register.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,14 +56,18 @@ export function SignUp() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success('Registration successful! Please sign in.');
-        navigate('/signin');
+        // Save user profile data to localStorage
+        localStorage.setItem('userProfile', JSON.stringify(data.user));
+        // Trigger storage event for other tabs/components
+        window.dispatchEvent(new Event('storage'));
+        toast.success('Account created successfully!');
+        navigate('/');
       } else {
-        toast.error(data.message || 'Registration failed');
+        setError(data.message || 'Registration failed. Please try again.');
       }
     } catch (error) {
-      toast.error('An error occurred. Please try again.');
       console.error('Registration error:', error);
+      setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -124,6 +138,18 @@ export function SignUp() {
                       required
                       minLength={8}
                       value={formData.password}
+                      onChange={handleChange}
+                      className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
+                    />
+                  </div>
+                  <div>
+                    <Input 
+                      name="confirmPassword"
+                      type="password"
+                      placeholder="Confirm Password*"
+                      required
+                      minLength={8}
+                      value={formData.confirmPassword}
                       onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
                     />
