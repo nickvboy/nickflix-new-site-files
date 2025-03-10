@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Play } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { TheaterSelector } from "@/components/TheaterSelector";
+import { SeatSelector, Seat } from "@/components/SeatSelector";
 
 interface Movie {
   id: number;
@@ -68,6 +69,12 @@ export function MovieDetails() {
       fetchMovieDetails();
     }
   }, [id]);
+
+  // Handle seat selection
+  const handleSeatSelect = (selectedSeats: Seat[]) => {
+    console.log('Selected seats:', selectedSeats);
+    // In a real app, you would save this selection
+  };
 
   if (isLoading) {
     return (
@@ -263,12 +270,16 @@ export function MovieDetails() {
         </div>
         
         <TheaterSelector movieId={id} movieTitle={movie.title} className="mt-4" />
-        
-        <div className="mt-8 flex justify-center">
-          <Button className="bg-primary-300 hover:bg-primary-200 text-primary-100 rounded-full px-10 py-6 text-lg">
-            Continue to Seats
-          </Button>
+      </div>
+
+      {/* Seat Selector Section */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-100">Select Your Seats</h2>
+          <p className="text-text-200 text-sm md:text-base">Choose where you want to sit to watch {movie.title}</p>
         </div>
+        
+        <SeatSelector onSelectSeats={handleSeatSelect} />
       </div>
     </main>
   );
