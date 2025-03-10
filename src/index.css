@@ -71,6 +71,13 @@
     font-size: 0.75rem;
     line-height: 1.5;
   }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

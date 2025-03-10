@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Play } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { TheaterSelector } from "@/components/TheaterSelector";
 
 interface Movie {
   id: number;
@@ -251,6 +252,22 @@ export function MovieDetails() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Theater Selector Section */}
+      <div className="container mx-auto px-4 py-8 mt-24 md:mt-28">
+        <div className="mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-text-100">Select a Showtime</h2>
+          <p className="text-text-200 text-sm md:text-base">Choose a date, time, format, and theater to watch {movie.title}</p>
+        </div>
+        
+        <TheaterSelector movieId={id} movieTitle={movie.title} className="mt-4" />
+        
+        <div className="mt-8 flex justify-center">
+          <Button className="bg-primary-300 hover:bg-primary-200 text-primary-100 rounded-full px-10 py-6 text-lg">
+            Continue to Seats
+          </Button>
         </div>
       </div>
     </main>
