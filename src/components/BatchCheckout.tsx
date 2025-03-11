@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Ticket, ShoppingCart, ArrowLeft, CreditCard, Check } from 'lucide-react';
+import { Ticket, ShoppingCart, ArrowLeft, CreditCard, Check, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TicketOrder } from '@/components/TicketQueue';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -17,6 +17,7 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
   );
   const [paymentStep, setPaymentStep] = useState<'select' | 'payment' | 'confirmation'>('select');
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [availableOrders, setAvailableOrders] = useState<TicketOrder[]>(orders);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -34,14 +35,23 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
   };
 
   const toggleSelectAll = () => {
-    if (selectedOrderIds.length === orders.length) {
+    if (selectedOrderIds.length === availableOrders.length) {
       setSelectedOrderIds([]);
     } else {
-      setSelectedOrderIds(orders.map(order => order.id));
+      setSelectedOrderIds(availableOrders.map(order => order.id));
     }
   };
 
-  const selectedOrders = orders.filter(order => selectedOrderIds.includes(order.id));
+  const handleDeleteSelected = () => {
+    if (selectedOrderIds.length === 0) return;
+    
+    const updatedOrders = availableOrders.filter(order => !selectedOrderIds.includes(order.id));
+    setAvailableOrders(updatedOrders);
+    
+    setSelectedOrderIds([]);
+  };
+
+  const selectedOrders = availableOrders.filter(order => selectedOrderIds.includes(order.id));
   const totalAmount = selectedOrders.reduce((sum, order) => sum + order.pricing.total, 0);
   const totalTickets = selectedOrders.reduce((sum, order) => {
     return sum + order.ticketSelections.reduce((tSum, selection) => tSum + selection.quantity, 0);
@@ -90,15 +100,27 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
             <div className="flex items-center gap-2">
               <Checkbox 
                 id="select-all" 
-                checked={selectedOrderIds.length === orders.length && orders.length > 0}
+                checked={selectedOrderIds.length === availableOrders.length && availableOrders.length > 0}
                 onCheckedChange={toggleSelectAll}
               />
               <label htmlFor="select-all" className="text-sm text-text-200">
-                Select All ({orders.length} orders)
+                Select All ({availableOrders.length} orders)
               </label>
             </div>
-            <div className="text-sm text-text-200">
-              {selectedOrderIds.length} of {orders.length} selected
+            <div className="flex items-center gap-2">
+              <div className="text-sm text-text-200">
+                {selectedOrderIds.length} of {availableOrders.length} selected
+              </div>
+              {selectedOrderIds.length > 0 && (
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={handleDeleteSelected}
+                  className="ml-2 bg-red-500 hover:bg-red-600"
+                >
+                  <Trash2 className="w-4 h-4 mr-1" /> Delete
+                </Button>
+              )}
             </div>
           </div>
         )}
@@ -114,7 +136,7 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
       <div className="flex-1 p-4 overflow-y-auto">
         {paymentStep === 'select' && (
           <div className="space-y-4">
-            {orders.map((order) => (
+            {availableOrders.map((order) => (
               <div 
                 key={order.id} 
                 className={`border rounded-lg overflow-hidden transition-all ${
@@ -310,6 +332,7 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
             <Button 
               onClick={handleContinueToPayment}
               disabled={selectedOrderIds.length === 0}
+              className="bg-primary-300 hover:bg-primary-300/90 text-primary-100"
             >
               Continue to Payment
             </Button>
@@ -321,10 +344,11 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
             <Button 
               onClick={handleCompletePayment}
               disabled={processingPayment}
+              className="bg-primary-300 hover:bg-primary-300/90 text-primary-100"
             >
               {processingPayment ? (
                 <>
-                  <div className="w-4 h-4 rounded-full border-2 border-t-transparent border-white animate-spin mr-2"></div>
+                  <div className="w-4 h-4 rounded-full border-2 border-t-transparent border-primary-100 animate-spin mr-2"></div>
                   Processing...
                 </>
               ) : (
@@ -336,7 +360,10 @@ export function BatchCheckout({ orders, onComplete, onCancel }: BatchCheckoutPro
         
         {paymentStep === 'confirmation' && (
           <div className="flex justify-end">
-            <Button onClick={handleFinish}>
+            <Button 
+              onClick={handleFinish}
+              className="bg-primary-300 hover:bg-primary-300/90 text-primary-100"
+            >
               <Ticket className="w-4 h-4 mr-2" />
               View My Tickets
             </Button>
