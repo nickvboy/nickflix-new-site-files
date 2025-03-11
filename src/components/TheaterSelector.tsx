@@ -105,57 +105,59 @@ export function TheaterSelector({ movieId, className, movieTitle }: MovieShowing
       {/* All elements in a single row */}
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
         {/* Date section */}
-        <div className="flex items-center w-full lg:w-auto">
-          <h3 className="text-lg font-semibold text-text-100 mr-5 w-16 flex-shrink-0">Date</h3>
-          <div className="flex items-center">
+        <div className="flex flex-col w-full lg:w-auto">
+          <h3 className="text-lg font-semibold text-text-100 mb-2 lg:mb-0 lg:mr-5 lg:w-16 lg:flex-shrink-0">Date</h3>
+          <div className="flex items-center w-full">
             <button 
               className={cn(
-                "text-primary-300 flex-shrink-0 mr-2",
+                "text-primary-300 flex-shrink-0 mr-1",
                 dateOffset === 0 ? "opacity-50 cursor-not-allowed" : ""
               )}
               onClick={handlePrevDates}
               disabled={dateOffset === 0}
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-4 w-4" />
             </button>
             
-            <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
-              {visibleDates.map((date, index) => {
-                const actualIndex = index + dateOffset;
-                return (
-                  <button
-                    key={`${date.day}-${date.date}`}
-                    onClick={() => setSelectedDate(actualIndex)}
-                    className={cn(
-                      "flex-shrink-0 w-14 h-16 flex flex-col items-center justify-center transition-all rounded-xl",
-                      selectedDate === actualIndex
-                        ? "bg-primary-300 text-primary-100"
-                        : "bg-bg-300 hover:bg-bg-300/80"
-                    )}
-                  >
-                    <span className="text-xs">{date.day}</span>
-                    <span className="text-base font-bold">{date.date}</span>
-                  </button>
-                );
-              })}
+            <div className="flex-1 overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-1 sm:space-x-2 min-w-min px-1">
+                {visibleDates.map((date, index) => {
+                  const actualIndex = index + dateOffset;
+                  return (
+                    <button
+                      key={`${date.day}-${date.date}`}
+                      onClick={() => setSelectedDate(actualIndex)}
+                      className={cn(
+                        "flex-shrink-0 w-10 sm:w-12 md:w-14 h-14 flex flex-col items-center justify-center transition-all rounded-xl",
+                        selectedDate === actualIndex
+                          ? "bg-primary-300 text-primary-100"
+                          : "bg-bg-300 hover:bg-bg-300/80"
+                      )}
+                    >
+                      <span className="text-xs">{date.day}</span>
+                      <span className="text-base font-bold">{date.date}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
             
             <button 
               className={cn(
-                "text-primary-300 flex-shrink-0 ml-2",
+                "text-primary-300 flex-shrink-0 ml-1",
                 dateOffset >= sampleDates.length - 7 ? "opacity-50 cursor-not-allowed" : ""
               )}
               onClick={handleNextDates}
               disabled={dateOffset >= sampleDates.length - 7}
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </div>
 
         {/* Time section */}
-        <div className="flex items-center w-full lg:flex-1 lg:ml-6">
-          <h3 className="text-lg font-semibold text-text-100 mr-5 w-16 flex-shrink-0">Time</h3>
+        <div className="flex flex-col w-full lg:flex-1 lg:flex-row lg:items-center lg:ml-6">
+          <h3 className="text-lg font-semibold text-text-100 mb-2 lg:mb-0 lg:mr-5 lg:w-16 lg:flex-shrink-0">Time</h3>
           <div className="relative w-full">
             <button
               onClick={() => {
@@ -199,23 +201,23 @@ export function TheaterSelector({ movieId, className, movieTitle }: MovieShowing
         </div>
 
         {/* Type section - Buttons on mobile, dropdown on desktop */}
-        <div className="flex items-center w-full lg:flex-1 lg:ml-6">
-          <h3 className="text-lg font-semibold text-text-100 mr-5 w-16 flex-shrink-0">Type</h3>
+        <div className="flex flex-col w-full lg:flex-1 lg:flex-row lg:items-center lg:ml-6">
+          <h3 className="text-lg font-semibold text-text-100 mb-2 lg:mb-0 lg:mr-5 lg:w-16 lg:flex-shrink-0">Type</h3>
           
           {/* Mobile buttons (shown on mobile, hidden on desktop) */}
-          <div className="flex space-x-2 min-w-[180px] w-full lg:hidden">
+          <div className="flex space-x-2 w-full overflow-x-auto scrollbar-hide pb-1 lg:hidden">
             {formatTypes.map((type) => (
               <button
                 key={type}
                 onClick={() => setSelectedType(type)}
                 className={cn(
-                  "w-10 h-10 rounded-lg transition-all text-center flex items-center justify-center",
+                  "min-w-11 h-10 rounded-lg transition-all text-center flex items-center justify-center flex-shrink-0",
                   selectedType === type
                     ? "bg-primary-300 text-primary-100"
                     : "bg-bg-300 hover:bg-bg-300/80"
                 )}
               >
-                {type}
+                <span className="text-xs sm:text-sm font-medium px-1.5">{type}</span>
               </button>
             ))}
           </div>
@@ -250,7 +252,7 @@ export function TheaterSelector({ movieId, className, movieTitle }: MovieShowing
                         : "hover:bg-primary-300/20"
                     )}
                   >
-                    {type}
+                    <span className="text-sm">{type}</span>
                   </button>
                 ))}
               </div>
@@ -258,9 +260,9 @@ export function TheaterSelector({ movieId, className, movieTitle }: MovieShowing
           </div>
         </div>
 
-        {/* Theater/Address section */}
-        <div className="flex items-center w-full lg:flex-1 lg:ml-6">
-          <h3 className="text-lg font-semibold text-text-100 mr-5 w-16 flex-shrink-0">Address</h3>
+        {/* Address section */}
+        <div className="flex flex-col w-full lg:flex-1 lg:flex-row lg:items-center lg:ml-6">
+          <h3 className="text-lg font-semibold text-text-100 mb-2 lg:mb-0 lg:mr-5 lg:w-16 lg:flex-shrink-0">Address</h3>
           <div className="relative w-full">
             <button
               onClick={() => {

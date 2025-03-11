@@ -17,13 +17,18 @@ export interface SeatLayout {
   id: string;
   name: string;
   seats: Seat[];
+  createdAt: string;
+  updatedAt: string;
 }
 
-interface SeatSelectorProps {
+export interface SeatSelectorProps {
   className?: string;
   onSelectSeats?: (selectedSeats: Seat[]) => void;
   initialLayout?: SeatLayout;
   showScreen?: boolean;
+  onSaveLayout?: (layout: SeatLayout) => void;
+  onLoadLayout?: (layoutId: string) => void;
+  availableLayouts?: SeatLayout[];
 }
 
 // Sample data - seat layout
@@ -70,16 +75,27 @@ const sampleLayouts: SeatLayout[] = [
     id: 'default',
     name: 'Default Layout',
     seats: generateSampleSeats(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   },
 ];
 
-export function SeatSelector({ className, onSelectSeats, initialLayout, showScreen = true }: SeatSelectorProps) {
+export function SeatSelector({ 
+  className, 
+  onSelectSeats, 
+  initialLayout, 
+  showScreen = true,
+  onSaveLayout,
+  onLoadLayout,
+  availableLayouts = []
+}: SeatSelectorProps) {
   const [seats, setSeats] = useState<Seat[]>(initialLayout?.seats || sampleLayouts[0].seats);
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [isAdminMode, setIsAdminMode] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [layoutName, setLayoutName] = useState<string>(initialLayout?.name || 'Default Layout');
   const [currentEditStatus, setCurrentEditStatus] = useState<SeatStatus>('available');
+  const [showLayoutSelector, setShowLayoutSelector] = useState<boolean>(false);
 
   // Group seats by row for display
   const seatsByRow = seats.reduce((acc, seat) => {
@@ -137,9 +153,28 @@ export function SeatSelector({ className, onSelectSeats, initialLayout, showScre
 
   // Handle save layout in admin mode
   const handleSaveLayout = () => {
-    // In a real app, you would save this to a database
-    console.log('Saving layout:', { name: layoutName, seats });
+    if (!layoutName.trim()) {
+      alert('Please enter a layout name');
+      return;
+    }
+
+    const newLayout: SeatLayout = {
+      id: initialLayout?.id || crypto.randomUUID(),
+      name: layoutName,
+      seats,
+      createdAt: initialLayout?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    onSaveLayout?.(newLayout);
     setEditMode(false);
+    alert('Layout saved successfully!');
+  };
+
+  // Handle layout selection
+  const handleLayoutSelect = (layoutId: string) => {
+    onLoadLayout?.(layoutId);
+    setShowLayoutSelector(false);
   };
 
   // Handle cancel edit in admin mode
@@ -185,15 +220,23 @@ export function SeatSelector({ className, onSelectSeats, initialLayout, showScre
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-lg font-semibold mb-1">Admin Panel</h3>
-                  <p className="text-xs text-text-200">Click 'Edit Layout' to modify seat arrangement</p>
+                  <p className="text-xs text-text-200">Manage seat layouts</p>
                 </div>
-                <button
-                  onClick={() => setEditMode(true)}
-                  className="bg-primary-300 hover:bg-primary-200 text-primary-100 px-3 py-1.5 rounded-lg flex items-center gap-1 text-sm"
-                >
-                  <Edit size={16} />
-                  Edit Layout
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowLayoutSelector(!showLayoutSelector)}
+                    className="bg-bg-400 hover:bg-bg-400/80 text-text-100 px-3 py-1.5 rounded-lg flex items-center gap-1 text-sm"
+                  >
+                    Load Layout
+                  </button>
+                  <button
+                    onClick={() => setEditMode(true)}
+                    className="bg-primary-300 hover:bg-primary-200 text-primary-100 px-3 py-1.5 rounded-lg flex items-center gap-1 text-sm"
+                  >
+                    <Edit size={16} />
+                    Edit Layout
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="space-y-3">
@@ -221,6 +264,7 @@ export function SeatSelector({ className, onSelectSeats, initialLayout, showScre
                       value={layoutName}
                       onChange={(e) => setLayoutName(e.target.value)}
                       className="bg-bg-200 border border-bg-100 rounded px-2 py-1 text-text-100 text-sm w-40"
+                      placeholder="Enter layout name"
                     />
                   </div>
                 </div>
@@ -285,10 +329,35 @@ export function SeatSelector({ className, onSelectSeats, initialLayout, showScre
                 </div>
               </div>
             )}
+
+            {/* Layout Selector Modal */}
+            {showLayoutSelector && (
+              <div className="absolute top-full left-0 w-full bg-bg-300 p-4 rounded-lg mt-2 shadow-lg z-50">
+                <h4 className="text-sm font-semibold mb-2">Available Layouts</h4>
+                {availableLayouts.length > 0 ? (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {availableLayouts.map((layout) => (
+                      <button
+                        key={layout.id}
+                        onClick={() => handleLayoutSelect(layout.id)}
+                        className="w-full text-left p-2 hover:bg-bg-400 rounded-lg flex justify-between items-center"
+                      >
+                        <span className="text-sm">{layout.name}</span>
+                        <span className="text-xs text-text-200">
+                          {new Date(layout.updatedAt).toLocaleDateString()}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-text-200">No saved layouts available</p>
+                )}
+              </div>
+            )}
           </div>
         )}
 
-        {/* Screen visualization - curved bezier projection screen */}
+        {/* Screen visualization */}
         {showScreen && (
           <div className="w-full max-w-lg mx-auto mb-8 flex flex-col items-center">
             <div className="w-full h-10 relative">
@@ -369,7 +438,7 @@ export function SeatSelector({ className, onSelectSeats, initialLayout, showScre
           </div>
         </div>
 
-        {/* Selected seats information (only in user mode) */}
+        {/* Selected seats information */}
         {!isAdminMode && selectedSeats.length > 0 && (
           <div className="mt-6 bg-bg-300 p-3 rounded-lg w-full">
             <h3 className="text-sm font-semibold mb-2">Selected Seats</h3>

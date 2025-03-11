@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, Play } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { TheaterSelector } from "@/components/TheaterSelector";
-import { SeatSelector, Seat } from "@/components/SeatSelector";
+import { SeatSelector, Seat, SeatLayout } from "@/components/SeatSelector";
+import { TicketCheckout, CheckoutData } from "@/components/TicketCheckout";
 
 interface Movie {
   id: number;
@@ -33,11 +34,42 @@ interface Movie {
   }[];
 }
 
+// Local storage key for layouts
+const LAYOUT_STORAGE_KEY = 'seat-layouts';
+
+// Helper function to load layouts from local storage
+const loadLayoutsFromStorage = (): SeatLayout[] => {
+  const stored = localStorage.getItem(LAYOUT_STORAGE_KEY);
+  return stored ? JSON.parse(stored) : [];
+};
+
+// Helper function to save layouts to local storage
+const saveLayoutsToStorage = (layouts: SeatLayout[]) => {
+  localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(layouts));
+};
+
 export function MovieDetails() {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
+  const [showTicketCheckout, setShowTicketCheckout] = useState(false);
+  const [currentLayout, setCurrentLayout] = useState<SeatLayout | undefined>();
+  const [availableLayouts, setAvailableLayouts] = useState<SeatLayout[]>([]);
+
+  // Load layouts on component mount
+  useEffect(() => {
+    const layouts = loadLayoutsFromStorage();
+    setAvailableLayouts(layouts);
+    
+    // Use the most recently updated layout as default
+    if (layouts.length > 0) {
+      setCurrentLayout(layouts.sort((a, b) => 
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      )[0]);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -71,9 +103,51 @@ export function MovieDetails() {
   }, [id]);
 
   // Handle seat selection
-  const handleSeatSelect = (selectedSeats: Seat[]) => {
-    console.log('Selected seats:', selectedSeats);
-    // In a real app, you would save this selection
+  const handleSeatSelect = (seats: Seat[]) => {
+    setSelectedSeats(seats);
+    // Always show ticket checkout, even if seats are deselected
+    // This ensures the warning stays visible when needed
+    if (!showTicketCheckout) {
+      setShowTicketCheckout(true);
+    }
+  };
+
+  // Handle layout save
+  const handleSaveLayout = (layout: SeatLayout) => {
+    const layouts = loadLayoutsFromStorage();
+    const existingIndex = layouts.findIndex(l => l.id === layout.id);
+    
+    if (existingIndex >= 0) {
+      // Update existing layout
+      layouts[existingIndex] = layout;
+    } else {
+      // Add new layout
+      layouts.push(layout);
+    }
+    
+    saveLayoutsToStorage(layouts);
+    setAvailableLayouts(layouts);
+    setCurrentLayout(layout);
+  };
+
+  // Handle layout load
+  const handleLoadLayout = (layoutId: string) => {
+    const layout = availableLayouts.find(l => l.id === layoutId);
+    if (layout) {
+      setCurrentLayout(layout);
+      setSelectedSeats([]); // Reset selected seats when loading new layout
+      setShowTicketCheckout(false);
+    }
+  };
+
+  // Handle checkout completion
+  const handleCheckoutComplete = (checkoutData: CheckoutData) => {
+    console.log('Checkout completed:', checkoutData);
+    // In a real app, you would send this data to your backend
+    alert(`Purchase complete! Total: ${new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(checkoutData.pricing.total)}`);
   };
 
   if (isLoading) {
@@ -116,35 +190,24 @@ export function MovieDetails() {
     <main className="min-h-screen bg-bg-300">
       {/* Hero section with movie backdrop */}
       <div 
-        className="relative w-full h-[60vh] bg-cover bg-center"
+        className="relative w-full h-[70vh] bg-cover bg-center"
         style={{ 
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: "cover",
-          backgroundPosition: "center top"
+          backgroundPosition: "center 20%"
         }}
       >
         {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-300 via-bg-300/70 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-300 via-bg-300/80 to-transparent"></div>
         
         {/* Content */}
-        <div className="container mx-auto px-4 relative z-10 h-full flex flex-col justify-end pb-4">
-          <div className="flex flex-col md:flex-row gap-4 items-start">
-            {/* Movie poster */}
-            <div className="w-1/3 md:w-1/4 lg:w-1/5 -mb-16 md:-mb-24 transform scale-100 origin-top">
-              <AspectRatio ratio={2/3} className="overflow-hidden rounded-[16px] shadow-xl border border-primary-200/30">
-                <img 
-                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ""} 
-                  alt={movie.title} 
-                  className="w-full h-full object-cover"
-                />
-              </AspectRatio>
-            </div>
-            
-            {/* Movie info */}
-            <div className="w-full md:w-3/4 lg:w-4/5 text-white">
+        <div className="container mx-auto px-4 relative z-10 h-full flex flex-col justify-end pb-6">
+          <div className="flex flex-row md:flex-row gap-4 items-start">
+            {/* Movie info - on left at mobile, stays left at larger screens */}
+            <div className="w-2/3 md:w-3/4 lg:w-4/5 text-white order-1 md:order-2">
               <div className="flex flex-col md:flex-row gap-2">
                 <div className="w-full md:w-2/3 md:pr-8">
-                  <h1 className="text-3xl md:text-5xl font-bold mb-1">{movie.title}</h1>
+                  <h1 className="text-2xl md:text-4xl font-bold mb-1">{movie.title}</h1>
                   
                   {/* Genre pills */}
                   <div className="flex flex-wrap gap-1 mb-2">
@@ -158,7 +221,7 @@ export function MovieDetails() {
                   </div>
                   
                   {/* Metadata row */}
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs md:text-sm mb-2 text-text-200">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs mb-2 text-text-200">
                     {movie.release_date && (
                       <span>{new Date(movie.release_date).getFullYear()}</span>
                     )}
@@ -175,24 +238,24 @@ export function MovieDetails() {
                   
                   {/* Tagline */}
                   {movie.tagline && (
-                    <p className="text-primary-300 italic mb-2 text-base">{movie.tagline}</p>
+                    <p className="text-primary-300 italic mb-2 text-sm">{movie.tagline}</p>
                   )}
                   
                   {/* Overview */}
                   {movie.overview && (
-                    <p className="text-xs md:text-sm text-text-200 mb-4 max-w-3xl leading-relaxed">
+                    <p className="text-xs text-text-200 mb-4 max-w-3xl leading-relaxed line-clamp-2">
                       {movie.overview}
                     </p>
                   )}
                   
                   {/* Action buttons */}
-                  <div className="flex flex-wrap gap-3 mb-4 md:mb-0">
-                    <Button className="bg-primary-300 hover:bg-primary-200 text-primary-100 rounded-full px-6 py-3 text-sm">
+                  <div className="flex flex-wrap gap-2 mb-4 md:mb-0">
+                    <Button className="bg-primary-300 hover:bg-primary-200 text-primary-100 rounded-full px-4 py-2 text-sm">
                       Add to Watchlist
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="border-primary-300 text-primary-300 hover:bg-primary-300/20 rounded-full px-6 py-3 text-sm flex items-center gap-2"
+                      className="border-primary-300 text-primary-300 hover:bg-primary-300/20 rounded-full px-4 py-2 text-sm flex items-center gap-2"
                     >
                       <Play className="h-4 w-4" />
                       Watch Trailer
@@ -201,32 +264,14 @@ export function MovieDetails() {
                 </div>
                 
                 {/* Credits section - right side */}
-                <div className="w-full md:w-1/3 space-y-4 md:-mt-1">
+                <div className="hidden md:block w-1/3 space-y-3">
                   {/* Directors section */}
                   <div>
-                    <h2 className="text-lg font-bold mb-1 text-text-100 border-b-4 border-primary-200 pb-1">
+                    <h2 className="text-base font-bold mb-1 text-text-100 border-b-2 border-primary-200 pb-1">
                       Director
                     </h2>
                     {movie.directors && movie.directors.length > 0 ? (
-                      <div className="space-y-0.5 pt-0.5">
-                        {movie.directors.map(director => (
-                          <div key={director.id} className="text-text-200 text-sm">
-                            {director.name} {director.job === "Director" ? "" : `(${director.job})`}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-gray-400 text-sm">Information not available</div>
-                    )}
-                  </div>
-                  
-                  {/* Writers section - using directors for demo */}
-                  <div>
-                    <h2 className="text-lg font-bold mb-1 text-text-100 border-b-4 border-primary-200 pb-1">
-                      Writers
-                    </h2>
-                    {movie.directors && movie.directors.length > 0 ? (
-                      <div className="space-y-0.5 pt-0.5">
+                      <div className="space-y-0.5">
                         {movie.directors.map(director => (
                           <div key={director.id} className="text-text-200 text-sm">
                             {director.name}
@@ -240,11 +285,11 @@ export function MovieDetails() {
                   
                   {/* Stars section */}
                   <div>
-                    <h2 className="text-lg font-bold mb-1 text-text-100 border-b-4 border-primary-200 pb-1">
+                    <h2 className="text-base font-bold mb-1 text-text-100 border-b-2 border-primary-200 pb-1">
                       Stars
                     </h2>
                     {movie.cast && movie.cast.length > 0 ? (
-                      <div className="space-y-0.5 pt-0.5">
+                      <div className="space-y-0.5">
                         {movie.cast.slice(0, 3).map(actor => (
                           <div key={actor.id} className="text-text-200 text-sm">
                             {actor.name}
@@ -258,12 +303,23 @@ export function MovieDetails() {
                 </div>
               </div>
             </div>
+            
+            {/* Movie poster - on right at mobile, moves to left at larger screens */}
+            <div className="w-1/3 md:w-1/4 lg:w-1/5 -mb-12 md:-mb-20 transform scale-100 origin-top order-2 md:order-1">
+              <AspectRatio ratio={2/3} className="overflow-hidden rounded-[16px] shadow-xl border border-primary-200/30">
+                <img 
+                  src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ""} 
+                  alt={movie.title} 
+                  className="w-full h-full object-cover"
+                />
+              </AspectRatio>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Theater Selector Section */}
-      <div className="container mx-auto px-4 py-8 mt-24 md:mt-28">
+      <div className="container mx-auto px-4 py-6 mt-24 md:mt-28">
         <div className="mb-6">
           <h2 className="text-2xl md:text-3xl font-bold text-text-100">Select a Showtime</h2>
           <p className="text-text-200 text-sm md:text-base">Choose a date, time, format, and theater to watch {movie.title}</p>
@@ -279,7 +335,26 @@ export function MovieDetails() {
           <p className="text-text-200 text-sm md:text-base">Choose where you want to sit to watch {movie.title}</p>
         </div>
         
-        <SeatSelector onSelectSeats={handleSeatSelect} />
+        <div className="flex flex-col-reverse md:flex-row gap-8">
+          <div className="md:w-1/3 flex-shrink-0">
+            <TicketCheckout 
+              movieId={id || ""} 
+              movieTitle={movie.title} 
+              selectedSeats={selectedSeats}
+              onComplete={handleCheckoutComplete}
+            />
+          </div>
+          
+          <div className="md:w-2/3">
+            <SeatSelector 
+              onSelectSeats={handleSeatSelect}
+              initialLayout={currentLayout}
+              onSaveLayout={handleSaveLayout}
+              onLoadLayout={handleLoadLayout}
+              availableLayouts={availableLayouts}
+            />
+          </div>
+        </div>
       </div>
     </main>
   );
