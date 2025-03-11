@@ -6,6 +6,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { TheaterSelector } from "@/components/TheaterSelector";
 import { SeatSelector, Seat, SeatLayout } from "@/components/SeatSelector";
 import { TicketCheckout, CheckoutData } from "@/components/TicketCheckout";
+import { ticketOrderService } from './TicketQueue';
 
 interface Movie {
   id: number;
@@ -143,11 +144,37 @@ export function MovieDetails() {
   // Handle checkout completion
   const handleCheckoutComplete = (checkoutData: CheckoutData) => {
     console.log('Checkout completed:', checkoutData);
-    // In a real app, you would send this data to your backend
-    alert(`Purchase complete! Total: ${new Intl.NumberFormat('en-US', {
+    
+    // Get theater information
+    const currentTheater = currentLayout?.name || "Main Theater";
+    
+    // Add order to ticket queue
+    const order = ticketOrderService.addOrder({
+      movieId: id ? parseInt(id) : 0,
+      movieTitle: movie?.title || "Unknown Movie",
+      theaterName: currentTheater,
+      showtime: "7:30 PM", // This would come from actual selected showtime
+      selectedSeats: checkoutData.selectedSeats,
+      ticketSelections: checkoutData.ticketSelections,
+      pricing: checkoutData.pricing
+    });
+    
+    // Show success message
+    alert(`Purchase added to cart! Total: ${new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(checkoutData.pricing.total)}`);
+    
+    // Reset the seat selection
+    handleResetSeats();
+  };
+  
+  // Add a new function to reset seats after checkout
+  const handleResetSeats = () => {
+    if (currentLayout) {
+      setCurrentLayout(undefined);
+      setSelectedSeats([]);
+    }
   };
 
   if (isLoading) {
