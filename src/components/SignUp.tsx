@@ -3,8 +3,10 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Ticket, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { apiPost, ApiResponse, UserProfileData, testDatabaseConnection } from "@/lib/api";
+import { DatePicker, calculateAge } from "@/components/ui/DatePicker";
 
 export function SignUp() {
   const [formData, setFormData] = useState({
@@ -13,11 +15,34 @@ export function SignUp() {
     email: "",
     username: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    dateOfBirth: null as Date | null,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [dbStatus, setDbStatus] = useState<boolean | null>(null);
   const navigate = useNavigate();
+
+  // Check database connection on component mount
+  useEffect(() => {
+    const checkDbConnection = async () => {
+      try {
+        const isConnected = await testDatabaseConnection();
+        setDbStatus(isConnected);
+        
+        if (!isConnected) {
+          console.warn('Database connection test failed - registration functionality may be limited');
+        } else {
+          console.log('Database connection test succeeded');
+        }
+      } catch (err) {
+        console.error('Error during database connection test:', err);
+        // Don't update status on unexpected errors
+      }
+    };
+    
+    checkDbConnection();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,47 +52,129 @@ export function SignUp() {
     }));
   };
 
+  const handleDateChange = (date: Date | null) => {
+    setFormData(prev => ({
+      ...prev,
+      dateOfBirth: date
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    // Form validation
+    // Enhanced Form validation
+    if (!formData.firstName.trim()) {
+      setError('First name is required');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.username.trim()) {
+      setError('Username is required');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.username.trim().length < 8) {
+      setError('Username must be at least 8 characters');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      setError('Password is required');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.trim().length < 8) {
+      setError('Password must be at least 8 characters');
+      setIsLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setIsLoading(false);
       return;
     }
 
+    if (!formData.dateOfBirth) {
+      setError('Date of birth is required');
+      setIsLoading(false);
+      return;
+    } else {
+      // Age validation - minimum 13 years old
+      const age = calculateAge(formData.dateOfBirth);
+      if (age < 13) {
+        setError('You must be at least 13 years old to register');
+        setIsLoading(false);
+        return;
+      }
+    }
+
     try {
-      const response = await fetch('https://charlesvillier.com/nickflix-new-site-files/public/register.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          username: formData.username,
-          full_name: `${formData.firstName} ${formData.lastName}`.trim()
-        }),
+      // If database connection is known to be down, warn the user but proceed anyway
+      if (dbStatus === false) {
+        console.warn('Attempting registration despite known database connection issues');
+      }
+      
+      // Log the registration attempt
+      console.log('Attempting registration with data:', {
+        email: formData.email,
+        username: formData.username,
+        full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+        date_of_birth: formData.dateOfBirth ? formData.dateOfBirth.toISOString().split('T')[0] : undefined,
       });
 
-      const data = await response.json();
+      const data = await apiPost<ApiResponse>('register.php', {
+        email: formData.email,
+        password: formData.password,
+        username: formData.username,
+        full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+        date_of_birth: formData.dateOfBirth ? formData.dateOfBirth.toISOString().split('T')[0] : undefined,
+      });
+
+      // Log the full response
+      console.log('Registration API response:', data);
 
       if (data.success) {
-        // Save user profile data to localStorage
-        localStorage.setItem('userProfile', JSON.stringify(data.user));
-        // Trigger storage event for other tabs/components
-        window.dispatchEvent(new Event('storage'));
-        toast.success('Account created successfully!');
-        navigate('/');
+        // No longer store user data in localStorage - user needs to log in first
+        toast.success('Account created successfully! Please sign in.');
+        navigate('/signin'); // Redirect to sign-in page instead of home
       } else {
-        setError(data.message || 'Registration failed. Please try again.');
+        setError(data.message || 'Registration failed. Please check your information and try again.');
+        console.error('Registration failed:', data.message);
       }
-    } catch (error) {
+    } catch (error: any) {
+      // Handle network or unexpected errors
       console.error('Registration error:', error);
-      setError('An error occurred. Please try again.');
+      
+      // Only retest database connection if we haven't already determined it's working
+      if (dbStatus !== true) {
+        try {
+          const isConnected = await testDatabaseConnection();
+          setDbStatus(isConnected);
+          
+          if (!isConnected) {
+            setError('Cannot connect to the database. The server may be down or experiencing issues. Please try again later.');
+            setIsLoading(false);
+            return;
+          }
+        } catch (connErr) {
+          console.error('Error testing database connection after registration failure:', connErr);
+        }
+      }
+      
+      setError(error.message || 'Connection error. Please check your internet connection and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -105,6 +212,18 @@ export function SignUp() {
                       value={formData.lastName}
                       onChange={handleChange}
                       className="bg-bg-400 border-primary-200 text-text-100 placeholder:text-text-200/50"
+                    />
+                  </div>
+                  <div>
+                    <DatePicker
+                      label="Date of Birth*"
+                      required
+                      value={formData.dateOfBirth}
+                      onChange={handleDateChange}
+                      showAge={true}
+                      maxDate={new Date()} // Cannot select future dates
+                      minDate={new Date(1900, 0, 1)} // Lower bound for realistic birth dates
+                      helperText="You must be at least 13 years old to register"
                     />
                   </div>
                   <div>
@@ -155,6 +274,18 @@ export function SignUp() {
                     />
                   </div>
                 </div>
+
+                {dbStatus === false && (
+                  <div className="p-2 bg-yellow-500/10 border border-yellow-500/50 rounded text-yellow-700 text-sm">
+                    Warning: Database connection issues detected. Registration may not work correctly.
+                  </div>
+                )}
+
+                {error && (
+                  <div className="p-2 bg-red-500/10 border border-red-500/50 rounded text-red-500 text-sm">
+                    {error}
+                  </div>
+                )}
 
                 <Button 
                   type="submit"

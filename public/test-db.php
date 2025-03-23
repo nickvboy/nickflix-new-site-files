@@ -1,7 +1,58 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: ' . (isset($_GET['json']) ? 'application/json' : 'text/html; charset=utf-8'));
 require_once 'config.php';
 
+if (isset($_GET['json'])) {
+    // JSON response mode for API testing
+    $response = [
+        'success' => false,
+        'message' => 'Database connection test failed',
+        'tables' => [],
+        'error' => null
+    ];
+    
+    try {
+        $conn = getDbConnection();
+        $response['success'] = true;
+        $response['message'] = 'Database connection successful';
+        
+        // Test if tables exist and get their structure
+        $tables = ['users', 'user_profiles'];
+        foreach ($tables as $table) {
+            $result = $conn->query("SHOW TABLES LIKE '$table'");
+            if ($result->num_rows > 0) {
+                $tableInfo = ['name' => $table, 'exists' => true, 'fields' => []];
+                
+                // Get table structure
+                $structure = $conn->query("DESCRIBE $table");
+                if ($structure) {
+                    while ($row = $structure->fetch_assoc()) {
+                        $tableInfo['fields'][] = [
+                            'name' => $row['Field'],
+                            'type' => $row['Type'],
+                            'null' => $row['Null'],
+                            'key' => $row['Key'],
+                            'default' => $row['Default']
+                        ];
+                    }
+                }
+                
+                $response['tables'][] = $tableInfo;
+            } else {
+                $response['tables'][] = ['name' => $table, 'exists' => false];
+            }
+        }
+        
+        $conn->close();
+    } catch (Exception $e) {
+        $response['error'] = $e->getMessage();
+    }
+    
+    echo json_encode($response, JSON_PRETTY_PRINT);
+    exit;
+}
+
+// HTML response mode
 echo "<h2>Database Connection Test</h2>";
 
 try {

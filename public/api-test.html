@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NickFlix API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #f5f5f5;
+            background-color: #1a1a1a;
+        }
+        h1, h2 {
+            color: #fff;
+        }
+        .card {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        button {
+            background-color: #3a6ea5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #2c5282;
+        }
+        pre {
+            background-color: #333;
+            color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #f5f5f5;
+        }
+        .success { color: #4cd964; }
+        .error { color: #ff3b30; }
+    </style>
+</head>
+<body>
+    <h1>NickFlix API Test</h1>
+    
+    <div class="card">
+        <h2>Database Tests</h2>
+        <button id="testDb">Test Database Connection</button>
+        <button id="setupDb">Setup Database Tables</button>
+        <div id="dbResult"></div>
+    </div>
+    
+    <div class="card">
+        <h2>User Registration</h2>
+        <form id="registerForm">
+            <label for="regEmail">Email:</label>
+            <input type="email" id="regEmail" required>
+            
+            <label for="regPassword">Password:</label>
+            <input type="password" id="regPassword" required>
+            
+            <label for="regUsername">Username:</label>
+            <input type="text" id="regUsername" required>
+            
+            <label for="regFirstName">First Name:</label>
+            <input type="text" id="regFirstName" required>
+            
+            <label for="regLastName">Last Name:</label>
+            <input type="text" id="regLastName">
+            
+            <button type="submit">Register</button>
+        </form>
+        <div id="registerResult"></div>
+    </div>
+    
+    <div class="card">
+        <h2>User Login</h2>
+        <form id="loginForm">
+            <label for="loginEmail">Email:</label>
+            <input type="email" id="loginEmail" required>
+            
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        <div id="loginResult"></div>
+    </div>
+    
+    <div class="card">
+        <h2>User Profile</h2>
+        <div>
+            <label for="userId">User ID:</label>
+            <input type="number" id="userId">
+            <button id="getProfile">Get Profile</button>
+        </div>
+        <div id="profileResult"></div>
+    </div>
+    
+    <script>
+        // Database Tests
+        document.getElementById('testDb').addEventListener('click', async () => {
+            const result = document.getElementById('dbResult');
+            result.innerHTML = '<pre>Testing database connection...</pre>';
+            
+            try {
+                const response = await fetch('test-db.php?json=1');
+                const data = await response.json();
+                
+                result.innerHTML = `<pre>${JSON.stringify(data, null, 4)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<pre class="error">Error: ${error.message}</pre>`;
+            }
+        });
+        
+        document.getElementById('setupDb').addEventListener('click', async () => {
+            const result = document.getElementById('dbResult');
+            result.innerHTML = '<pre>Setting up database tables...</pre>';
+            
+            try {
+                const response = await fetch('setup-db.php?json=1');
+                const data = await response.json();
+                
+                result.innerHTML = `<pre>${JSON.stringify(data, null, 4)}</pre>`;
+            } catch (error) {
+                result.innerHTML = `<pre class="error">Error: ${error.message}</pre>`;
+            }
+        });
+        
+        // Registration
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const result = document.getElementById('registerResult');
+            result.innerHTML = '<pre>Registering user...</pre>';
+            
+            try {
+                const response = await fetch('register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('regEmail').value,
+                        password: document.getElementById('regPassword').value,
+                        username: document.getElementById('regUsername').value,
+                        full_name: document.getElementById('regFirstName').value + ' ' + document.getElementById('regLastName').value
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.innerHTML = `<pre class="success">${JSON.stringify(data, null, 4)}</pre>`;
+                    
+                    // Auto-fill login form
+                    document.getElementById('loginEmail').value = document.getElementById('regEmail').value;
+                    document.getElementById('loginPassword').value = document.getElementById('regPassword').value;
+                    
+                    // Auto-fill user ID field
+                    if (data.user && data.user.id) {
+                        document.getElementById('userId').value = data.user.id;
+                    }
+                } else {
+                    result.innerHTML = `<pre class="error">${JSON.stringify(data, null, 4)}</pre>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<pre class="error">Error: ${error.message}</pre>`;
+            }
+        });
+        
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const result = document.getElementById('loginResult');
+            result.innerHTML = '<pre>Logging in...</pre>';
+            
+            try {
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.innerHTML = `<pre class="success">${JSON.stringify(data, null, 4)}</pre>`;
+                    
+                    // Auto-fill user ID field
+                    if (data.user && data.user.id) {
+                        document.getElementById('userId').value = data.user.id;
+                    }
+                } else {
+                    result.innerHTML = `<pre class="error">${JSON.stringify(data, null, 4)}</pre>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<pre class="error">Error: ${error.message}</pre>`;
+            }
+        });
+        
+        // Get Profile
+        document.getElementById('getProfile').addEventListener('click', async () => {
+            const userId = document.getElementById('userId').value;
+            const result = document.getElementById('profileResult');
+            
+            if (!userId) {
+                result.innerHTML = `<pre class="error">Please enter a user ID</pre>`;
+                return;
+            }
+            
+            result.innerHTML = '<pre>Getting user profile...</pre>';
+            
+            try {
+                const response = await fetch(`user-api.php?user_id=${userId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.innerHTML = `<pre class="success">${JSON.stringify(data, null, 4)}</pre>`;
+                } else {
+                    result.innerHTML = `<pre class="error">${JSON.stringify(data, null, 4)}</pre>`;
+                }
+            } catch (error) {
+                result.innerHTML = `<pre class="error">Error: ${error.message}</pre>`;
+            }
+        });
+    </script>
+</body>
+</html> 

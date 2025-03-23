@@ -3,8 +3,9 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Ticket, Users, Brain, MousePointerClick, CheckCircle, Gift } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { apiPost, ApiResponse, UserProfileData, testDatabaseConnection } from "@/lib/api";
 
 export function SignIn() {
   const [formData, setFormData] = useState({
@@ -13,7 +14,29 @@ export function SignIn() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [dbStatus, setDbStatus] = useState<boolean | null>(null);
   const navigate = useNavigate();
+
+  // Check database connection on component mount
+  useEffect(() => {
+    const checkDbConnection = async () => {
+      try {
+        const isConnected = await testDatabaseConnection();
+        setDbStatus(isConnected);
+        
+        if (!isConnected) {
+          console.warn('Database connection test failed - login functionality may be limited');
+        } else {
+          console.log('Database connection test succeeded');
+        }
+      } catch (err) {
+        console.error('Error during database connection test:', err);
+        // Don't update status on unexpected errors
+      }
+    };
+    
+    checkDbConnection();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,33 +51,86 @@ export function SignIn() {
     setError('');
     setIsLoading(true);
 
+    // Basic validation
+    if (!formData.email.trim()) {
+      setError('Email is required');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      setError('Password is required');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch('https://charlesvillier.com/nickflix-new-site-files/public/login.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
+      // If database connection is known to be down, warn the user but proceed anyway
+      if (dbStatus === false) {
+        console.warn('Attempting login despite known database connection issues');
+      }
+
+      const data = await apiPost<ApiResponse<UserProfileData>>('login.php', {
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
+      // Debug: Log the full response
+      console.log('Login API response:', data);
 
-      if (data.success) {
+      if (data.success && data.user) {
+        // Format user profile data for app consistency
+        const userProfile = {
+          id: data.user.id,
+          name: data.user.full_name || data.user.username || formData.email.split('@')[0],
+          email: data.user.email,
+          avatarUrl: data.user.avatar_url || null,
+          username: data.user.username || formData.email.split('@')[0],
+          full_name: data.user.full_name || null,
+          avatar_url: data.user.avatar_url || null,
+          membership: data.user.membership || "Free",
+          date_of_birth: data.user.date_of_birth || null,
+          age: data.user.age !== undefined ? data.user.age : null
+        };
+        
+        // Log the user profile we're saving
+        console.log('Saving user profile:', userProfile);
+        
         // Save user profile data to localStorage
-        localStorage.setItem('userProfile', JSON.stringify(data.user));
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        
         // Trigger storage event for other tabs/components
         window.dispatchEvent(new Event('storage'));
+        
         toast.success('Successfully signed in!');
         navigate('/'); // Redirect to home page
       } else {
-        setError(data.message || 'Login failed. Please try again.');
+        // Handle failed login with more specific error message
+        const errorMessage = data.message || 'Invalid email or password. Please try again.';
+        setError(errorMessage);
+        console.error('Login failed:', errorMessage);
       }
-    } catch (error) {
+    } catch (error: any) {
+      // Handle network or unexpected errors
       console.error('Login error:', error);
-      setError('An error occurred. Please try again.');
+      
+      // Only retest database connection if we haven't already determined it's working
+      if (dbStatus !== true) {
+        try {
+          const isConnected = await testDatabaseConnection();
+          setDbStatus(isConnected);
+          
+          if (!isConnected) {
+            setError('Cannot connect to the database. The server may be down or experiencing issues. Please try again later.');
+            return;
+          }
+        } catch (connErr) {
+          console.error('Error testing database connection after login failure:', connErr);
+        }
+      }
+      
+      // Show a more user-friendly error message
+      setError(error.message || 'Connection error. Please check your internet connection and try again.');
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +176,18 @@ export function SignIn() {
                     />
                   </div>
                 </div>
+
+                {dbStatus === false && (
+                  <div className="p-2 bg-yellow-500/10 border border-yellow-500/50 rounded text-yellow-700 text-sm">
+                    Warning: Database connection issues detected. Login may not work correctly.
+                  </div>
+                )}
+
+                {error && (
+                  <div className="p-2 bg-red-500/10 border border-red-500/50 rounded text-red-500 text-sm">
+                    {error}
+                  </div>
+                )}
 
                 <Button 
                   type="submit"
