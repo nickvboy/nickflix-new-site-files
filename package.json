@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy:awardspace": "tsc && vite build && node scripts/deploy-ftp.js",
-    "deploy:nickflix2": "tsc && vite build && node scripts/deploy-ftp.js"
+    "deploy:nickflix2": "tsc && vite build && node scripts/deploy-ftp.js",
+    "deploy:nickflix3": "tsc && vite build && cross-env FTP_SITE_DIR=nickflix3.atwebpages.com node scripts/deploy-ftp.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -82,6 +83,7 @@
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "cross-env": "^7.0.3",
     "eslint": "^9.11.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",

@@ -7,6 +7,9 @@ import { dirname } from 'path';
 
 dotenv.config();
 
+// Debug environment variables
+console.log('FTP_SITE_DIR from env:', process.env.FTP_SITE_DIR);
+
 // ES modules don't have __dirname, so we need to create it
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,6 +17,11 @@ const __dirname = dirname(__filename);
 async function deployToFTP() {
     const client = new Client();
     client.ftp.verbose = true;
+
+    // Get target domain from environment variable
+    // The cross-env package will set this correctly
+    const targetDomain = process.env.FTP_SITE_DIR || 'nickflix3.atwebpages.com';
+    console.log('Target domain for deployment:', targetDomain);
 
     try {
         console.log('Connecting to AwardSpace FTP server...');
@@ -36,7 +44,7 @@ async function deployToFTP() {
 
         // Navigate to the hostname directory
         console.log('Navigating to site directory...');
-        await client.cd(process.env.FTP_SITE_DIR || '');
+        await client.cd(targetDomain);
         
         // List the current directory to verify
         console.log('Current directory contents:');
