@@ -1,0 +1,146 @@
+[
+  {
+    "name": "AMC Arrowhead 14",
+    "brand": "amc",
+    "lat": 33.6428282,
+    "lon": -112.2257354,
+    "address": {
+      "street": "West Arrowhead Towne Center",
+      "housenumber": "7700",
+      "city": "Glendale",
+      "postcode": "85308"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-arrowhead-14",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.765191",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC Ahwatukee 24",
+    "brand": "amc",
+    "lat": 33.3168259,
+    "lon": -111.9772852,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Phoenix city",
+      "postcode": "85044"
+    },
+    "website": null,
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.765517",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC DINE-IN Esplanade 14",
+    "brand": "amc",
+    "lat": 33.5081322,
+    "lon": -112.0276073,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Phoenix city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-dine-in-esplanade-14",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.765818",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC Arizona Center 24",
+    "brand": "amc",
+    "lat": 33.4537293,
+    "lon": -112.0693155,
+    "address": {
+      "street": "North 3rd Street",
+      "housenumber": "465",
+      "city": "Phoenix",
+      "postcode": "85004"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-arizona-center-24",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.766022",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC Centerpoint 11",
+    "brand": "amc",
+    "lat": 33.4229967,
+    "lon": -111.941511,
+    "address": {
+      "street": "South Mill Avenue",
+      "housenumber": "730",
+      "city": "Tempe",
+      "postcode": "85281"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-centerpoint-11",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.766244",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC Westgate 20",
+    "brand": "amc",
+    "lat": 33.5354839,
+    "lon": -112.2613682,
+    "address": {
+      "street": "West Hanna Lane",
+      "housenumber": "9400",
+      "city": "Glendale",
+      "postcode": "85305"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-westgate-20",
+    "phone": "+623-772-1371",
+    "last_updated": "2025-03-23T19:53:16.766500",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC",
+    "brand": "amc",
+    "lat": 33.3168065,
+    "lon": -111.9773532,
+    "address": {
+      "street": "East Ray Road",
+      "housenumber": "4915",
+      "city": "Phoenix",
+      "postcode": "85044-6407"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-ahwatukee-24",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.766766",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC Deer Valley 17",
+    "brand": "amc",
+    "lat": 33.666171,
+    "lon": -112.1240462,
+    "address": {
+      "street": "West Agua Fria Freeway",
+      "housenumber": "3033",
+      "city": "Phoenix",
+      "postcode": "85027"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-deer-valley-17",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.767067",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "name": "AMC Desert Ridge 18",
+    "brand": "amc",
+    "lat": 33.6757385,
+    "lon": -111.970791,
+    "address": {
+      "street": "North Tatum Boulevard",
+      "housenumber": "21001",
+      "city": "Phoenix",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-desert-ridge-18",
+    "phone": null,
+    "last_updated": "2025-03-23T19:53:16.767350",
+    "source_city": "Phoenix city, AZ"
+  }
+]

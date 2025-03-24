@@ -1,0 +1,2684 @@
+[
+  {
+    "unique_id": "amc-368043799",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "1998",
+      "city": "New York",
+      "postcode": "10023"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.286753",
+    "lat": 40.7750135,
+    "lon": -73.9817481,
+    "name": "AMC Loews Lincoln Square 13",
+    "phone": "+1 212-336-5020",
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-loews-lincoln-square-13"
+  },
+  {
+    "unique_id": "amc-663103163",
+    "address": {
+      "street": "West 34th Street",
+      "housenumber": "312",
+      "city": "New York",
+      "postcode": "10001"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.287449",
+    "lat": 40.7524154,
+    "lon": -73.9944494,
+    "name": "AMC 34th Street 14",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-34th-street-14"
+  },
+  {
+    "unique_id": "amc-761560987",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.287978",
+    "lat": 40.7385891,
+    "lon": -73.9896994,
+    "name": "AMC Loews 19th St. East 6",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-loews-19th-st-east-6"
+  },
+  {
+    "unique_id": "regal-889115578",
+    "address": {
+      "street": "North End Avenue",
+      "housenumber": "102",
+      "city": "New York",
+      "postcode": "10282"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.288615",
+    "lat": 40.714742,
+    "lon": -74.015169,
+    "name": "Regal Battery Park",
+    "phone": "+1 844 462 7342",
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/Theatres/Theatre-Folder/Regal-Battery-Park-Stadium-11-6582"
+  },
+  {
+    "unique_id": "amc-1293173329",
+    "address": {
+      "street": "2nd Avenue",
+      "housenumber": "570",
+      "city": "New York city",
+      "postcode": "10016"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.289103",
+    "lat": 40.7429085,
+    "lon": -73.9767783,
+    "name": "AMC Kips Bay 15",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-kips-bay-15"
+  },
+  {
+    "unique_id": "regal-1419725355",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New Rochelle",
+      "postcode": "10801"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.289753",
+    "lat": 40.9110372,
+    "lon": -73.7796609,
+    "name": "Regal New Roc Stadium",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "regal-2326030976",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "1320",
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.290216",
+    "lat": 40.7340532,
+    "lon": -73.9907254,
+    "name": "Regal Union Square Stadium 14",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-union-square-screenx-4dx/1320"
+  },
+  {
+    "unique_id": "amc-2562438625",
+    "address": {
+      "street": "Frederick Douglass Boulevard",
+      "housenumber": "2309",
+      "city": "New York",
+      "postcode": "10027"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.290706",
+    "lat": 40.8097211,
+    "lon": -73.9517949,
+    "name": "AMC Magic Johnson Harlem 9",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-magic-johnson-harlem-9"
+  },
+  {
+    "unique_id": "regal-2622901047",
+    "address": {
+      "street": "Cooper Avenue",
+      "housenumber": "80-28",
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.291672",
+    "lat": 40.7079132,
+    "lon": -73.8679145,
+    "name": "Regal Atlas Park Stadium 8",
+    "phone": "+1-718-416-1349",
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theaters/regal-atlas-park-stadium-8/C00886889702"
+  },
+  {
+    "unique_id": "regal-2716231259",
+    "address": {
+      "street": "West 42nd Street",
+      "housenumber": "247",
+      "city": "New York",
+      "postcode": "10036"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.292162",
+    "lat": 40.7570477,
+    "lon": -73.9889365,
+    "name": "Regal E-Walk Stadium 13 & RPX",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-e-walk-4dx-rpx/1929"
+  },
+  {
+    "unique_id": "amc-2758640929",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "2310",
+      "city": "New York",
+      "postcode": "10024"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.292658",
+    "lat": 40.7867861,
+    "lon": -73.9774328,
+    "name": "AMC Loews 84th Street 6",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-84th-street-6"
+  },
+  {
+    "unique_id": "amc-2861113982",
+    "address": {
+      "street": "Bartow Avenue",
+      "housenumber": "2210",
+      "city": "New York city",
+      "postcode": "10475"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.293214",
+    "lat": 40.8670408,
+    "lon": -73.8251735,
+    "name": "AMC Bay Plaza Cinema 13",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-bay-plaza-cinema-13"
+  },
+  {
+    "unique_id": "amc-4071907604",
+    "address": {
+      "street": "3rd Avenue",
+      "housenumber": "66",
+      "city": "New York",
+      "postcode": "10003"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.293784",
+    "lat": 40.7315215,
+    "lon": -73.9887471,
+    "name": "AMC Loews Village 7",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-village-7"
+  },
+  {
+    "unique_id": "amc-5116117400",
+    "address": {
+      "street": "3rd Avenue",
+      "housenumber": "1538",
+      "city": "New York",
+      "postcode": "10028"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.294355",
+    "lat": 40.7794376,
+    "lon": -73.954081,
+    "name": "AMC Loews Orpheum 7",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-loews-orpheum-7"
+  },
+  {
+    "unique_id": "amc-5360034111",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.295002",
+    "lat": 40.7266521,
+    "lon": -74.0381087,
+    "name": "AMC Newport 11",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/jersey-city/amc-newport-centre-11"
+  },
+  {
+    "unique_id": "amc-6910638032",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.295597",
+    "lat": 40.7934466,
+    "lon": -74.2568541,
+    "name": "AMC DINE-IN Essex Green 9",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/west-orange/amc-dine-in-essex-green-9"
+  },
+  {
+    "unique_id": "regal-6912090035",
+    "address": {
+      "street": "Delancey Street",
+      "housenumber": "129",
+      "city": "New York",
+      "postcode": "10002"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.296159",
+    "lat": 40.7182171,
+    "lon": -73.9879129,
+    "name": "Regal Essex 14 & RPX",
+    "phone": "+1-212-475-5768",
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "amc-6932774599",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.296661",
+    "lat": 40.7789874,
+    "lon": -73.7789065,
+    "name": "AMC Bay Terrace 6",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-bay-terrace-6"
+  },
+  {
+    "unique_id": "regal-9649218717",
+    "address": {
+      "street": "37th Avenue",
+      "housenumber": "133-36",
+      "city": "Flushing",
+      "postcode": "11354"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.297244",
+    "lat": 40.7603521,
+    "lon": -73.8335782,
+    "name": "Regal Tangram 4DX",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "amc-45791868",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.297862",
+    "lat": 40.8289215,
+    "lon": -74.1402355,
+    "name": "AMC Clifton Commons 16",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/clifton/amc-clifton-commons-16"
+  },
+  {
+    "unique_id": "amc-58569844",
+    "address": {
+      "street": "Willowbrook Boulevard",
+      "housenumber": "67",
+      "city": "Wayne",
+      "postcode": "07470"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.298424",
+    "lat": 40.8881358,
+    "lon": -74.2505553,
+    "name": "AMC Wayne 14",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/wayne/amc-loews-wayne-14"
+  },
+  {
+    "unique_id": "amc-167898265",
+    "address": {
+      "street": "Kapkowski Road",
+      "housenumber": "640",
+      "city": "Elizabeth",
+      "postcode": "07201"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.299236",
+    "lat": 40.6595289,
+    "lon": -74.1682675,
+    "name": "AMC Jersey Gardens 20",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/elizabeth/amc-loews-jersey-gardens-20"
+  },
+  {
+    "unique_id": "amc-239020218",
+    "address": {
+      "street": "Challenger Road",
+      "housenumber": "75",
+      "city": "Ridgefield Park",
+      "postcode": "07660"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.299827",
+    "lat": 40.8491624,
+    "lon": -74.01255,
+    "name": "AMC Ridgefield Park 12",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/ridgefield-park/amc-ridgefield-park-12"
+  },
+  {
+    "unique_id": "regal-241819049",
+    "address": {
+      "street": "Forest Avenue",
+      "housenumber": "2474",
+      "city": "New York city",
+      "postcode": "10303"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.300348",
+    "lat": 40.6260851,
+    "lon": -74.1728258,
+    "name": "Regal UA Staten Island & RPX",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://regmovies.com/theatres/regal-ua-staten-island-rpx/1331"
+  },
+  {
+    "unique_id": "amc-248518963",
+    "address": {
+      "street": "Horace Harding Expressway Sr S",
+      "housenumber": "190-02",
+      "city": "New York city",
+      "postcode": "11365"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.301004",
+    "lat": 40.7411048,
+    "lon": -73.7837962,
+    "name": "AMC Fresh Meadows",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-fresh-meadows-7"
+  },
+  {
+    "unique_id": "amc-266143298",
+    "address": {
+      "street": "West 42nd Street",
+      "housenumber": "234",
+      "city": "New York",
+      "postcode": "10036"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.301494",
+    "lat": 40.7567058,
+    "lon": -73.9892591,
+    "name": "AMC Empire 25",
+    "phone": "+12123982597",
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25"
+  },
+  {
+    "unique_id": "regal-280569694",
+    "address": {
+      "street": "38th Street",
+      "housenumber": "35-30",
+      "city": "New York city",
+      "postcode": "11101"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.302180",
+    "lat": 40.755255,
+    "lon": -73.9236599,
+    "name": "Regal UA Kaufman Astoria",
+    "phone": "+1 844-462-7342",
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-ua-kaufman-astoria-rpx-1333"
+  },
+  {
+    "unique_id": "amc-737659722",
+    "address": {
+      "street": "South Stiles Street",
+      "housenumber": "1200",
+      "city": "Linden",
+      "postcode": "07036"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.302757",
+    "lat": 40.62084,
+    "lon": -74.2452655,
+    "name": "AMC Aviation 12",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/linden/amc-aviation-12"
+  },
+  {
+    "unique_id": "regal-737700996",
+    "address": {
+      "street": "Bricktown Way",
+      "housenumber": "165",
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.303264",
+    "lat": 40.5306454,
+    "lon": -74.2300179,
+    "name": "Regal Bricktown Charleston",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-bricktown-charleston/1419"
+  },
+  {
+    "unique_id": "amc-747167010",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.303799",
+    "lat": 40.9155173,
+    "lon": -74.0769866,
+    "name": "AMC Garden State 16",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/paramus/amc-garden-state-16"
+  },
+  {
+    "unique_id": "amc-756935282",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.304295",
+    "lat": 40.9051071,
+    "lon": -74.0297309,
+    "name": "AMC Dine-In Shops at Riverside 9",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/hackensack/amc-dine-in-shops-at-riverside-9"
+  },
+  {
+    "unique_id": "amc-760267016",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.304779",
+    "lat": 40.5812863,
+    "lon": -74.1671113,
+    "name": "AMC DINE-IN Staten Island 11",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-dine-in-staten-island-11"
+  },
+  {
+    "unique_id": "amc-904206115",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:17:07.305317",
+    "lat": 40.5812157,
+    "lon": -74.1668264,
+    "name": "AMC DINE-IN Staten Island 11",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-459444907",
+    "address": {
+      "street": "Center Drive",
+      "housenumber": "6081",
+      "city": "Los Angeles",
+      "postcode": "90045"
+    },
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.764877",
+    "lat": 33.9780463,
+    "lon": -118.391908,
+    "name": "CINEMARK 18 & XD",
+    "phone": "310-568-3394",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.cinemark.com/theatres/ca-los-angeles/cinemark-howard-hughes-los-angeles-and-xd"
+  },
+  {
+    "unique_id": "regal-1839100824",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.765272",
+    "lat": 33.7719409,
+    "lon": -118.372489,
+    "name": "Regal Promenade 13",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": null
+  },
+  {
+    "unique_id": "amc-2048544138",
+    "address": {
+      "street": "Third Street Promenade",
+      "housenumber": "1310",
+      "city": "Santa Monica",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.765629",
+    "lat": 34.0166773,
+    "lon": -118.497631,
+    "name": "AMC Santa Monica 7",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-santa-monica-7"
+  },
+  {
+    "unique_id": "cinemark-3417754799",
+    "address": {
+      "street": "West Jefferson Boulevard",
+      "housenumber": "12746",
+      "city": "Los Angeles",
+      "postcode": "90096"
+    },
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.766191",
+    "lat": 33.9772337,
+    "lon": -118.416587,
+    "name": "Cinemark Playa Vista",
+    "phone": "(310) 862-5668",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.cinemark.com/theatres/ca-playa-vista/cinemark-playa-vista-and-xd"
+  },
+  {
+    "unique_id": "cinemark-4696753292",
+    "address": {
+      "street": "South Pine Avenue",
+      "housenumber": "99",
+      "city": "Los Angeles city",
+      "postcode": "90804"
+    },
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.766685",
+    "lat": 33.7648589,
+    "lon": -118.1934751,
+    "name": "Cinemark",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": null
+  },
+  {
+    "unique_id": "amc-5115677603",
+    "address": {
+      "street": "Magnolia Boulevard",
+      "housenumber": "201",
+      "city": "Burbank",
+      "postcode": "91502"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.767031",
+    "lat": 34.1836616,
+    "lon": -118.3121443,
+    "name": "AMC Burbank Town Center 8",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-burbank-town-center-8"
+  },
+  {
+    "unique_id": "amc-5115959534",
+    "address": {
+      "street": "3rd Street Promenade",
+      "housenumber": "1441",
+      "city": "Santa Monica",
+      "postcode": "90401"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.767397",
+    "lat": 34.0148476,
+    "lon": -118.4948686,
+    "name": "AMC Broadway 4",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-loews-broadway-4"
+  },
+  {
+    "unique_id": "amc-5415267421",
+    "address": {
+      "street": "West Sunset Boulevard",
+      "housenumber": "8000",
+      "city": "Los Angeles",
+      "postcode": "90046"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.767723",
+    "lat": 34.0972967,
+    "lon": -118.3648736,
+    "name": "AMC Sunset 5",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-6907059385",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.768065",
+    "lat": 33.8445123,
+    "lon": -118.2613715,
+    "name": "Cinemark Carson and XD",
+    "phone": "(310) 323-0394",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://cinemark.com/southern-california/cinemark-carson-and-xd"
+  },
+  {
+    "unique_id": "amc-7101577720",
+    "address": {
+      "street": "North First Street",
+      "housenumber": "770",
+      "city": "Burbank",
+      "postcode": "91502"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.768494",
+    "lat": 34.1848094,
+    "lon": -118.3153197,
+    "name": "AMC Burbank Town Center 6",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-burbank-town-center-6"
+  },
+  {
+    "unique_id": "amc-9682309316",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.768869",
+    "lat": 34.1931099,
+    "lon": -118.6254357,
+    "name": "AMC Fallbrook 7",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/west-hills"
+  },
+  {
+    "unique_id": "cinemark-124425039",
+    "address": {
+      "street": "Marlton Avenue",
+      "housenumber": "4020",
+      "city": "Los Angeles",
+      "postcode": "90008"
+    },
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.769249",
+    "lat": 34.0115427,
+    "lon": -118.3374067,
+    "name": "Cinemark Baldwin Hills Crenshaw and XD",
+    "phone": "+1 323-296-1005",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.cinemark.com/southern-california/baldwin-hills-crenshaw-plaza-15-and-xd#theatreInfo"
+  },
+  {
+    "unique_id": "amc-155813612",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.769563",
+    "lat": 33.8339672,
+    "lon": -118.3477333,
+    "name": "AMC Del Amo 18",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-del-amo-18"
+  },
+  {
+    "unique_id": "amc-247386472",
+    "address": {
+      "street": "East Palm Avenue",
+      "housenumber": "125",
+      "city": "Burbank",
+      "postcode": "91502"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.769827",
+    "lat": 34.1819195,
+    "lon": -118.3120039,
+    "name": "AMC Burbank 16",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-burbank-16"
+  },
+  {
+    "unique_id": "amc-259278726",
+    "address": {
+      "street": "Airport Drive",
+      "housenumber": "2591",
+      "city": "Torrance",
+      "postcode": "90505"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.770185",
+    "lat": 33.7924727,
+    "lon": -118.3285061,
+    "name": "AMC Rolling Hills 20",
+    "phone": "+1 310 326 5011",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-rolling-hills-20"
+  },
+  {
+    "unique_id": "cinemark-317310026",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.770677",
+    "lat": 34.1870565,
+    "lon": -118.4127643,
+    "name": "Cinemark North Hollywood",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": null
+  },
+  {
+    "unique_id": "regal-428021737",
+    "address": {
+      "street": "West Olympic Boulevard",
+      "housenumber": "1000",
+      "city": "Los Angeles city",
+      "postcode": "90015"
+    },
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.771250",
+    "lat": 34.0457405,
+    "lon": -118.268063,
+    "name": "Regal L.A. Live",
+    "phone": "(844) 462-7342",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.regmovies.com/theatres/regal-la-live/1484"
+  },
+  {
+    "unique_id": "amc-432109184",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.771692",
+    "lat": 34.1919958,
+    "lon": -118.6257498,
+    "name": "AMC Fallbrook 7",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/west-hills/amc-fallbrook-7"
+  },
+  {
+    "unique_id": "amc-434440034",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.772033",
+    "lat": 34.1888174,
+    "lon": -118.6039868,
+    "name": "AMC Dine-In Cinema Topanga 12",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-dine-in-topanga-12"
+  },
+  {
+    "unique_id": "regal-452941389",
+    "address": {
+      "street": "Garfield Avenue",
+      "housenumber": "8630",
+      "city": "South Gate",
+      "postcode": "90280"
+    },
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.772499",
+    "lat": 33.9518489,
+    "lon": -118.1616327,
+    "name": "Regal Edwards South Gate & IMAX",
+    "phone": "(844) 462-7342",
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.regmovies.com/theaters/edwards-south-gate-stadium-20-imax/C00265383356"
+  },
+  {
+    "unique_id": "amc-482940983",
+    "address": {
+      "street": "Universal City Plaza",
+      "housenumber": "100",
+      "city": "Universal City",
+      "postcode": "91608"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.772933",
+    "lat": 34.1369696,
+    "lon": -118.3525503,
+    "name": "AMC Universal CityWalk 19",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-universal-citywalk-19-with-imax-los-angeles"
+  },
+  {
+    "unique_id": "amc-539743482",
+    "address": {
+      "street": "Shirley Avenue",
+      "housenumber": null,
+      "city": "Northridge",
+      "postcode": "91324"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.773390",
+    "lat": 34.2402082,
+    "lon": -118.5574184,
+    "name": "AMC",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-northridge-10"
+  },
+  {
+    "unique_id": "amc-735254627",
+    "address": {
+      "street": "Maxella Avenue",
+      "housenumber": "13455",
+      "city": "Marina Del Rey",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.773778",
+    "lat": 33.9873981,
+    "lon": -118.4410247,
+    "name": "AMC Dine-in Marina 6",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-dine-in-marina-6"
+  },
+  {
+    "unique_id": "amc-746126702",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.774191",
+    "lat": 33.871811,
+    "lon": -118.3558112,
+    "name": "AMC South Bay Galleria 16",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-dine-in-south-bay-galleria-16"
+  },
+  {
+    "unique_id": "amc-746779110",
+    "address": {
+      "street": "Americana Way",
+      "housenumber": "322",
+      "city": "Glendale",
+      "postcode": "91210"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.774515",
+    "lat": 34.1431335,
+    "lon": -118.2570711,
+    "name": "AMC Americana at Brand 18",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-the-americana-at-brand-18"
+  },
+  {
+    "unique_id": "amc-747461798",
+    "address": {
+      "street": "Santa Monica Boulevard",
+      "housenumber": "10250",
+      "city": "Los Angeles",
+      "postcode": "90067"
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.774835",
+    "lat": 34.057417,
+    "lon": -118.4186017,
+    "name": "AMC Century City 15",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-century-city-15"
+  },
+  {
+    "unique_id": "amc-1190222006",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-23T20:17:18.775194",
+    "lat": 34.071553,
+    "lon": -118.3583969,
+    "name": "AMC The Grove 14",
+    "phone": null,
+    "source_city": "Los Angeles city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-the-grove-14"
+  },
+  {
+    "unique_id": "amc-1355987217",
+    "address": {
+      "street": "West Arrowhead Towne Center",
+      "housenumber": "7700",
+      "city": "Glendale",
+      "postcode": "85308"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.582451",
+    "lat": 33.6428282,
+    "lon": -112.2257354,
+    "name": "AMC Arrowhead 14",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-arrowhead-14"
+  },
+  {
+    "unique_id": "amc-10776980605",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Phoenix city",
+      "postcode": "85044"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.582884",
+    "lat": 33.3168259,
+    "lon": -111.9772852,
+    "name": "AMC Ahwatukee 24",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": null
+  },
+  {
+    "unique_id": "amc-66584777",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Phoenix city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.583193",
+    "lat": 33.5081322,
+    "lon": -112.0276073,
+    "name": "AMC DINE-IN Esplanade 14",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-dine-in-esplanade-14"
+  },
+  {
+    "unique_id": "amc-109835095",
+    "address": {
+      "street": "North 3rd Street",
+      "housenumber": "465",
+      "city": "Phoenix",
+      "postcode": "85004"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.583518",
+    "lat": 33.4537293,
+    "lon": -112.0693155,
+    "name": "AMC Arizona Center 24",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-arizona-center-24"
+  },
+  {
+    "unique_id": "amc-157628482",
+    "address": {
+      "street": "South Mill Avenue",
+      "housenumber": "730",
+      "city": "Tempe",
+      "postcode": "85281"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.583906",
+    "lat": 33.4229967,
+    "lon": -111.941511,
+    "name": "AMC Centerpoint 11",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-centerpoint-11"
+  },
+  {
+    "unique_id": "amc-366749546",
+    "address": {
+      "street": "West Hanna Lane",
+      "housenumber": "9400",
+      "city": "Glendale",
+      "postcode": "85305"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.584221",
+    "lat": 33.5354839,
+    "lon": -112.2613682,
+    "name": "AMC Westgate 20",
+    "phone": "+623-772-1371",
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-westgate-20"
+  },
+  {
+    "unique_id": "amc-521728070",
+    "address": {
+      "street": "East Ray Road",
+      "housenumber": "4915",
+      "city": "Phoenix",
+      "postcode": "85044-6407"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.584530",
+    "lat": 33.3168065,
+    "lon": -111.9773532,
+    "name": "AMC",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-ahwatukee-24"
+  },
+  {
+    "unique_id": "amc-558468069",
+    "address": {
+      "street": "West Agua Fria Freeway",
+      "housenumber": "3033",
+      "city": "Phoenix",
+      "postcode": "85027"
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.584817",
+    "lat": 33.666171,
+    "lon": -112.1240462,
+    "name": "AMC Deer Valley 17",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-deer-valley-17"
+  },
+  {
+    "unique_id": "amc-735237031",
+    "address": {
+      "street": "North Tatum Boulevard",
+      "housenumber": "21001",
+      "city": "Phoenix",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-23T20:17:45.585098",
+    "lat": 33.6757385,
+    "lon": -111.970791,
+    "name": "AMC Desert Ridge 18",
+    "phone": null,
+    "source_city": "Phoenix city, AZ",
+    "website": "https://www.amctheatres.com/movie-theatres/phoenix/amc-desert-ridge-18"
+  },
+  {
+    "unique_id": "regal-463772269",
+    "address": {
+      "street": "West Webster Avenue",
+      "housenumber": "1471",
+      "city": "Chicago",
+      "postcode": "60614"
+    },
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.075655",
+    "lat": 41.9213576,
+    "lon": -87.6652615,
+    "name": "Regal Webster Place 11",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.regmovies.com/theatres/regal-webster-place/1793"
+  },
+  {
+    "unique_id": "amc-1892871989",
+    "address": {
+      "street": "East Illinois Street",
+      "housenumber": "322",
+      "city": "Chicago",
+      "postcode": "60611"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.076379",
+    "lat": 41.8914092,
+    "lon": -87.6187573,
+    "name": "AMC River East 21",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-river-east-21"
+  },
+  {
+    "unique_id": "amc-2708233532",
+    "address": {
+      "street": "North Michigan Avenue",
+      "housenumber": "600",
+      "city": "Chicago",
+      "postcode": "60611"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.076955",
+    "lat": 41.8926601,
+    "lon": -87.6252293,
+    "name": "AMC Dine-In 600 North Michigan 9",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-dine-in-600-north-michigan-9"
+  },
+  {
+    "unique_id": "amc-3323773297",
+    "address": {
+      "street": "North Clybourn Avenue",
+      "housenumber": "1500",
+      "city": "Chicago",
+      "postcode": "60610"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.077518",
+    "lat": 41.9084267,
+    "lon": -87.6465893,
+    "name": "AMC NewCity 14",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-newcity-14"
+  },
+  {
+    "unique_id": "amc-5115836538",
+    "address": {
+      "street": "North State Street",
+      "housenumber": "108",
+      "city": "Chicago",
+      "postcode": "60602"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.077995",
+    "lat": 41.8836842,
+    "lon": -87.6282717,
+    "name": "AMC Dine-In Block 37",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-dine-in-block-37"
+  },
+  {
+    "unique_id": "amc-162243332",
+    "address": {
+      "street": "South Cicero Avenue",
+      "housenumber": "7601",
+      "city": "Chicago",
+      "postcode": "60652"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.079422",
+    "lat": 41.7535649,
+    "lon": -87.7333804,
+    "name": "AMC Ford City 14",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-ford-city-14"
+  },
+  {
+    "unique_id": "amc-162553341",
+    "address": {
+      "street": "West Homer Street",
+      "housenumber": "5530",
+      "city": "Chicago",
+      "postcode": "60639"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.079950",
+    "lat": 41.9158962,
+    "lon": -87.7645964,
+    "name": "AMC Showplace Galewood 14",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-galewood-crossings-14"
+  },
+  {
+    "unique_id": "amc-207001540",
+    "address": {
+      "street": "Bryn Mawr Avenue",
+      "housenumber": "9701",
+      "city": "Rosemont",
+      "postcode": "60018"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.080448",
+    "lat": 41.9800362,
+    "lon": -87.8675405,
+    "name": "AMC DINE-IN Rosemont 12",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-dine-in-rosemont-12"
+  },
+  {
+    "unique_id": "regal-209454953",
+    "address": {
+      "street": "North Western Avenue",
+      "housenumber": "2600",
+      "city": "Chicago",
+      "postcode": "60647"
+    },
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.080944",
+    "lat": 41.9296437,
+    "lon": -87.6883917,
+    "name": "Regal City North Stadium 14 IMAX & RPX",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.regmovies.com/theatres/regal-city-north-imax-rpx/1789"
+  },
+  {
+    "unique_id": "regal-211121005",
+    "address": {
+      "street": "East 79th Street",
+      "housenumber": "1641",
+      "city": "Chicago",
+      "postcode": "60617"
+    },
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.081437",
+    "lat": 41.7512487,
+    "lon": -87.583517,
+    "name": "Avalon Regal Theater",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.avalonregal.com/"
+  },
+  {
+    "unique_id": "amc-550785988",
+    "address": {
+      "street": "North Harlem Avenue",
+      "housenumber": "4520",
+      "city": "Norridge",
+      "postcode": "60706"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.081847",
+    "lat": 41.9624493,
+    "lon": -87.8105969,
+    "name": "AMC Norridge 6 Cinemas",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-norridge-6"
+  },
+  {
+    "unique_id": "amc-554930633",
+    "address": {
+      "street": "West 63rd Street",
+      "housenumber": "9201",
+      "city": "Hodgkins",
+      "postcode": "60525"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.082301",
+    "lat": 41.7766679,
+    "lon": -87.8589604,
+    "name": "AMC Loews Quarry Cinemas 14",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-quarry-cinemas-14"
+  },
+  {
+    "unique_id": "amc-686726388",
+    "address": {
+      "street": "Carpenter Road",
+      "housenumber": "7000",
+      "city": "Skokie",
+      "postcode": "60077"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.082804",
+    "lat": 42.0096707,
+    "lon": -87.7650438,
+    "name": "AMC Village Crossing 18",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-village-crossing-18"
+  },
+  {
+    "unique_id": "amc-737591266",
+    "address": {
+      "street": "West Cermak Road",
+      "housenumber": "4779",
+      "city": "Cicero",
+      "postcode": "60804"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.083276",
+    "lat": 41.8486784,
+    "lon": -87.7426751,
+    "name": "AMC Cicero 14",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-cicero-14"
+  },
+  {
+    "unique_id": "amc-737629934",
+    "address": {
+      "street": "Rivercrest Drive",
+      "housenumber": "13221",
+      "city": "Crestwood",
+      "postcode": "60445"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.083805",
+    "lat": 41.6516123,
+    "lon": -87.7442324,
+    "name": "AMC Crestwood 18",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-crestwood-18"
+  },
+  {
+    "unique_id": "amc-754143547",
+    "address": {
+      "street": "West 95th Street",
+      "housenumber": "6501",
+      "city": "Chicago Ridge",
+      "postcode": "60415"
+    },
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.084259",
+    "lat": 41.7150271,
+    "lon": -87.7837696,
+    "name": "AMC Chicago Ridge 6",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://www.amctheatres.com/movie-theatres/chicago/amc-chicago-ridge-6"
+  },
+  {
+    "unique_id": "cinemark-6179561",
+    "address": {
+      "street": "West North Avenue",
+      "housenumber": "1001",
+      "city": "Melrose Park",
+      "postcode": "60160"
+    },
+    "brand": "cinemark",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-23T20:17:29.084755",
+    "lat": 41.9097857,
+    "lon": -87.846426,
+    "name": "Cinemark Melrose Park",
+    "phone": null,
+    "source_city": "Chicago city, IL",
+    "website": "https://cinemark.com/illinois/cinemark-melrose-park"
+  },
+  {
+    "unique_id": "amc-919353391",
+    "address": {
+      "street": "Texas Avenue",
+      "housenumber": "510",
+      "city": "Houston",
+      "postcode": "77002"
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.140117",
+    "lat": 29.7617813,
+    "lon": -95.3668957,
+    "name": "AMC Houston 8",
+    "phone": "+1-713-223-3456",
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-houston-8"
+  },
+  {
+    "unique_id": "amc-46714131",
+    "address": {
+      "street": "South Sam Houston Parkway East",
+      "housenumber": "11801",
+      "city": "Houston",
+      "postcode": "77089"
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.140602",
+    "lat": 29.6048989,
+    "lon": -95.2128336,
+    "name": "AMC Gulf Pointe 30",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-gulf-pointe-30"
+  },
+  {
+    "unique_id": "regal-48232505",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.141054",
+    "lat": 29.7860171,
+    "lon": -95.463332,
+    "name": "Regal Cinemas",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "amc-156319868",
+    "address": {
+      "street": "Fountain Lake Drive",
+      "housenumber": "11225",
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.141410",
+    "lat": 29.6412241,
+    "lon": -95.5843987,
+    "name": "AMC Fountains 18",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-fountains-18"
+  },
+  {
+    "unique_id": "cinemark-184062611",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.141728",
+    "lat": 29.5468204,
+    "lon": -95.7618353,
+    "name": "Cinemark",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "regal-231126359",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Houston",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.142060",
+    "lat": 29.7313726,
+    "lon": -95.4408474,
+    "name": "Regal Edwards Greenway Grand Palace ScreenX & RPX",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.regmovies.com/theatres/regal-edwards-greenway-grand-palace-rpx/1051"
+  },
+  {
+    "unique_id": "cinemark-272877655",
+    "address": {
+      "street": "Northwest Freeway",
+      "housenumber": "12920",
+      "city": "Houston",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.142361",
+    "lat": 29.8467206,
+    "lon": -95.4964576,
+    "name": "Cinemark Tinseltown",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "amc-316129162",
+    "address": {
+      "street": "Holzwarth Road",
+      "housenumber": "20115",
+      "city": "Spring",
+      "postcode": "77388"
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.142634",
+    "lat": 30.0572649,
+    "lon": -95.4384679,
+    "name": "AMC Spring 10",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-spring-10"
+  },
+  {
+    "unique_id": "cinemark-347266973",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.142896",
+    "lat": 29.9700883,
+    "lon": -95.6883477,
+    "name": "Cinemark Cypress 12",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-377912565",
+    "address": {
+      "street": "West Grand Parkway North",
+      "housenumber": "1030",
+      "city": "Katy",
+      "postcode": "77449"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.143180",
+    "lat": 29.7868181,
+    "lon": -95.7745602,
+    "name": "Cinemark",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-408394876",
+    "address": {
+      "street": "Silverlake Village Drive",
+      "housenumber": "3311",
+      "city": "Pearland",
+      "postcode": "77584"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.143449",
+    "lat": 29.5490408,
+    "lon": -95.3850265,
+    "name": "Cinemark Pearland and XD",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "regal-458126185",
+    "address": {
+      "street": "Tomball Parkway",
+      "housenumber": "24720",
+      "city": "Tomball",
+      "postcode": "77375"
+    },
+    "brand": "regal",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.143719",
+    "lat": 30.0416219,
+    "lon": -95.6054555,
+    "name": "Regal Lone Star IMAX & RPX",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.regmovies.com/theatres/regal-lone-star-imax-rpx/1441"
+  },
+  {
+    "unique_id": "amc-520606963",
+    "address": {
+      "street": "Yorktown Crossing Parkway",
+      "housenumber": "15900",
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.144204",
+    "lat": 29.8636185,
+    "lon": -95.6484805,
+    "name": "AMC Yorktown 15",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-yorktown-15"
+  },
+  {
+    "unique_id": "amc-605433806",
+    "address": {
+      "street": "Tomball Parkway",
+      "housenumber": "17145",
+      "city": "Houston",
+      "postcode": "77064"
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.144594",
+    "lat": 29.9533848,
+    "lon": -95.5410239,
+    "name": "AMC Willowbrook 24",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-willowbrook-24"
+  },
+  {
+    "unique_id": "cinemark-608469309",
+    "address": {
+      "street": "West Grand Parkway South Frontage Road",
+      "housenumber": "7301",
+      "city": "Richmond",
+      "postcode": "77407"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.145031",
+    "lat": 29.6718386,
+    "lon": -95.7486035,
+    "name": "Cinemark",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-707043854",
+    "address": {
+      "street": "Kuykendahl Road",
+      "housenumber": "21440",
+      "city": "Spring",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.145594",
+    "lat": 30.0806979,
+    "lon": -95.5180876,
+    "name": "Cinemark",
+    "phone": "+1-281-288-2894",
+    "source_city": "Houston city, TX",
+    "website": "https://www.cinemark.com/theatres/tx-spring/cinemark-spring-klein-and-xd"
+  },
+  {
+    "unique_id": "amc-735264941",
+    "address": {
+      "street": "Town Center Boulevard South",
+      "housenumber": "3301",
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.146026",
+    "lat": 29.5869261,
+    "lon": -95.6271699,
+    "name": "AMC First Colony 24",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-first-colony-24"
+  },
+  {
+    "unique_id": "amc-735289540",
+    "address": {
+      "street": "Katy Mills Circle",
+      "housenumber": "5000",
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.146398",
+    "lat": 29.7724774,
+    "lon": -95.8096993,
+    "name": "AMC Katy Mills 20",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-katy-mills-20"
+  },
+  {
+    "unique_id": "cinemark-737710548",
+    "address": {
+      "street": "East Sam Houston Parkway South",
+      "housenumber": "2101",
+      "city": "Pasadena",
+      "postcode": "77503"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.146710",
+    "lat": 29.6806383,
+    "lon": -95.1532335,
+    "name": "Cinemark Hollywood Movies 20",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.cinemark.com/texas-gulf-coast/cinemark-hollywood-movies-20"
+  },
+  {
+    "unique_id": "cinemark-738317270",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.147124",
+    "lat": 29.7683984,
+    "lon": -95.2292434,
+    "name": "Cinemark Tinseltown USA and XD",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://cinemark.com/texas-gulf-coast/cinemark-tinseltown-usa"
+  },
+  {
+    "unique_id": "amc-746141030",
+    "address": {
+      "street": "Eastex Freeway",
+      "housenumber": "20131",
+      "city": "Humble",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.147494",
+    "lat": 30.009859,
+    "lon": -95.27165,
+    "name": "AMC Deerbrook 24",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/houston/amc-deerbrook-24"
+  },
+  {
+    "unique_id": "cinemark-747148748",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Houston city",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-23T20:17:38.147818",
+    "lat": 29.7804193,
+    "lon": -95.5408384,
+    "name": "Cinemark Memorial City",
+    "phone": null,
+    "source_city": "Houston city, TX",
+    "website": "https://www.cinemark.com/texas-gulf-coast/cinemark-memorial-city"
+  },
+  {
+    "unique_id": "cinemark-343293151",
+    "address": {
+      "street": "Walnut Street",
+      "housenumber": "4012",
+      "city": "Philadelphia",
+      "postcode": "19104"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.421904",
+    "lat": 39.9538723,
+    "lon": -75.2032852,
+    "name": "Cinemark University City Penn 6",
+    "phone": "+1-215-386-9800",
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.cinemark.com/pennsylvania/cinemark-university-city-penn-6"
+  },
+  {
+    "unique_id": "amc-1697053207",
+    "address": {
+      "street": "North Broad Street",
+      "housenumber": "1600",
+      "city": "Philadelphia",
+      "postcode": "19121"
+    },
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.422206",
+    "lat": 39.9774961,
+    "lon": -75.1584795,
+    "name": "AMC Broadstreet 7",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.amctheatres.com/movie-theatres/philadelphia/amc-broadstreet-7"
+  },
+  {
+    "unique_id": "regal-5440718278",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Philadelphia city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.422554",
+    "lat": 39.9428131,
+    "lon": -74.9630098,
+    "name": "Regal Moorsetown Mall Stadium 12 & RPX",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": null
+  },
+  {
+    "unique_id": "amc-7204177389",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Philadelphia city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.422871",
+    "lat": 39.9522508,
+    "lon": -75.1576892,
+    "name": "AMC Dine-In Fashion District 8",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.amctheatres.com/movie-theatres/philadelphia/amc-dine-in-fashion-district-8"
+  },
+  {
+    "unique_id": "amc-58745057",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Philadelphia city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.423200",
+    "lat": 40.1145375,
+    "lon": -75.2791847,
+    "name": "AMC Plymouth Meeting Mall 12",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.amctheatres.com/movie-theatres/philadelphia/amc-plymouth-meeting-mall-12"
+  },
+  {
+    "unique_id": "regal-60928793",
+    "address": {
+      "street": "Main Street",
+      "housenumber": "3720",
+      "city": "Philadelphia",
+      "postcode": "19127"
+    },
+    "brand": "regal",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.423476",
+    "lat": 40.0153861,
+    "lon": -75.2105088,
+    "name": "Regal UA Main Street Theatre",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.regmovies.com/theatres/regal-ua-main-street-theatre/1314"
+  },
+  {
+    "unique_id": "amc-304668392",
+    "address": {
+      "street": "Kaighns Avenue",
+      "housenumber": "2121",
+      "city": "Cherry Hill",
+      "postcode": "08002"
+    },
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.423762",
+    "lat": 39.9362881,
+    "lon": -75.0280699,
+    "name": "AMC Loews Cherry Hill 24",
+    "phone": "(856) 486-7420",
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.amctheatres.com/movie-theatres/philadelphia/amc-cherry-hill-24"
+  },
+  {
+    "unique_id": "amc-738380688",
+    "address": {
+      "street": "Franklin Mills Circle",
+      "housenumber": "1149",
+      "city": "Philadelphia",
+      "postcode": "19154"
+    },
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.424061",
+    "lat": 40.0838517,
+    "lon": -74.9610094,
+    "name": "AMC Philadelphia Mills 14",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.amctheatres.com/movie-theatres/philadelphia/amc-philadelphia-mills-14"
+  },
+  {
+    "unique_id": "amc-738510235",
+    "address": {
+      "street": "Bristol Pike",
+      "housenumber": "1336",
+      "city": "Bensalem Township",
+      "postcode": "19020"
+    },
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-23T20:17:54.424479",
+    "lat": 40.0743089,
+    "lon": -74.9681422,
+    "name": "AMC Woodhaven 10",
+    "phone": null,
+    "source_city": "Philadelphia city, PA",
+    "website": "https://www.amctheatres.com/movie-theatres/philadelphia/amc-woodhaven-10"
+  },
+  {
+    "unique_id": "regal-47335623",
+    "address": {
+      "street": "Henderson Pass",
+      "housenumber": "17640",
+      "city": "San Antonio",
+      "postcode": "78232"
+    },
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.395738",
+    "lat": 29.6048375,
+    "lon": -98.4643583,
+    "name": "Regal Northwoods Stadium 14",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": "https://www.regmovies.com/Theatres/Theatre-Folder/Regal-Northwoods-Stadium-14-1377"
+  },
+  {
+    "unique_id": "amc-80188578",
+    "address": {
+      "street": "East Commerce Street",
+      "housenumber": "849",
+      "city": "San Antonio",
+      "postcode": "78205"
+    },
+    "brand": "amc",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.396043",
+    "lat": 29.4246426,
+    "lon": -98.4849454,
+    "name": "AMC Rivercenter 11 with Alamo IMAX",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/san-antonio/amc-rivercenter-11-with-alamo-imax"
+  },
+  {
+    "unique_id": "regal-125525941",
+    "address": {
+      "street": "Cinema Ridge",
+      "housenumber": "2828",
+      "city": "San Antonio",
+      "postcode": "78238"
+    },
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.396367",
+    "lat": 29.4626083,
+    "lon": -98.6183563,
+    "name": "Regal Cielo Vista Stadium 18 & RPX",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": "https://www.regmovies.com/Theatres/Theatre-Folder/Regal-Cielo-Vista-Stadium-18-RPX-2922"
+  },
+  {
+    "unique_id": "regal-238812575",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "San Antonio city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.396658",
+    "lat": 29.5612269,
+    "lon": -98.5860048,
+    "name": "Regal Fiesta - San Antonio",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "regal-241289615",
+    "address": {
+      "street": "Interstate 10 West",
+      "housenumber": "11075",
+      "city": "San Antonio",
+      "postcode": "78230"
+    },
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.396929",
+    "lat": 29.5483901,
+    "lon": -98.5788694,
+    "name": "Regal Huebner Oaks Stadium 14",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "regal-373713567",
+    "address": {
+      "street": "Pat Booker Road",
+      "housenumber": "7901",
+      "city": "Live Oak",
+      "postcode": "78233"
+    },
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.397226",
+    "lat": 29.5655069,
+    "lon": -98.3331142,
+    "name": "Regal Live Oak Stadium 18 & RPX",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-737993224",
+    "address": {
+      "street": "South New Braunfels Avenue",
+      "housenumber": "4224",
+      "city": "San Antonio",
+      "postcode": "78223"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.397504",
+    "lat": 29.3763224,
+    "lon": -98.4584563,
+    "name": "Cinemark McCreless Market",
+    "phone": "+1-210-532-4459",
+    "source_city": "San Antonio city, TX",
+    "website": "https://www.cinemark.com"
+  },
+  {
+    "unique_id": "regal-747409316",
+    "address": {
+      "street": "East Basse Road",
+      "housenumber": "255",
+      "city": "San Antonio",
+      "postcode": "78209"
+    },
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-23T20:18:04.397773",
+    "lat": 29.4952823,
+    "lon": -98.4805851,
+    "name": "Regal Alamo Quarry",
+    "phone": null,
+    "source_city": "San Antonio city, TX",
+    "website": "https://www.regmovies.com/theatres/regal-alamo-quarry/0939"
+  },
+  {
+    "unique_id": "amc-446003391",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "San Diego city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.572688",
+    "lat": 32.8649226,
+    "lon": -117.2320884,
+    "name": "AMC Theatres La Jolla",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-la-jolla-12"
+  },
+  {
+    "unique_id": "amc-4848393789",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "San Diego city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.573111",
+    "lat": 32.6259356,
+    "lon": -116.96619,
+    "name": "AMC Otay Ranch 12",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-otay-ranch-12"
+  },
+  {
+    "unique_id": "amc-31818109",
+    "address": {
+      "street": "Dennery Road",
+      "housenumber": "770",
+      "city": "San Diego",
+      "postcode": "92154"
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.573769",
+    "lat": 32.5788455,
+    "lon": -117.0367645,
+    "name": "AMC Palm Promenade 24",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-palm-promenade-24"
+  },
+  {
+    "unique_id": "regal-109688348",
+    "address": {
+      "street": "Jamacha Road",
+      "housenumber": "2951",
+      "city": "El Cajon",
+      "postcode": "92019"
+    },
+    "brand": "regal",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.574750",
+    "lat": 32.7373928,
+    "lon": -116.9393871,
+    "name": "Regal Edwards Rancho San Diego",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.regmovies.com/theatres/regal-edwards-rancho-san-diego/1049"
+  },
+  {
+    "unique_id": "amc-544065394",
+    "address": {
+      "street": "Poway Road",
+      "housenumber": "13475",
+      "city": "Poway",
+      "postcode": "92064"
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.575158",
+    "lat": 32.9546015,
+    "lon": -117.039659,
+    "name": "AMC Poway 10",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-dine-in-poway-10"
+  },
+  {
+    "unique_id": "regal-630089098",
+    "address": {
+      "street": "Tierra del Rey",
+      "housenumber": "1025",
+      "city": "Chula Vista",
+      "postcode": "91910"
+    },
+    "brand": "regal",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.575465",
+    "lat": 32.638275,
+    "lon": -117.0190394,
+    "name": "Regal Rancho Del Rey",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": null
+  },
+  {
+    "unique_id": "amc-709059097",
+    "address": {
+      "street": "Camino del Rio North",
+      "housenumber": "1640",
+      "city": "San Diego",
+      "postcode": "92108"
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.575755",
+    "lat": 32.7675873,
+    "lon": -117.1483079,
+    "name": "AMC Mission Valley 20",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-mission-valley-20"
+  },
+  {
+    "unique_id": "amc-737385973",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "San Diego city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.576038",
+    "lat": 32.6535767,
+    "lon": -117.0654192,
+    "name": "AMC Plaza Bonita 14",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-plaza-bonita-14"
+  },
+  {
+    "unique_id": "amc-744775716",
+    "address": {
+      "street": "Friars Road",
+      "housenumber": "7037",
+      "city": "San Diego",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.576326",
+    "lat": 32.7672925,
+    "lon": -117.1665287,
+    "name": "AMC Fashion Valley 18",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-fashion-valley-18"
+  },
+  {
+    "unique_id": "regal-746777279",
+    "address": {
+      "street": "Parkway Plaza",
+      "housenumber": "405",
+      "city": "El Cajon",
+      "postcode": "92020"
+    },
+    "brand": "regal",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.576667",
+    "lat": 32.8052827,
+    "lon": -116.9674838,
+    "name": "Regal Parkway Plaza 18",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": null
+  },
+  {
+    "unique_id": "amc-760635449",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "555",
+      "city": "Chula Vista",
+      "postcode": "91910"
+    },
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-23T20:18:11.577098",
+    "lat": 32.6298069,
+    "lon": -117.0851193,
+    "name": "AMC Chula Vista 10",
+    "phone": null,
+    "source_city": "San Diego city, CA",
+    "website": "https://www.amctheatres.com/movie-theatres/san-diego/amc-chula-vista-10"
+  },
+  {
+    "unique_id": "amc-343387981",
+    "address": {
+      "street": "Coneflower Drive",
+      "housenumber": "100",
+      "city": "Garland",
+      "postcode": "75040"
+    },
+    "brand": "amc",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.865777",
+    "lat": 32.950443,
+    "lon": -96.613948,
+    "name": "AMC Firewheel 18",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/dallas-ft-worth/amc-firewheel-18"
+  },
+  {
+    "unique_id": "amc-454296692",
+    "address": {
+      "street": "Belt Line Road",
+      "housenumber": "5100",
+      "city": "Dallas",
+      "postcode": "75254"
+    },
+    "brand": "amc",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.866184",
+    "lat": 32.950331,
+    "lon": -96.8205753,
+    "name": "AMC Village on the Parkway",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/dallas-ft-worth/amc-village-on-the-parkway-9"
+  },
+  {
+    "unique_id": "cinemark-467534796",
+    "address": {
+      "street": "Webb Chapel Road",
+      "housenumber": "11819",
+      "city": "Dallas",
+      "postcode": null
+    },
+    "brand": "cinemark",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.866535",
+    "lat": 32.9103752,
+    "lon": -96.8744226,
+    "name": "Cinemark 17",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "regal-468042738",
+    "address": {
+      "street": "McCree Road",
+      "housenumber": "11801",
+      "city": "Dallas",
+      "postcode": "75238"
+    },
+    "brand": "regal",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.866890",
+    "lat": 32.8696768,
+    "lon": -96.6755099,
+    "name": "Regal Cinemas",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "cinemark-560268932",
+    "address": {
+      "street": "Summer Lee Drive",
+      "housenumber": "2125",
+      "city": "Rockwall",
+      "postcode": "75032"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.867236",
+    "lat": 32.8913194,
+    "lon": -96.4799713,
+    "name": "Cinemark Rockwall 14 and XD",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": "https://www.cinemark.com/north-texas/cinemark-12-rockwall"
+  },
+  {
+    "unique_id": "amc-560268959",
+    "address": {
+      "street": "Lyndon B Johnson Freeway",
+      "housenumber": "19919",
+      "city": "Mesquite",
+      "postcode": "75149"
+    },
+    "brand": "amc",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.867554",
+    "lat": 32.7886706,
+    "lon": -96.6272548,
+    "name": "AMC Mesquite 30",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/dallas-ft-worth/amc-dine-in-mesquite-30"
+  },
+  {
+    "unique_id": "cinemark-588812037",
+    "address": {
+      "street": "South Stemmons Freeway",
+      "housenumber": "2401",
+      "city": "Lewisville",
+      "postcode": "75067"
+    },
+    "brand": "cinemark",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.867824",
+    "lat": 33.00143,
+    "lon": -96.9707258,
+    "name": "Cinemark 15 Vista Ridge",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": null
+  },
+  {
+    "unique_id": "amc-735288033",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Dallas city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.868104",
+    "lat": 32.8411294,
+    "lon": -96.995594,
+    "name": "AMC Irving Mall 14",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/dallas-ft-worth/amc-irving-mall-14"
+  },
+  {
+    "unique_id": "amc-747461217",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Dallas city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-23T20:18:20.868365",
+    "lat": 32.8686703,
+    "lon": -96.7737344,
+    "name": "AMC Northpark 15",
+    "phone": null,
+    "source_city": "Dallas city, TX",
+    "website": "https://www.amctheatres.com/movie-theatres/dallas-ft-worth/amc-northpark-15"
+  },
+  {
+    "unique_id": "cinemark-430463722",
+    "address": {
+      "street": "Southside Boulevard",
+      "housenumber": "4535",
+      "city": "Jacksonville",
+      "postcode": "32216"
+    },
+    "brand": "cinemark",
+    "city_geoid": "1235000",
+    "last_updated": "2025-03-23T20:18:30.181987",
+    "lat": 30.2634161,
+    "lon": -81.5539467,
+    "name": "Cinemark Tinseltown and XD",
+    "phone": null,
+    "source_city": "Jacksonville city, FL",
+    "website": null
+  },
+  {
+    "unique_id": "regal-451140340",
+    "address": {
+      "street": "Beach Boulevard",
+      "housenumber": "14051",
+      "city": "Jacksonville Beach",
+      "postcode": "32250"
+    },
+    "brand": "regal",
+    "city_geoid": "1235000",
+    "last_updated": "2025-03-23T20:18:30.182331",
+    "lat": 30.2893719,
+    "lon": -81.4466109,
+    "name": "Regal Beach Boulevard 18",
+    "phone": null,
+    "source_city": "Jacksonville city, FL",
+    "website": "https://www.regmovies.com/theatres/regal-beach-boulevard/0230"
+  },
+  {
+    "unique_id": "regal-593082429",
+    "address": {
+      "street": "Philips Highway",
+      "housenumber": "9525",
+      "city": "Jacksonville",
+      "postcode": "32256"
+    },
+    "brand": "regal",
+    "city_geoid": "1235000",
+    "last_updated": "2025-03-23T20:18:30.182817",
+    "lat": 30.192776,
+    "lon": -81.564673,
+    "name": "Regal Cinemas Avenues 20 & RPX",
+    "phone": null,
+    "source_city": "Jacksonville city, FL",
+    "website": "https://www.regmovies.com/theatres/regal-avenues-4dx-rpx/0241"
+  },
+  {
+    "unique_id": "amc-746683414",
+    "address": {
+      "street": "Wells Road",
+      "housenumber": "1910",
+      "city": "Orange Park",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "1235000",
+    "last_updated": "2025-03-23T20:18:30.183164",
+    "lat": 30.1853298,
+    "lon": -81.7363085,
+    "name": "AMC Orange Park 24",
+    "phone": null,
+    "source_city": "Jacksonville city, FL",
+    "website": "https://www.amctheatres.com/movie-theatres/jacksonville/amc-orange-park-24"
+  }
+]

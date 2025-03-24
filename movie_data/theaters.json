@@ -1,0 +1,558 @@
+[
+  {
+    "unique_id": "amc-368043799",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "1998",
+      "city": "New York",
+      "postcode": "10023"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.288818",
+    "lat": 40.7750135,
+    "lon": -73.9817481,
+    "name": "AMC Loews Lincoln Square 13",
+    "phone": "+1 212-336-5020",
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-loews-lincoln-square-13"
+  },
+  {
+    "unique_id": "amc-663103163",
+    "address": {
+      "street": "West 34th Street",
+      "housenumber": "312",
+      "city": "New York",
+      "postcode": "10001"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.289261",
+    "lat": 40.7524154,
+    "lon": -73.9944494,
+    "name": "AMC 34th Street 14",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-34th-street-14"
+  },
+  {
+    "unique_id": "amc-761560987",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.289566",
+    "lat": 40.7385891,
+    "lon": -73.9896994,
+    "name": "AMC Loews 19th St. East 6",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-loews-19th-st-east-6"
+  },
+  {
+    "unique_id": "regal-889115578",
+    "address": {
+      "street": "North End Avenue",
+      "housenumber": "102",
+      "city": "New York",
+      "postcode": "10282"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.289826",
+    "lat": 40.714742,
+    "lon": -74.015169,
+    "name": "Regal Battery Park",
+    "phone": "+1 844 462 7342",
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/Theatres/Theatre-Folder/Regal-Battery-Park-Stadium-11-6582"
+  },
+  {
+    "unique_id": "amc-1293173329",
+    "address": {
+      "street": "2nd Avenue",
+      "housenumber": "570",
+      "city": "New York city",
+      "postcode": "10016"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.290194",
+    "lat": 40.7429085,
+    "lon": -73.9767783,
+    "name": "AMC Kips Bay 15",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-kips-bay-15"
+  },
+  {
+    "unique_id": "regal-1419725355",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New Rochelle",
+      "postcode": "10801"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.290599",
+    "lat": 40.9110372,
+    "lon": -73.7796609,
+    "name": "Regal New Roc Stadium",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "regal-2326030976",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "1320",
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.290937",
+    "lat": 40.7340532,
+    "lon": -73.9907254,
+    "name": "Regal Union Square Stadium 14",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-union-square-screenx-4dx/1320"
+  },
+  {
+    "unique_id": "amc-2562438625",
+    "address": {
+      "street": "Frederick Douglass Boulevard",
+      "housenumber": "2309",
+      "city": "New York",
+      "postcode": "10027"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.291360",
+    "lat": 40.8097211,
+    "lon": -73.9517949,
+    "name": "AMC Magic Johnson Harlem 9",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-magic-johnson-harlem-9"
+  },
+  {
+    "unique_id": "regal-2622901047",
+    "address": {
+      "street": "Cooper Avenue",
+      "housenumber": "80-28",
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.291745",
+    "lat": 40.7079132,
+    "lon": -73.8679145,
+    "name": "Regal Atlas Park Stadium 8",
+    "phone": "+1-718-416-1349",
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theaters/regal-atlas-park-stadium-8/C00886889702"
+  },
+  {
+    "unique_id": "regal-2716231259",
+    "address": {
+      "street": "West 42nd Street",
+      "housenumber": "247",
+      "city": "New York",
+      "postcode": "10036"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.292062",
+    "lat": 40.7570477,
+    "lon": -73.9889365,
+    "name": "Regal E-Walk Stadium 13 & RPX",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-e-walk-4dx-rpx/1929"
+  },
+  {
+    "unique_id": "amc-2758640929",
+    "address": {
+      "street": "Broadway",
+      "housenumber": "2310",
+      "city": "New York",
+      "postcode": "10024"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.292395",
+    "lat": 40.7867861,
+    "lon": -73.9774328,
+    "name": "AMC Loews 84th Street 6",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-84th-street-6"
+  },
+  {
+    "unique_id": "amc-2861113982",
+    "address": {
+      "street": "Bartow Avenue",
+      "housenumber": "2210",
+      "city": "New York city",
+      "postcode": "10475"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.292679",
+    "lat": 40.8670408,
+    "lon": -73.8251735,
+    "name": "AMC Bay Plaza Cinema 13",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-bay-plaza-cinema-13"
+  },
+  {
+    "unique_id": "amc-4071907604",
+    "address": {
+      "street": "3rd Avenue",
+      "housenumber": "66",
+      "city": "New York",
+      "postcode": "10003"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.293014",
+    "lat": 40.7315215,
+    "lon": -73.9887471,
+    "name": "AMC Loews Village 7",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-village-7"
+  },
+  {
+    "unique_id": "amc-5116117400",
+    "address": {
+      "street": "3rd Avenue",
+      "housenumber": "1538",
+      "city": "New York",
+      "postcode": "10028"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.293356",
+    "lat": 40.7794376,
+    "lon": -73.954081,
+    "name": "AMC Loews Orpheum 7",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-loews-orpheum-7"
+  },
+  {
+    "unique_id": "amc-5360034111",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.293682",
+    "lat": 40.7266521,
+    "lon": -74.0381087,
+    "name": "AMC Newport 11",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/jersey-city/amc-newport-centre-11"
+  },
+  {
+    "unique_id": "amc-6910638032",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.294047",
+    "lat": 40.7934466,
+    "lon": -74.2568541,
+    "name": "AMC DINE-IN Essex Green 9",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/west-orange/amc-dine-in-essex-green-9"
+  },
+  {
+    "unique_id": "regal-6912090035",
+    "address": {
+      "street": "Delancey Street",
+      "housenumber": "129",
+      "city": "New York",
+      "postcode": "10002"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.294353",
+    "lat": 40.7182171,
+    "lon": -73.9879129,
+    "name": "Regal Essex 14 & RPX",
+    "phone": "+1-212-475-5768",
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "amc-6932774599",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.294667",
+    "lat": 40.7789874,
+    "lon": -73.7789065,
+    "name": "AMC Bay Terrace 6",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-bay-terrace-6"
+  },
+  {
+    "unique_id": "regal-9649218717",
+    "address": {
+      "street": "37th Avenue",
+      "housenumber": "133-36",
+      "city": "Flushing",
+      "postcode": "11354"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.295003",
+    "lat": 40.7603521,
+    "lon": -73.8335782,
+    "name": "Regal Tangram 4DX",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": null
+  },
+  {
+    "unique_id": "amc-45791868",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.295342",
+    "lat": 40.8289215,
+    "lon": -74.1402355,
+    "name": "AMC Clifton Commons 16",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/clifton/amc-clifton-commons-16"
+  },
+  {
+    "unique_id": "amc-58569844",
+    "address": {
+      "street": "Willowbrook Boulevard",
+      "housenumber": "67",
+      "city": "Wayne",
+      "postcode": "07470"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.295629",
+    "lat": 40.8881358,
+    "lon": -74.2505553,
+    "name": "AMC Wayne 14",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/wayne/amc-loews-wayne-14"
+  },
+  {
+    "unique_id": "amc-167898265",
+    "address": {
+      "street": "Kapkowski Road",
+      "housenumber": "640",
+      "city": "Elizabeth",
+      "postcode": "07201"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.295925",
+    "lat": 40.6595289,
+    "lon": -74.1682675,
+    "name": "AMC Jersey Gardens 20",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/elizabeth/amc-loews-jersey-gardens-20"
+  },
+  {
+    "unique_id": "amc-239020218",
+    "address": {
+      "street": "Challenger Road",
+      "housenumber": "75",
+      "city": "Ridgefield Park",
+      "postcode": "07660"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.296256",
+    "lat": 40.8491624,
+    "lon": -74.01255,
+    "name": "AMC Ridgefield Park 12",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/ridgefield-park/amc-ridgefield-park-12"
+  },
+  {
+    "unique_id": "regal-241819049",
+    "address": {
+      "street": "Forest Avenue",
+      "housenumber": "2474",
+      "city": "New York city",
+      "postcode": "10303"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.296568",
+    "lat": 40.6260851,
+    "lon": -74.1728258,
+    "name": "Regal UA Staten Island & RPX",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://regmovies.com/theatres/regal-ua-staten-island-rpx/1331"
+  },
+  {
+    "unique_id": "amc-248518963",
+    "address": {
+      "street": "Horace Harding Expressway Sr S",
+      "housenumber": "190-02",
+      "city": "New York city",
+      "postcode": "11365"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.296981",
+    "lat": 40.7411048,
+    "lon": -73.7837962,
+    "name": "AMC Fresh Meadows",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-fresh-meadows-7"
+  },
+  {
+    "unique_id": "amc-266143298",
+    "address": {
+      "street": "West 42nd Street",
+      "housenumber": "234",
+      "city": "New York",
+      "postcode": "10036"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.297339",
+    "lat": 40.7567058,
+    "lon": -73.9892591,
+    "name": "AMC Empire 25",
+    "phone": "+12123982597",
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/new-york-city/amc-empire-25"
+  },
+  {
+    "unique_id": "regal-280569694",
+    "address": {
+      "street": "38th Street",
+      "housenumber": "35-30",
+      "city": "New York city",
+      "postcode": "11101"
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.297761",
+    "lat": 40.755255,
+    "lon": -73.9236599,
+    "name": "Regal UA Kaufman Astoria",
+    "phone": "+1 844-462-7342",
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-ua-kaufman-astoria-rpx-1333"
+  },
+  {
+    "unique_id": "amc-737659722",
+    "address": {
+      "street": "South Stiles Street",
+      "housenumber": "1200",
+      "city": "Linden",
+      "postcode": "07036"
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.298690",
+    "lat": 40.62084,
+    "lon": -74.2452655,
+    "name": "AMC Aviation 12",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/linden/amc-aviation-12"
+  },
+  {
+    "unique_id": "regal-737700996",
+    "address": {
+      "street": "Bricktown Way",
+      "housenumber": "165",
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "regal",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.299181",
+    "lat": 40.5306454,
+    "lon": -74.2300179,
+    "name": "Regal Bricktown Charleston",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.regmovies.com/theatres/regal-bricktown-charleston/1419"
+  },
+  {
+    "unique_id": "amc-747167010",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.299746",
+    "lat": 40.9155173,
+    "lon": -74.0769866,
+    "name": "AMC Garden State 16",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/paramus/amc-garden-state-16"
+  },
+  {
+    "unique_id": "amc-756935282",
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "New York city",
+      "postcode": null
+    },
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-23T20:36:23.300298",
+    "lat": 40.9051071,
+    "lon": -74.0297309,
+    "name": "AMC Dine-In Shops at Riverside 9",
+    "phone": null,
+    "source_city": "New York city, NY",
+    "website": "https://www.amctheatres.com/movie-theatres/hackensack/amc-dine-in-shops-at-riverside-9"

@@ -1,0 +1,23 @@
+{
+  "completed": [
+    "0455000",
+    "4260000",
+    "3651000",
+    "1714000",
+    "0644000",
+    "4835000"
+  ],
+  "last_updated": "2025-03-23T19:53:24.559361",
+  "stats": {
+    "processed": 6,
+    "skipped": 0,
+    "errors": 0,
+    "total_theaters": 69,
+    "brand_counts": {
+      "amc": 50,
+      "regal": 13,
+      "cinemark": 6,
+      "other": 0
+    }
+  }
+}

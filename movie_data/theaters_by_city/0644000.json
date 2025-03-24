@@ -1,0 +1,434 @@
+[
+  {
+    "name": "CINEMARK 18 & XD",
+    "brand": "cinemark",
+    "lat": 33.9780463,
+    "lon": -118.391908,
+    "address": {
+      "street": "Center Drive",
+      "housenumber": "6081",
+      "city": "Los Angeles",
+      "postcode": "90045"
+    },
+    "website": "https://www.cinemark.com/theatres/ca-los-angeles/cinemark-howard-hughes-los-angeles-and-xd",
+    "phone": "310-568-3394",
+    "last_updated": "2025-03-23T19:52:54.595499",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Regal Promenade 13",
+    "brand": "regal",
+    "lat": 33.7719409,
+    "lon": -118.372489,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": null,
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.595767",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Santa Monica 7",
+    "brand": "amc",
+    "lat": 34.0166773,
+    "lon": -118.497631,
+    "address": {
+      "street": "Third Street Promenade",
+      "housenumber": "1310",
+      "city": "Santa Monica",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-santa-monica-7",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.595977",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Cinemark Playa Vista",
+    "brand": "cinemark",
+    "lat": 33.9772337,
+    "lon": -118.416587,
+    "address": {
+      "street": "West Jefferson Boulevard",
+      "housenumber": "12746",
+      "city": "Los Angeles",
+      "postcode": "90096"
+    },
+    "website": "https://www.cinemark.com/theatres/ca-playa-vista/cinemark-playa-vista-and-xd",
+    "phone": "(310) 862-5668",
+    "last_updated": "2025-03-23T19:52:54.596202",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Cinemark",
+    "brand": "cinemark",
+    "lat": 33.7648589,
+    "lon": -118.1934751,
+    "address": {
+      "street": "South Pine Avenue",
+      "housenumber": "99",
+      "city": "Los Angeles city",
+      "postcode": "90804"
+    },
+    "website": null,
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.596432",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Burbank Town Center 8",
+    "brand": "amc",
+    "lat": 34.1836616,
+    "lon": -118.3121443,
+    "address": {
+      "street": "Magnolia Boulevard",
+      "housenumber": "201",
+      "city": "Burbank",
+      "postcode": "91502"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-burbank-town-center-8",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.596632",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Broadway 4",
+    "brand": "amc",
+    "lat": 34.0148476,
+    "lon": -118.4948686,
+    "address": {
+      "street": "3rd Street Promenade",
+      "housenumber": "1441",
+      "city": "Santa Monica",
+      "postcode": "90401"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-loews-broadway-4",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.596818",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Sunset 5",
+    "brand": "amc",
+    "lat": 34.0972967,
+    "lon": -118.3648736,
+    "address": {
+      "street": "West Sunset Boulevard",
+      "housenumber": "8000",
+      "city": "Los Angeles",
+      "postcode": "90046"
+    },
+    "website": null,
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.597130",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Cinemark Carson and XD",
+    "brand": "cinemark",
+    "lat": 33.8445123,
+    "lon": -118.2613715,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://cinemark.com/southern-california/cinemark-carson-and-xd",
+    "phone": "(310) 323-0394",
+    "last_updated": "2025-03-23T19:52:54.597368",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Burbank Town Center 6",
+    "brand": "amc",
+    "lat": 34.1848094,
+    "lon": -118.3153197,
+    "address": {
+      "street": "North First Street",
+      "housenumber": "770",
+      "city": "Burbank",
+      "postcode": "91502"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-burbank-town-center-6",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.597565",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Fallbrook 7",
+    "brand": "amc",
+    "lat": 34.1931099,
+    "lon": -118.6254357,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/west-hills",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.597784",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Cinemark Baldwin Hills Crenshaw and XD",
+    "brand": "cinemark",
+    "lat": 34.0115427,
+    "lon": -118.3374067,
+    "address": {
+      "street": "Marlton Avenue",
+      "housenumber": "4020",
+      "city": "Los Angeles",
+      "postcode": "90008"
+    },
+    "website": "https://www.cinemark.com/southern-california/baldwin-hills-crenshaw-plaza-15-and-xd#theatreInfo",
+    "phone": "+1 323-296-1005",
+    "last_updated": "2025-03-23T19:52:54.598084",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Del Amo 18",
+    "brand": "amc",
+    "lat": 33.8339672,
+    "lon": -118.3477333,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-del-amo-18",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.598381",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Burbank 16",
+    "brand": "amc",
+    "lat": 34.1819195,
+    "lon": -118.3120039,
+    "address": {
+      "street": "East Palm Avenue",
+      "housenumber": "125",
+      "city": "Burbank",
+      "postcode": "91502"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-burbank-16",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.598610",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Rolling Hills 20",
+    "brand": "amc",
+    "lat": 33.7924727,
+    "lon": -118.3285061,
+    "address": {
+      "street": "Airport Drive",
+      "housenumber": "2591",
+      "city": "Torrance",
+      "postcode": "90505"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-rolling-hills-20",
+    "phone": "+1 310 326 5011",
+    "last_updated": "2025-03-23T19:52:54.598813",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Cinemark North Hollywood",
+    "brand": "cinemark",
+    "lat": 34.1870565,
+    "lon": -118.4127643,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": null,
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.599042",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Regal L.A. Live",
+    "brand": "regal",
+    "lat": 34.0457405,
+    "lon": -118.268063,
+    "address": {
+      "street": "West Olympic Boulevard",
+      "housenumber": "1000",
+      "city": "Los Angeles city",
+      "postcode": "90015"
+    },
+    "website": "https://www.regmovies.com/theatres/regal-la-live/1484",
+    "phone": "(844) 462-7342",
+    "last_updated": "2025-03-23T19:52:54.599706",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Fallbrook 7",
+    "brand": "amc",
+    "lat": 34.1919958,
+    "lon": -118.6257498,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/west-hills/amc-fallbrook-7",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.600291",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Dine-In Cinema Topanga 12",
+    "brand": "amc",
+    "lat": 34.1888174,
+    "lon": -118.6039868,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-dine-in-topanga-12",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.600753",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "Regal Edwards South Gate & IMAX",
+    "brand": "regal",
+    "lat": 33.9518489,
+    "lon": -118.1616327,
+    "address": {
+      "street": "Garfield Avenue",
+      "housenumber": "8630",
+      "city": "South Gate",
+      "postcode": "90280"
+    },
+    "website": "https://www.regmovies.com/theaters/edwards-south-gate-stadium-20-imax/C00265383356",
+    "phone": "(844) 462-7342",
+    "last_updated": "2025-03-23T19:52:54.601070",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Universal CityWalk 19",
+    "brand": "amc",
+    "lat": 34.1369696,
+    "lon": -118.3525503,
+    "address": {
+      "street": "Universal City Plaza",
+      "housenumber": "100",
+      "city": "Universal City",
+      "postcode": "91608"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-universal-citywalk-19-with-imax-los-angeles",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.601368",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC",
+    "brand": "amc",
+    "lat": 34.2402082,
+    "lon": -118.5574184,
+    "address": {
+      "street": "Shirley Avenue",
+      "housenumber": null,
+      "city": "Northridge",
+      "postcode": "91324"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-northridge-10",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.601684",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Dine-in Marina 6",
+    "brand": "amc",
+    "lat": 33.9873981,
+    "lon": -118.4410247,
+    "address": {
+      "street": "Maxella Avenue",
+      "housenumber": "13455",
+      "city": "Marina Del Rey",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-dine-in-marina-6",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.601965",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC South Bay Galleria 16",
+    "brand": "amc",
+    "lat": 33.871811,
+    "lon": -118.3558112,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-dine-in-south-bay-galleria-16",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.602226",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Americana at Brand 18",
+    "brand": "amc",
+    "lat": 34.1431335,
+    "lon": -118.2570711,
+    "address": {
+      "street": "Americana Way",
+      "housenumber": "322",
+      "city": "Glendale",
+      "postcode": "91210"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-the-americana-at-brand-18",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.602441",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC Century City 15",
+    "brand": "amc",
+    "lat": 34.057417,
+    "lon": -118.4186017,
+    "address": {
+      "street": "Santa Monica Boulevard",
+      "housenumber": "10250",
+      "city": "Los Angeles",
+      "postcode": "90067"
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-century-city-15",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.602627",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "name": "AMC The Grove 14",
+    "brand": "amc",
+    "lat": 34.071553,
+    "lon": -118.3583969,
+    "address": {
+      "street": null,
+      "housenumber": null,
+      "city": "Los Angeles city",
+      "postcode": null
+    },
+    "website": "https://www.amctheatres.com/movie-theatres/los-angeles/amc-the-grove-14",
+    "phone": null,
+    "last_updated": "2025-03-23T19:52:54.602842",
+    "source_city": "Los Angeles city, CA"
+  }
+]
