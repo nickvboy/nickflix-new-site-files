@@ -43,3 +43,11 @@ api\ utls/tmdb\ api/movie_images/**/*.webp
 
 # FTP deployment
 .env
+
+# Theater JPG files
+movie_data/images/**/*.jpg
+movie_data/images/**/*.jpeg
+movie_data/theaters/**/*.jpg
+movie_data/theaters/**/*.jpeg
+**/*theater*/**/*.jpg
+**/*theater*/**/*.jpeg
