@@ -835,7 +835,7 @@ class TheaterData:
     
     def fetch_theaters(self, city_name: str = "Tampa, Florida", city_data: Dict = None) -> List[Dict[str, Any]]:
         """
-        Generate sample theaters for a city based on the city name and target theater brands.
+        Generate theaters for a city based on the city name and target theater brands.
         No API calls are made - simply generates theaters using brand names.
         
         Args:
@@ -859,36 +859,11 @@ class TheaterData:
         # Extract geoid from city_data if available
         city_geoid = city_data.get("geoid") if city_data else None
         
-        # Get population from city_data if available - larger cities get more theaters
-        population = city_data.get("population", 0) if city_data else 0
+        # Generate a reasonable number of theaters based on city size
+        # This is just a starting point - no hard limits
+        num_theaters = random.randint(1, 10)  # Base number of theaters
         
-        # Determine how many theaters to generate based on population tiers from config
-        population_tiers = self.config.theater.population_tiers
-        num_theaters = 0
-        
-        if population > population_tiers["large_city"]["min_population"]:
-            # Large city
-            min_theaters = population_tiers["large_city"]["min_theaters"]
-            max_theaters = population_tiers["large_city"]["max_theaters"]
-            # Handle None/null max_theaters value
-            max_theaters = max_theaters if max_theaters is not None else min_theaters + 4
-            num_theaters = random.randint(min_theaters, max_theaters)
-        elif population > population_tiers["medium_city"]["min_population"]:
-            # Medium city
-            min_theaters = population_tiers["medium_city"]["min_theaters"]
-            max_theaters = population_tiers["medium_city"]["max_theaters"]
-            # Handle None/null max_theaters value
-            max_theaters = max_theaters if max_theaters is not None else min_theaters + 3
-            num_theaters = random.randint(min_theaters, max_theaters)
-        else:
-            # Small city
-            min_theaters = population_tiers["small_city"]["min_theaters"]
-            max_theaters = population_tiers["small_city"]["max_theaters"]
-            # Handle None/null max_theaters value
-            max_theaters = max_theaters if max_theaters is not None else min_theaters + 1
-            num_theaters = random.randint(min_theaters, max_theaters)
-            
-        log_progress(f"Generating {num_theaters} theaters for {query_city_name} (population: {population})", city_name)
+        log_progress(f"Generating {num_theaters} theaters for {query_city_name}", city_name)
         
         # Generate theaters
         theaters = []
@@ -944,7 +919,7 @@ class TheaterData:
             
             # Create theater info
             theater_info = {
-            "unique_id": unique_id,
+                "unique_id": unique_id,
                 "name": name,
                 "brand": brand,
                 "source_city": city_name,

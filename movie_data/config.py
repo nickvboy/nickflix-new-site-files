@@ -168,31 +168,6 @@ class TheaterConfig:
         return self.config.get(self.section, "theater_brands", ["amc", "regal", "cinemark"])
         
     @property
-    def population_tiers(self) -> Dict[str, Dict[str, Any]]:
-        """Population threshold tiers for theater generation."""
-        default_tiers = {
-            "large_city": {
-                "min_population": 500000,
-                "max_population": None,
-                "min_theaters": 5,
-                "max_theaters": 9
-            },
-            "medium_city": {
-                "min_population": 100000,
-                "max_population": 500000,
-                "min_theaters": 2,
-                "max_theaters": 4
-            },
-            "small_city": {
-                "min_population": 0,
-                "max_population": 100000,
-                "min_theaters": 0,
-                "max_theaters": 1
-            }
-        }
-        return self.config.get(self.section, "population_tiers", default_tiers)
-        
-    @property
     def city_selection(self) -> str:
         """City selection strategy (population, random, region)."""
         return self.config.get(self.section, "city_selection", "population")
