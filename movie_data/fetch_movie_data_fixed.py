@@ -20,38 +20,26 @@ from dotenv import load_dotenv
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
+from pymongo.operations import UpdateOne
 from tqdm import tqdm
 import argparse
 
-# Configure logging
-# Create log directory if it doesn't exist
-LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE = os.path.join(LOG_DIR, "movie_fetcher.log")
-
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(LOG_FILE),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger("MovieFetcher")
-logger.info(f"Logging to {LOG_FILE}")
-
-LOGGING_LEVEL = logging.INFO
-
-def initialize_logging():
-    """Reconfigure logging with current LOGGING_LEVEL."""
-    for handler in logger.handlers:
-        handler.setLevel(LOGGING_LEVEL)
-    logger.setLevel(LOGGING_LEVEL)
-    logger.info(f"Logging level set to: {logging.getLevelName(LOGGING_LEVEL)}")
+# Import configuration module
+from config import get_config, reload_config
 
 # Load environment variables from project root .env file
 load_dotenv()  # This will look for .env in the current working directory
-logger.info("Loaded environment variables from .env file")
+
+# Get configuration
+config = get_config()
+
+# Initialize logging
+initialize_logging = config.initialize_logging
+initialize_logging()
+
+# Logger for this module
+logger = logging.getLogger("MovieFetcher")
+logger.info(f"Logging to {config.logging.log_file}")
 
 # TMDB API Configuration
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
@@ -74,9 +62,9 @@ MONGODB_COLLECTION_CITIES = "cities"
 MONGODB_COLLECTION_THEATERS = "theaters"
 MONGODB_COLLECTION_PROGRESS = "progress"
 
-# Output file paths
-OUTPUT_JSON_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "movies_data.json")
-THEATERS_JSON_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "theaters.json")
+# Output file paths from configuration
+OUTPUT_JSON_FILE = config.output.movies_json_file
+THEATERS_JSON_FILE = config.output.theaters_json_file
 US_CITIES_JSON_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "us_cities.json")
 
 # Custom progress logger for theater processing
@@ -95,7 +83,7 @@ def log_progress(message, city=None, level="info"):
         logger.debug(message)
         
     # Also print to console for better visibility
-    if level in ["info", "error", "warning"]:
+    if level in ["info", "error", "warning"] and config.logging.log_to_console:
         time_str = datetime.now().strftime("%H:%M:%S")
         print(f"[{time_str}] {message}")
 
@@ -111,6 +99,7 @@ class MovieData:
         self.api_key = TMDB_API_KEY
         self.tmdb_base_url = TMDB_BASE_URL
         self.tmdb_image_base_url = TMDB_IMAGE_BASE_URL
+        self.config = get_config().movie
         
         # Set up HTTP headers for API requests
         self.headers = {
@@ -165,7 +154,8 @@ class MovieData:
         url = f"{self.tmdb_base_url}/movie/{movie_id}"
         params = {
             "api_key": self.api_key,
-            "append_to_response": "credits,videos,keywords,recommendations"
+            "append_to_response": "credits,videos,keywords,recommendations",
+            "language": self.config.language
         }
         
         try:
@@ -182,7 +172,7 @@ class MovieData:
             log_progress(f"Error fetching movie details for ID {movie_id}: {str(e)}", level="error")
             return None
     
-    def get_popular_movies(self, count: int = 50, min_vote_count: int = 1000, min_vote_average: float = 6.0) -> List[Dict]:
+    def get_popular_movies(self, count: int = None, min_vote_count: int = None, min_vote_average: float = None) -> List[Dict]:
         """
         Retrieve popular movies from TMDB API.
         
@@ -194,25 +184,47 @@ class MovieData:
         Returns:
             List of movie dictionaries
         """
+        # Use config values if not provided
+        if count is None:
+            count = self.config.count
+        if min_vote_count is None:
+            min_vote_count = self.config.min_vote_count
+        if min_vote_average is None:
+            min_vote_average = self.config.min_vote_average
+            
         log_progress(f"Fetching {count} popular movies from TMDB API", level="info")
+        log_progress(f"Filtering criteria: min_vote_count={min_vote_count}, min_vote_average={min_vote_average}", level="info")
         
         url = f"{self.tmdb_base_url}/discover/movie"
         movies = []
         page = 1
+        max_pages = 50  # Safety limit to prevent infinite loops
         
         # Use tqdm to display progress
         progress = tqdm(total=count, desc="Fetching movies")
         
-        while len(movies) < count:
+        while len(movies) < count and page <= max_pages:
             params = {
                 "api_key": self.api_key,
-                "sort_by": "popularity.desc",
+                "sort_by": self.config.sort_by,
                 "vote_count.gte": min_vote_count,
                 "vote_average.gte": min_vote_average,
                 "page": page,
                 "include_adult": False,
-                "language": "en-US"
+                "language": self.config.language
             }
+            
+            # Add year range filters if configured
+            if self.config.release_year_start:
+                params["primary_release_date.gte"] = f"{self.config.release_year_start}-01-01"
+            if self.config.release_year_end:
+                params["primary_release_date.lte"] = f"{self.config.release_year_end}-12-31"
+                
+            # Add genre filters if configured
+            if self.config.genres_include:
+                params["with_genres"] = ",".join(str(g) for g in self.config.genres_include)
+            if self.config.genres_exclude:
+                params["without_genres"] = ",".join(str(g) for g in self.config.genres_exclude)
             
             try:
                 response = requests.get(url, params=params, headers=self.headers, timeout=10)
@@ -221,36 +233,53 @@ class MovieData:
                     data = response.json()
                     results = data.get("results", [])
                     
-                    for movie in results:
+                    if not results:
+                        log_progress(f"No more results found on page {page}", level="info")
+                        break
+                        
+                    log_progress(f"Processing {len(results)} movies from page {page}", level="debug")
+                    
+                    for movie_summary in results:
                         if len(movies) < count:
                             # Get full movie details
-                            movie_id = movie.get("id")
+                            movie_id = movie_summary.get("id")
                             movie_details = self.get_movie_details(movie_id)
                             
                             if movie_details:
                                 movies.append(movie_details)
                                 progress.update(1)
+                                log_progress(f"Added movie: {movie_details.get('title')}", level="debug")
+                            else:
+                                log_progress(f"Failed to get details for movie ID {movie_id}", level="warning")
                         else:
                             break
                             
-                    # If no more results or we've reached the end, break
-                    if not results or page >= data.get("total_pages", 1):
+                    # If we've reached the end of available pages, break
+                    if page >= data.get("total_pages", 1):
+                        log_progress(f"Reached the last page ({page}) of results", level="info")
                         break
                         
                     page += 1
                 else:
-                    log_progress(f"Failed to retrieve popular movies. Status code: {response.status_code}", level="warning")
+                    log_progress(f"API request failed with status code: {response.status_code}", level="warning")
+                    log_progress(f"Response: {response.text[:200]}", level="debug")
                     break
                     
             except Exception as e:
                 log_progress(f"Error fetching popular movies: {str(e)}", level="error")
-                break
+                time.sleep(2)  # Wait a bit longer before retrying
+                continue
                 
-            # Add a small delay to avoid rate limiting
-            time.sleep(0.5)
+            # Add a delay to avoid rate limiting
+            time.sleep(0.8)
         
         progress.close()
-        log_progress(f"Successfully retrieved {len(movies)} movies", level="info")
+        
+        if len(movies) < count:
+            log_progress(f"Could only retrieve {len(movies)} out of {count} requested movies", level="warning")
+        else:
+            log_progress(f"Successfully retrieved {len(movies)} movies", level="info")
+            
         return movies
     
     def process_movie_data(self, movie: Dict) -> Dict:
@@ -560,8 +589,11 @@ class TheaterData:
             "Accept-Language": "en-US,en;q=0.5",
             "Referer": "https://nickflix.example.com"
         }
-        # Target theater chains - we'll only collect these
-        self.target_theaters = ["amc", "regal", "cinemark"]
+        # Get configuration
+        self.config = get_config()
+        
+        # Target theater chains from configuration
+        self.target_theaters = self.config.theater.theater_brands
         
         # MongoDB connection - No fallback anymore
         try:
@@ -830,19 +862,35 @@ class TheaterData:
         # Get population from city_data if available - larger cities get more theaters
         population = city_data.get("population", 0) if city_data else 0
         
-        # Determine how many theaters to generate based on population
-        if population > 1000000:  # Large city
-            num_theaters = random.randint(8, 15)
-        elif population > 250000:  # Medium city
-            num_theaters = random.randint(4, 8)
-        elif population > 50000:   # Small city
-            num_theaters = random.randint(1, 4)
-        else:                      # Very small city/town
-            num_theaters = random.randint(0, 2)
+        # Determine how many theaters to generate based on population tiers from config
+        population_tiers = self.config.theater.population_tiers
+        num_theaters = 0
+        
+        if population > population_tiers["large_city"]["min_population"]:
+            # Large city
+            min_theaters = population_tiers["large_city"]["min_theaters"]
+            max_theaters = population_tiers["large_city"]["max_theaters"]
+            # Handle None/null max_theaters value
+            max_theaters = max_theaters if max_theaters is not None else min_theaters + 4
+            num_theaters = random.randint(min_theaters, max_theaters)
+        elif population > population_tiers["medium_city"]["min_population"]:
+            # Medium city
+            min_theaters = population_tiers["medium_city"]["min_theaters"]
+            max_theaters = population_tiers["medium_city"]["max_theaters"]
+            # Handle None/null max_theaters value
+            max_theaters = max_theaters if max_theaters is not None else min_theaters + 3
+            num_theaters = random.randint(min_theaters, max_theaters)
+        else:
+            # Small city
+            min_theaters = population_tiers["small_city"]["min_theaters"]
+            max_theaters = population_tiers["small_city"]["max_theaters"]
+            # Handle None/null max_theaters value
+            max_theaters = max_theaters if max_theaters is not None else min_theaters + 1
+            num_theaters = random.randint(min_theaters, max_theaters)
             
         log_progress(f"Generating {num_theaters} theaters for {query_city_name} (population: {population})", city_name)
         
-        # Generate theater data
+        # Generate theaters
         theaters = []
         target_theaters = self.target_theaters
         
@@ -865,13 +913,25 @@ class TheaterData:
             ]
         }
         
+        # Add additional templates for any other configured brands
+        for brand in target_theaters:
+            if brand not in theater_templates:
+                theater_templates[brand] = [
+                    f"{brand.upper()} {query_city_name} {{number}}",
+                    f"{brand.title()} {query_city_name}",
+                    f"{query_city_name} {brand.title()}"
+                ]
+        
         # Generate theaters for each brand
         for i in range(num_theaters):
             # Randomly select a brand
             brand = random.choice(target_theaters)
             
+            # Get templates for this brand
+            brand_templates = theater_templates.get(brand, theater_templates["amc"])
+            
             # Randomly select a template for this brand
-            template = random.choice(theater_templates[brand])
+            template = random.choice(brand_templates)
             
             # Generate a number for the theater (if the template has {number})
             number = random.randint(8, 24)
@@ -923,6 +983,9 @@ class TheaterData:
             
         # Process and insert cities
         imported_count = 0
+        operations = []
+        mongodb_batch_size = self.config.processing.mongodb_batch_size
+        
         for geoid, city_data in tqdm(cities_data.items()):
             # Add geoid to the data
             city_data["geoid"] = geoid
@@ -933,37 +996,83 @@ class TheaterData:
             city_data["last_updated"] = datetime.now().isoformat()
             
             try:
-                # Insert or update city in MongoDB
-                self.cities_collection.update_one(
+                # Add to operations list
+                operations.append(
+                    UpdateOne(
                     {"geoid": geoid},
                     {"$set": city_data},
                     upsert=True
+                    )
                 )
                 imported_count += 1
+                
+                # Execute in batches to avoid memory issues with large datasets
+                if len(operations) >= mongodb_batch_size:
+                    self.cities_collection.bulk_write(operations)
+                    operations = []
+                    
             except Exception as e:
                 log_progress(f"Error importing city {geoid}: {str(e)}", level="error")
+                if self.config.processing.error_handling == "abort":
+                    raise
+        
+        # Execute any remaining operations
+        if operations:
+            try:
+                self.cities_collection.bulk_write(operations)
+            except Exception as e:
+                log_progress(f"Error in final bulk city operation: {str(e)}", level="error")
+                if self.config.processing.error_handling == "abort":
+                    raise
                 
         log_progress(f"Successfully imported {imported_count} cities to MongoDB")
         return imported_count
     
     def save_theaters_to_mongodb(self, theaters: List[Dict[str, Any]], city_geoid: str = None) -> int:
         """Save theaters to MongoDB and return count of saved theaters."""
+        if not theaters:
+            return 0
+            
         saved_count = 0
+        # Prepare theater operations for bulk insert/update
+        operations = []
+        mongodb_batch_size = self.config.processing.mongodb_batch_size
+        
         for theater in theaters:
             try:
                 # Set city_geoid if provided
                 if city_geoid:
                     theater["city_geoid"] = city_geoid
                     
-                # Update or insert theater
-                self.theaters_collection.update_one(
+                # Add to operations list
+                operations.append(
+                    UpdateOne(
                     {"unique_id": theater["unique_id"]},
                     {"$set": theater},
                     upsert=True
+                    )
                 )
                 saved_count += 1
+                
+                # Execute in batches if we reach the batch size
+                if len(operations) >= mongodb_batch_size:
+                    self.theaters_collection.bulk_write(operations)
+                    operations = []
+                    
             except Exception as e:
-                log_progress(f"Error saving theater {theater.get('name')}: {str(e)}", level="error")
+                log_progress(f"Error preparing theater {theater.get('name')}: {str(e)}", level="error")
+                if self.config.processing.error_handling == "abort":
+                    raise
+        
+        # Execute any remaining operations
+        if operations:
+            try:
+                self.theaters_collection.bulk_write(operations)
+            except Exception as e:
+                log_progress(f"Error in bulk theater operation: {str(e)}", level="error")
+                saved_count = 0
+                if self.config.processing.error_handling == "abort":
+                    raise
                 
         return saved_count
     
@@ -1009,13 +1118,23 @@ class TheaterData:
             log_progress(f"Error getting last progress: {str(e)}", level="error")
             return {}
     
-    def save_theaters(self, theaters: List[Dict[str, Any]], output_file: str = THEATERS_JSON_FILE) -> None:
+    def save_theaters(self, theaters: List[Dict[str, Any]], output_file: str = None) -> None:
         """Save theater data to a JSON file for backup or offline use."""
+        # Use config if output_file not provided
+        if output_file is None:
+            output_file = self.config.output.theaters_json_file
+            
         log_progress(f"Saving {len(theaters)} theaters to {output_file}")
+        
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(os.path.abspath(output_file)), exist_ok=True)
+        
         with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(theaters, f, ensure_ascii=False, indent=2)
+            # Use indent if pretty JSON is enabled
+            indent = 2 if self.config.output.pretty_json else None
+            json.dump(theaters, f, ensure_ascii=False, indent=indent)
 
-    def update_cities_with_nominatim_coordinates(self, batch_size=100, delay_between_requests=1) -> Dict[str, int]:
+    def update_cities_with_nominatim_coordinates(self, batch_size=None, delay_between_requests=1) -> Dict[str, int]:
         """
         Fetch bounding box coordinates from Nominatim for cities that need them.
         Updates MongoDB with the coordinates and finds theaters for these cities.
@@ -1027,6 +1146,10 @@ class TheaterData:
         Returns:
             Dictionary with statistics about the process
         """
+        # Use default batch size from processing config if not provided
+        if batch_size is None:
+            batch_size = self.config.processing.mongodb_batch_size
+            
         log_progress("Starting Nominatim coordinate update for cities", level="info")
         
         # Get cities that have no bounding box coordinates but have names
@@ -1152,14 +1275,24 @@ class TheaterData:
         return cities
     
     def get_pending_cities(self, limit=None) -> List[Dict[str, Any]]:
-        """Get cities that have not been processed yet, sorted by population."""
-        # Find cities that haven't been processed and have population data
+        """Get a list of cities that haven't been processed yet, sorted by population."""
+        log_progress(f"Retrieving pending cities (limit: {limit})")
+        
+        # Create index on population field for faster sorting if it doesn't exist
+        if "population_-1" not in [idx["name"] for idx in self.cities_collection.list_indexes()]:
+            self.cities_collection.create_index([("population", -1)])
+            
+        # Create index on processed field for faster filtering if it doesn't exist
+        if "processed_1" not in [idx["name"] for idx in self.cities_collection.list_indexes()]:
+            self.cities_collection.create_index([("processed", 1)])
+            
+        # Query with projection to only fetch needed fields
         cursor = self.cities_collection.find(
             {
                 "processed": {"$ne": True},
                 "population": {"$exists": True, "$ne": None}
             },
-            {"_id": 0}
+            {"_id": 0, "name": 1, "state": 1, "geoid": 1, "population": 1}  # Only fetch needed fields
         ).sort("population", -1)
         
         if limit:
@@ -1169,34 +1302,55 @@ class TheaterData:
         log_progress(f"Retrieved {len(cities)} pending cities")
         return cities
     
-    def process_batch_of_cities(self, batch_size=10, delay_between_cities=3, timeout=None) -> Dict[str, Any]:
+    def process_batch_of_cities(self, batch_size_or_cities=None, delay_between_cities=None, timeout=None) -> Dict[str, Any]:
         """
         Process a batch of cities to find theaters.
         
         Args:
-            batch_size: Number of cities to process in this batch
+            batch_size_or_cities: Either a number of cities to process or a list of city documents
             delay_between_cities: Delay in seconds between cities
             timeout: Optional timeout in seconds for the entire batch
             
         Returns:
             Dictionary with statistics about the processed batch
         """
-        log_progress(f"Starting processing batch of {batch_size} cities")
+        # Get configuration
+        config = get_config()
+        
+        # Use config if delay parameter not provided
+        if delay_between_cities is None:
+            delay_between_cities = config.theater.delay_between_cities
+            
+        if timeout is None:
+            timeout = config.theater.timeout_per_batch
+        
+        # Determine if we received a batch size or a list of cities
+        if isinstance(batch_size_or_cities, list):
+            # We received a list of city documents
+            cities = batch_size_or_cities
+            batch_size = len(cities)
+            log_progress(f"Starting processing batch of {batch_size} cities")
+        else:
+            # We received a batch size (or None)
+            batch_size = batch_size_or_cities
+            if batch_size is None:
+                batch_size = config.theater.batch_size
+                
+            log_progress(f"Starting processing batch of {batch_size} cities")
+            
+            # Get batch of cities to process
+            cities = self.get_pending_cities(limit=batch_size)
         
         # Statistics for this batch
         stats = {
             "batch_size": batch_size,
             "processed_cities": 0,
-            "pending_cities": 0,
+            "pending_cities": len(cities),
             "theaters_found": 0,
             "errors": 0,
             "batch_start": datetime.now().isoformat(),
             "status": "completed"  # Default status
         }
-        
-        # Get batch of cities to process
-        cities = self.get_pending_cities(limit=batch_size)
-        stats["pending_cities"] = len(cities)
         
         if not cities:
             log_progress("No pending cities found to process")
@@ -1235,7 +1389,14 @@ class TheaterData:
                 
                 # Add delay between cities to avoid rate limits (except for the last city)
                 if i < len(cities) - 1:
-                    actual_delay = random.uniform(delay_between_cities, delay_between_cities + 2)
+                    # Use delay range from config if it's a dictionary
+                    if isinstance(delay_between_cities, dict):
+                        delay_min = delay_between_cities.get("min", 0.5)
+                        delay_max = delay_between_cities.get("max", 1.0)
+                        actual_delay = random.uniform(delay_min, delay_max)
+                    else:
+                        actual_delay = delay_between_cities
+                        
                     log_progress(f"Adding delay of {actual_delay:.2f} seconds before next city", level="debug")
                     time.sleep(actual_delay)
             
@@ -1244,6 +1405,11 @@ class TheaterData:
                 # Mark city as processed with error
                 self.mark_city_as_processed(geoid, error=str(e))
                 stats["errors"] += 1
+                
+                if config.processing.error_handling == "abort":
+                    log_progress("Aborting batch due to error handling configuration", level="error")
+                    stats["status"] = "aborted"
+                    break
         
         # Calculate time taken
         end_time = time.time()
@@ -1257,7 +1423,7 @@ class TheaterData:
         log_progress(f"Batch processing complete. Processed {stats['processed_cities']} cities, found {stats['theaters_found']} theaters, encountered {stats['errors']} errors")
         return stats
     
-    def process_all_cities(self, batch_size=10, delay_between_batches=30, max_batches=None, timeout_per_batch=1800):
+    def process_all_cities(self, batch_size=None, delay_between_batches=None, max_batches=None, timeout_per_batch=None):
         """
         Process all cities in batches, with the ability to resume from where it left off.
         
@@ -1267,6 +1433,19 @@ class TheaterData:
             max_batches: Maximum number of batches to process (None = no limit)
             timeout_per_batch: Timeout in seconds for each batch
         """
+        # Use config if parameters not provided
+        if batch_size is None:
+            batch_size = self.config.theater.batch_size
+            
+        if delay_between_batches is None:
+            delay_between_batches = self.config.theater.delay_between_batches
+            
+        if max_batches is None:
+            max_batches = self.config.theater.max_batches
+            
+        if timeout_per_batch is None:
+            timeout_per_batch = self.config.theater.timeout_per_batch
+            
         log_progress(f"Starting processing of all cities in batches of {batch_size}")
         
         # Get the total number of cities
@@ -1308,8 +1487,7 @@ class TheaterData:
                 
                 # Process a batch
                 batch_stats = self.process_batch_of_cities(
-                    batch_size=batch_size,
-                    delay_between_cities=3,
+                    batch_size_or_cities=batch_size,
                     timeout=timeout_per_batch
                 )
                 
@@ -1326,6 +1504,11 @@ class TheaterData:
                 # Log batch summary
                 log_progress(f"Completed batch {batch_num}/{max_batches}: processed {batch_stats.get('processed_cities', 0)} cities, found {batch_stats.get('theaters_found', 0)} theaters")
                 
+                # If batch was aborted and error handling is set to abort, stop processing
+                if batch_stats.get("status") == "aborted" and self.config.processing.error_handling == "abort":
+                    log_progress("Stopping all processing due to batch abort", level="warning")
+                    break
+                
                 # Check if we should continue
                 if batch_num < max_batches and pending_count > 0:
                     log_progress(f"Adding delay of {delay_between_batches} seconds before next batch")
@@ -1340,6 +1523,12 @@ class TheaterData:
             except Exception as e:
                 log_progress(f"Error during batch {batch_num}: {str(e)}", level="error")
                 summary["errors"] += 1
+                
+                # Check if we should abort on error
+                if self.config.processing.error_handling == "abort":
+                    log_progress("Stopping all processing due to error", level="error")
+                    break
+                    
                 # Continue with next batch after a delay
                 log_progress(f"Continuing with next batch after delay of {delay_between_batches} seconds")
                 time.sleep(delay_between_batches)
@@ -1360,8 +1549,12 @@ class TheaterData:
         
         log_progress(f"Theater data collection complete. Processed {summary['cities_processed']} cities, found {summary['theaters_found']} theaters.")
     
-    def export_all_theaters_to_json(self, output_file=THEATERS_JSON_FILE):
+    def export_all_theaters_to_json(self, output_file=None):
         """Export all theaters from MongoDB to a JSON file."""
+        # Use config if output_file not provided
+        if output_file is None:
+            output_file = self.config.output.theaters_json_file
+            
         try:
             # Get all theaters from MongoDB
             theaters = list(self.theaters_collection.find({}, {"_id": 0}))
@@ -1383,6 +1576,8 @@ class TheaterData:
                 
         except Exception as e:
             log_progress(f"Error exporting theaters to JSON: {str(e)}", level="error")
+            if self.config.processing.error_handling == "abort":
+                raise
     
     def fetch_theaters_in_cities(self, cities: List[str]) -> List[Dict[str, Any]]:
         """Fetch theaters in multiple cities and combine results."""
@@ -1396,7 +1591,7 @@ class TheaterData:
                 
                 # Add delay between cities to avoid rate limits
                 if city != cities[-1]:  # Skip delay after last city
-                    delay = random.uniform(2, 5)
+                    delay = random.uniform(0.5, 1.0)  # Reduced from 2-5 seconds to 0.5-1 second
                     log_progress(f"Adding delay of {delay:.2f} seconds before next city", city, "debug")
                     time.sleep(delay)
             except Exception as e:
@@ -1418,9 +1613,16 @@ class TheaterData:
         log_progress(f"Completed theater data collection: {len(all_theaters)} theaters saved")
 
 
-def process_all_cities_with_theaters(batch_size=3):
+def process_all_cities_with_theaters(batch_size=None):
     """Process all cities in the US cities database and find theaters in each."""
     log_progress("Starting full processing of all US cities for theaters")
+    
+    # Get configuration
+    config = get_config()
+    
+    # Use config if batch_size not provided
+    if batch_size is None:
+        batch_size = config.theater.batch_size
     
     # Initialize theater data with MongoDB - will raise an error if connection fails
     theater_data = TheaterData()
@@ -1430,46 +1632,75 @@ def process_all_cities_with_theaters(batch_size=3):
     
     # Process all cities, starting with largest population
     theater_data.process_all_cities(
-        batch_size=batch_size,   # Process cities per batch (default 3)
-        delay_between_batches=10,   # Wait 10 seconds between batches (reduced from 30)
-        max_batches=None,       # No limit on batches (process all)
-        timeout_per_batch=1800  # 30 minutes timeout per batch
+        batch_size=batch_size,
+        delay_between_batches=config.theater.delay_between_batches,
+        max_batches=config.theater.max_batches,
+        timeout_per_batch=config.theater.timeout_per_batch
     )
     
     log_progress("Full city processing complete")
 
 
-def fetch_theater_data():
-    """Standalone function to fetch theater data with MongoDB integration."""
+def fetch_theater_data(cities=None):
+    """
+    Standalone function to fetch theater data with MongoDB integration.
+    
+    Args:
+        cities: Optional list of city names to fetch theaters for.
+               If None, uses a set of default major cities.
+    """
     logger.info("Starting theater data collection process")
+    
+    # Get configuration
+    config = get_config()
+    
     theater_data = TheaterData()
-    theater_data.fetch_and_save_theaters([
+    
+    # Use provided cities or default to these major cities
+    if cities is None:
+        cities = [
         "Tampa, Florida", 
         "Orlando, Florida",
         "New York, NY",
         "Los Angeles, CA",
         "Chicago, IL"
-    ])
+        ]
+    
+    theater_data.fetch_and_save_theaters(cities)
     logger.info("Theater data collection complete")
 
 
 def fetch_theaters_from_us_cities():
     """Fetch theaters for cities in the us_cities.json file."""
     logger.info("Starting theater data collection from us_cities.json")
+    
+    # Get configuration
+    config = get_config()
+    
     theater_data = TheaterData()
     
     # Import cities to MongoDB
     theater_data.import_cities_to_mongodb()
     
-    # Process all cities sorted by population (not just top 10)
-    cities = theater_data.get_cities_by_population()
+    # Get cities by selection strategy
+    city_selection = config.theater.city_selection
+    if city_selection == "population":
+        cities = theater_data.get_cities_by_population()
+    elif city_selection == "random":
+        # Use process_random_cities instead
+        process_random_cities()
+        return
+    else:
+        # Default to population order
+        cities = theater_data.get_cities_by_population()
+    
     if cities:
-        logger.info(f"Processing {len(cities)} cities by population order")
+        logger.info(f"Processing {len(cities)} cities using {city_selection} selection strategy")
         processed_count = 0
         total_theaters = 0
         
-        # Process cities in batches of 10 to avoid overwhelming
-        batch_size = 10
+        # Process cities in batches
+        batch_size = config.theater.batch_size
         for i in range(0, len(cities), batch_size):
             batch = cities[i:i+batch_size]
             city_names = [f"{city['name']}, {city['state']}" for city in batch]
@@ -1495,7 +1726,7 @@ def fetch_theaters_from_us_cities():
             
             # Add delay between batches
             if i + batch_size < len(cities):
-                delay = random.uniform(5, 10)
+                delay = config.theater.delay_between_batches
                 logger.info(f"Adding delay of {delay:.2f} seconds before next batch")
                 time.sleep(delay)
                 
@@ -1509,250 +1740,111 @@ def fetch_theaters_from_us_cities():
     logger.info("Theater data collection from us_cities.json complete")
 
 
-def process_random_cities(batch_size=10):
-    """Process a random batch of cities from the database."""
-    logger.info(f"Starting theater data collection for {batch_size} random cities")
+def process_random_cities(batch_size=None):
+    """Process all cities in a randomized order, working through the entire dataset in batches."""
+    logger.info("Starting random city processing for all cities in the database")
+    
+    # Get configuration
+    config = get_config()
+    
+    # Use config if batch_size not provided
+    if batch_size is None:
+        batch_size = config.theater.batch_size
+    
     theater_data = TheaterData()
     
-    # Get total count of cities
+    # Import cities to MongoDB
+    theater_data.import_cities_to_mongodb()
+    
+    # Count total unprocessed cities
     total_cities = theater_data.cities_collection.count_documents({
+        "processed": {"$ne": True},
         "population": {"$exists": True, "$ne": None}
     })
     
-    if total_cities == 0:
-        logger.error("No cities found in database")
+    # Check if we should limit the number of cities to process
+    max_cities = config.theater.max_cities
+    if max_cities is not None and max_cities > 0:
+        cities_to_process = min(total_cities, max_cities)
+        logger.info(f"Found {total_cities} unprocessed cities, but will only process {cities_to_process} as configured")
+    else:
+        cities_to_process = total_cities
+        logger.info(f"Found {total_cities} unprocessed cities to process in random order")
+    
+    if cities_to_process == 0:
+        logger.info("No unprocessed cities found, nothing to do")
         return
+            
+    # Calculate number of batches needed
+    total_batches = (cities_to_process + batch_size - 1) // batch_size
     
-    # Get random cities across different population ranges
-    # We'll divide the population range into segments to ensure diversity
-    random_cities = []
+    # Process cities in random batches
+    cities_processed = 0
+    theaters_found = 0
     
-    try:
-        # Get population range (min/max)
-        max_pop = theater_data.cities_collection.find_one(
-            {"population": {"$exists": True, "$ne": None}},
-            sort=[("population", -1)]
-        )
-        min_pop = theater_data.cities_collection.find_one(
-            {"population": {"$exists": True, "$ne": None}},
-            sort=[("population", 1)]
-        )
-        
-        if not max_pop or not min_pop:
-            logger.error("Could not determine population range")
-            return
+    for batch_num in range(1, total_batches + 1):
+        # Check if we've reached the max cities limit
+        if max_cities is not None and cities_processed >= max_cities:
+            logger.info(f"Reached max cities limit of {max_cities}, stopping")
+            break
             
-        max_population = max_pop.get("population", 0)
-        min_population = min_pop.get("population", 0)
-        
-        # Create population ranges to sample from
-        segments = 5  # Number of population segments to create
-        samples_per_segment = batch_size // segments
-        extra_samples = batch_size % segments
-        
-        pop_range = max_population - min_population
-        segment_size = pop_range / segments if pop_range > 0 else 1
-        
-        for i in range(segments):
-            segment_samples = samples_per_segment + (1 if i < extra_samples else 0)
-            if segment_samples <= 0:
-                continue
-                
-            low = min_population + (i * segment_size)
-            high = min_population + ((i + 1) * segment_size)
+        # Calculate how many cities to get for this batch
+        if max_cities is not None:
+            remaining = max_cities - cities_processed
+            batch_size_for_this_batch = min(batch_size, remaining)
+        else:
+            batch_size_for_this_batch = batch_size
             
-            # Get random cities from this population segment
-            segment_cities = list(theater_data.cities_collection.aggregate([
-                {"$match": {
-                    "population": {"$gte": low, "$lt": high},
-                    "processed": {"$ne": True}
-                }},
-                {"$sample": {"size": segment_samples}},
-                {"$project": {"_id": 0}}
-            ]))
-            
-            random_cities.extend(segment_cities)
+        # Create a pipeline to get a random batch of unprocessed cities
+        pipeline = [
+            {"$match": {"processed": {"$ne": True}, "population": {"$exists": True, "$ne": None}}},
+            {"$sample": {"size": batch_size_for_this_batch}}
+        ]
         
-        # If we don't have enough cities, get more randomly
-        if len(random_cities) < batch_size:
-            more_needed = batch_size - len(random_cities)
-            more_cities = list(theater_data.cities_collection.aggregate([
-                {"$match": {"population": {"$exists": True, "$ne": None}}},
-                {"$sample": {"size": more_needed}},
-                {"$project": {"_id": 0}}
-            ]))
-            random_cities.extend(more_cities)
+        # Get a random batch
+        city_batch = list(theater_data.cities_collection.aggregate(pipeline))
         
-        # Process the random cities
-        if random_cities:
-            logger.info(f"Processing {len(random_cities)} random cities")
-            city_names = [f"{city['name']}, {city['state']}" for city in random_cities]
+        if not city_batch:
+            logger.info("No more cities to process, finished early")
+            break
             
-            for city, city_name in zip(random_cities, city_names):
-                log_progress(f"Fetching theaters for random city: {city_name} (Population: {city.get('population', 'N/A')})", city_name)
-                
-                try:
-                    # Fetch theaters
-                    theaters = theater_data.fetch_theaters(city_name, city)
-                    
-                    # Save theaters
-                    if theaters:
-                        saved_count = theater_data.save_theaters_to_mongodb(theaters, city.get("geoid"))
-                        log_progress(f"Found and saved {saved_count} theaters for {city_name}", city_name)
-                        theater_data.mark_city_as_processed(city["geoid"], saved_count)
-                    else:
-                        log_progress(f"No theaters found for {city_name}", city_name)
-                        theater_data.mark_city_as_processed(city["geoid"], 0)
-                        
-                except Exception as e:
-                    log_progress(f"Error processing {city_name}: {str(e)}", city_name, "error")
-                
-                # Add delay between cities
-                if city != random_cities[-1]:
-                    delay = random.uniform(2, 5)
-                    time.sleep(delay)
+        logger.info(f"Processing batch {batch_num}/{total_batches}: {len(city_batch)} random cities")
+        
+        # Process this batch
+        batch_stats = theater_data.process_batch_of_cities(city_batch, delay_between_cities=config.theater.delay_between_cities)
+        
+        # Update counters
+        cities_processed += batch_stats["processed_cities"]
+        theaters_found += batch_stats["theaters_found"]
+        
+        logger.info(f"Batch {batch_num} complete: processed {batch_stats['processed_cities']} cities, found {batch_stats['theaters_found']} theaters")
+        logger.info(f"Progress: {cities_processed}/{cities_to_process} cities processed ({(cities_processed/cities_to_process)*100:.1f}%)")
+        
+        # Add delay between batches
+        if batch_num < total_batches:
+            delay = config.theater.delay_between_batches
+            if delay > 0:
+                logger.info(f"Pausing for {delay} seconds before next batch")
+                time.sleep(delay)
             
-            # Export all theaters
+    # Export theaters to JSON
             theater_data.export_all_theaters_to_json()
-            logger.info("Random cities processing complete")
-        else:
-            logger.error("No random cities found to process")
     
-    except Exception as e:
-        logger.error(f"Error in process_random_cities: {str(e)}")
+    logger.info(f"Random city processing complete. Processed {cities_processed} cities, found {theaters_found} theaters.")
 
 
-# Function to mask sensitive parts of the connection string for logging
-def mask_connection_string(conn_string):
-    """Mask username and password in connection string for safe logging."""
-    if not conn_string:
-        return "None"
-    # Mask username and password in MongoDB URI
-    masked = re.sub(r'(mongodb:\/\/)[^:]+:[^@]+(@)', r'\1****:****\2', conn_string)
-    return masked
-
-
-def test_mongodb_connection():
-    """Test connection to MongoDB and print diagnostic information."""
-    try:
-        log_progress("Testing MongoDB connection...", level="info")
-        log_progress(f"Connection string: {mask_connection_string(MONGODB_CONNECTION_STRING)}", level="info")
-        log_progress(f"Database name: {MONGODB_DATABASE}", level="info")
-        
-        # Create a client with explicit timeout
-        client = MongoClient(MONGODB_CONNECTION_STRING, serverSelectionTimeoutMS=10000)
-        
-        # Test connection with ping
-        log_progress("Attempting to ping MongoDB server...", level="info")
-        client.admin.command('ping')
-        
-        # If we get here, connection was successful
-        log_progress("SUCCESS: MongoDB connection successful!", level="info")
-        
-        # Get server information
-        server_info = client.server_info()
-        log_progress(f"MongoDB server version: {server_info.get('version', 'unknown')}", level="info")
-        
-        # Test database access
-        log_progress(f"Testing access to database: {MONGODB_DATABASE}", level="info")
-        db = client[MONGODB_DATABASE]
-        collections = db.list_collection_names()
-        log_progress(f"Collections in database: {', '.join(collections) if collections else 'None'}", level="info")
-        
-        # Success
-        log_progress("SUCCESS: MongoDB connection test completed successfully", level="info")
-        return True
-        
-    except Exception as e:
-        error_msg = str(e)
-        log_progress(f"FAILED: MongoDB connection test failed: {error_msg}", level="error")
-        
-        # Try to extract the host from the connection string
-        try:
-            if '@' in MONGODB_CONNECTION_STRING:
-                host = MONGODB_CONNECTION_STRING.split('@')[1].split('/')[0]
-            else:
-                host = MONGODB_CONNECTION_STRING.split('//')[1].split('/')[0]
-                
-            # Handle port if present
-            if ':' in host:
-                host, port_str = host.split(':')
-                port = int(port_str)
-            else:
-                port = 27017  # Default MongoDB port
-                
-            log_progress(f"Extracted MongoDB host: {host}, port: {port}", level="info")
-        except Exception:
-            log_progress("Could not extract host from connection string", level="warning")
-            host = "unknown"
-            port = 27017
-        
-        # Add network diagnostics
-        if "timed out" in error_msg or "No servers found" in error_msg:
-            log_progress("Running network diagnostics...", level="info")
-            
-            # Try ping
-            try:
-                import subprocess
-                log_progress(f"Pinging {host}...", level="info")
-                ping_result = subprocess.run(['ping', '-n', '3', host], capture_output=True, text=True)
-                if ping_result.returncode == 0:
-                    log_progress(f"SUCCESS: Ping to {host} successful:", level="info")
-                    # Extract RTT from ping output
-                    lines = ping_result.stdout.split('\n')
-                    for line in lines:
-                        if "Average" in line:
-                            log_progress(f"  {line.strip()}", level="info")
-                            break
-                else:
-                    log_progress(f"FAILED: Ping to {host} failed:", level="error")
-                    log_progress(ping_result.stdout, level="error")
-            except Exception as ping_error:
-                log_progress(f"Error during ping test: {str(ping_error)}", level="error")
-            
-            # Try socket connection
-            try:
-                import socket
-                log_progress(f"Testing socket connection to {host}:{port}...", level="info")
-                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                s.settimeout(5)
-                result = s.connect_ex((host, port))
-                s.close()
-                if result == 0:
-                    log_progress(f"SUCCESS: Socket connection to {host}:{port} successful", level="info")
-                    log_progress("Port is open but MongoDB server may have authentication issues", level="info")
-                else:
-                    log_progress(f"FAILED: Socket connection to {host}:{port} failed with code {result}", level="error")
-                    log_progress("MongoDB port is not reachable. Possible reasons:", level="error")
-                    log_progress("1. MongoDB server is not running", level="error")
-                    log_progress("2. Firewall is blocking the connection", level="error")
-                    log_progress("3. Server address is incorrect", level="error")
-                    log_progress("4. Server is not configured to accept external connections", level="error")
-            except Exception as socket_error:
-                log_progress(f"Error during socket test: {str(socket_error)}", level="error")
-        
-        # Provide a summary of the issue
-        log_progress("Summary of MongoDB connection issues:", level="error")
-        if "timed out" in error_msg or "No servers found" in error_msg:
-            log_progress("• Connection timeout - Server is unreachable", level="error")
-            log_progress("  - Check if the MongoDB server is running", level="error")
-            log_progress("  - Verify the MongoDB host address is correct", level="error")
-            log_progress("  - Check if firewalls are blocking the connection", level="error")
-            log_progress("  - Try using a different MongoDB instance or hosting provider", level="error")
-        elif "Authentication failed" in error_msg:
-            log_progress("• Authentication failed - Check your username and password", level="error")
-        elif "not valid" in error_msg:
-            log_progress("• Invalid connection string format", level="error")
-        else:
-            log_progress(f"• Unexpected error: {error_msg}", level="error")
-            
-        log_progress("Please fix the MongoDB connection settings in your .env file:", level="error")
-        log_progress("MONGODB_CONNECTION_STRING=mongodb://username:password@host:port/database", level="error")
-        return False
-
-
-def fetch_movie_data(count: int = 50, download_images: bool = True):
+def fetch_movie_data(count: int = None, download_images: bool = None):
     """Fetch movie data from TMDB API and store in MongoDB."""
+    # Get configuration
+    config = get_config()
+    
+    # Use config if parameters not provided
+    if count is None:
+        count = config.movie.count
+        
+    if download_images is None:
+        download_images = config.movie.download_images
+    
     log_progress("Starting movie data collection from TMDB API", level="info")
     
     # Initialize MovieData
@@ -1767,70 +1859,55 @@ def fetch_movie_data(count: int = 50, download_images: bool = True):
 
 
 def main():
-    """Main function to fetch movie data and store it in MongoDB."""
-    # Check if API key is set
-    if not TMDB_API_KEY:
-        logger.error("TMDB API key not found. Please set it in the .env file.")
-        return
-        
-    logger.info("Starting full data collection process (movies and theaters)")
-    
-    # Set verbose logging as default
-    global LOGGING_LEVEL
-    LOGGING_LEVEL = logging.DEBUG
+    """Main function to run the complete data fetching process."""
+    # Setup
     initialize_logging()
     
-    try:
-        # Test MongoDB connection
-        log_progress("Testing MongoDB connection...", level="info")
-        client = MongoClient(MONGODB_CONNECTION_STRING)
-        client.admin.command('ping')
-        db = client[MONGODB_DATABASE]
+    # Get configuration
+    config = get_config()
+    
+    # Step 1: Always fetch movie data
+    log_progress("STEP 1: FETCHING MOVIE DATA", level="info")
+    movie_data = MovieData()
+    
+    # Always fetch movies each time the program runs
+    logger.info("Fetching movie data from TMDB API...")
+    movie_stats = movie_data.fetch_and_save_movies(
+        count=config.movie.count,
+        download_images=config.movie.download_images
+    )
+    log_progress(f"Movie data collection complete. Fetched {movie_stats['fetched']} movies, saved {movie_stats['saved']} to MongoDB.", level="info")
         
-        # Create collections if they don't exist
-        collections_to_check = [
-            MONGODB_COLLECTION_MOVIES,
-            MONGODB_COLLECTION_DIRECTORS,
-            MONGODB_COLLECTION_ACTORS,
-            MONGODB_COLLECTION_GENRES,
-            MONGODB_COLLECTION_CITIES,
-            MONGODB_COLLECTION_THEATERS,
-            MONGODB_COLLECTION_PROGRESS
-        ]
-        
-        for collection_name in collections_to_check:
-            if collection_name not in db.list_collection_names():
-                log_progress(f"Creating collection: {collection_name}", level="info")
-                db.create_collection(collection_name)
-            
-        log_progress("MongoDB connection successful", level="info")
-        
-        # Step 1: Fetch movie data from TMDB API
-        log_progress("STEP 1: FETCHING MOVIE DATA", level="info")
-        movie_stats = fetch_movie_data(count=50, download_images=True)
-        log_progress(f"Movie data collection complete. Fetched {movie_stats['fetched']} movies, saved {movie_stats['saved']} to MongoDB.", level="info")
-        
-        # Step 2: Import cities to MongoDB
-        log_progress("STEP 2: IMPORTING CITIES DATA", level="info")
-        theater_data = TheaterData()
-        imported_count = theater_data.import_cities_to_mongodb()
-        log_progress(f"Imported {imported_count} cities to MongoDB", level="info")
-        
-        # Step 3: Update coordinates for cities
-        log_progress("STEP 3: UPDATING CITY COORDINATES", level="info")
-        coordinate_stats = theater_data.update_cities_with_nominatim_coordinates(batch_size=20)
-        log_progress(f"Updated coordinates for {coordinate_stats['cities_updated']} cities", level="info")
-        
-        # Step 4: Process all cities for theaters with specified batch size
-        log_progress("STEP 4: PROCESSING ALL CITIES FOR THEATERS", level="info")
-        theater_data.process_all_cities(batch_size=3, delay_between_batches=10, max_batches=None, timeout_per_batch=1800)
-        
-        # Output a summary
-        log_progress("DATA COLLECTION COMPLETE", level="info")
-        
-    except Exception as e:
-        logger.error(f"Error in main function: {str(e)}")
-        raise
+    # Step 2: Import US cities data (if needed)
+    log_progress("STEP 2: IMPORTING US CITIES DATA", level="info")
+    theater_data = TheaterData()
+    theater_data.import_cities_to_mongodb()
+
+    # Step 3: Determine city selection strategy
+    log_progress("STEP 3: SELECTING THEATER DATA COLLECTION STRATEGY", level="info")
+    city_selection = config.theater.city_selection
+    logger.info(f"Using city selection strategy: {city_selection}")
+    
+    # Step 4: Process cities based on selection strategy
+    log_progress("STEP 4: PROCESSING CITIES FOR THEATERS", level="info")
+    if city_selection == "random":
+        logger.info("Using random sampling of cities")
+        process_random_cities(batch_size=config.theater.batch_size)
+    else:
+        # Default to population-based processing
+        logger.info("Using population-based city processing")
+        theater_data.process_all_cities(
+            batch_size=config.theater.batch_size,
+            delay_between_batches=config.theater.delay_between_batches,
+            max_batches=config.theater.max_batches,
+            timeout_per_batch=config.theater.timeout_per_batch
+        )
+    
+    # Step 5: Export all theaters to JSON
+    log_progress("STEP 5: EXPORTING THEATER DATA", level="info")
+    theater_data.export_all_theaters_to_json()
+    
+    log_progress("DATA FETCHING COMPLETE", level="info")
 
 
 if __name__ == "__main__":
@@ -1839,7 +1916,7 @@ if __name__ == "__main__":
     parser.add_argument("--city-theaters", action="store_true", help="Process all cities for theaters, starting with highest population")
     parser.add_argument("--all-cities", action="store_true", help="Process all cities in batches")
     parser.add_argument("--random-cities", action="store_true", help="Process a random batch of cities across different population ranges")
-    parser.add_argument("--batch-size", type=int, default=3, help="Number of cities to process in each batch (default: 3)")
+    parser.add_argument("--batch-size", type=int, default=1, help="Number of cities to process in each batch (default: 1)")
     parser.add_argument("--test-mongodb", action="store_true", help="Test MongoDB connection")
     parser.add_argument("--update-coordinates", action="store_true", help="Update missing city coordinates using Nominatim")
     parser.add_argument("--fetch-movies", action="store_true", help="Fetch movie data from TMDB API")

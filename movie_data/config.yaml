@@ -1,0 +1,98 @@
+# Movie Data Fetcher Configuration
+# This file contains all configurable parameters for the movie and theater data fetching script
+
+# Movie data collection settings
+movie_data:
+  # Number of movies to fetch
+  count: 50
+  # Minimum vote count for movie to be included
+  min_vote_count: 1000
+  # Minimum vote average rating (out of 10)
+  min_vote_average: 1.0
+  # Sort order for movies
+  # Options: popularity.desc, release_date.desc, vote_average.desc, revenue.desc
+  sort_by: "popularity.desc"
+  # Whether to download movie images
+  download_images: true
+  # Types of images to download (poster, backdrop, or both)
+  image_types: ["poster", "backdrop"]
+  # Genres to include (by ID) - leave empty for all genres
+  genres_include: []
+  # Genres to exclude (by ID)
+  genres_exclude: []
+  # Release year range filter
+  release_year_start: null  # null for no limit
+  release_year_end: null    # null for no limit
+  # Language filter (ISO 639-1 code)
+  language: "en-US"
+
+# Theater data collection settings
+theater_data:
+  # Theater brands to include
+  theater_brands: ["amc", "regal", "cinemark"]
+  # Maximum number of cities to process (null for all cities)
+  max_cities: null
+  # Population tiers for theater generation
+  population_tiers:
+    large_city:
+      min_population: 500000
+      max_population: null  # null for no upper limit
+      min_theaters: 0
+      max_theaters: null
+      sample_count: 5  # Number of large cities to sample in random mode
+    medium_city:
+      min_population: 100000
+      max_population: 500000
+      min_theaters: 0
+      max_theaters: null
+      sample_count: 7  # Number of medium cities to sample in random mode
+    small_city:
+      min_population: 0
+      max_population: 100000
+      min_theaters: 0
+      max_theaters: null
+      sample_count: 10  # Number of small cities to sample in random mode
+  # City selection strategy
+  # Options: population, random, region
+  city_selection: "population"
+  # Number of cities to process in each batch
+  batch_size: 1
+  # Delay between cities in seconds (min and max for random range)
+  delay_between_cities:
+    min: 0.5
+    max: 1.0
+  # Delay between batches in seconds
+  delay_between_batches: 1
+  # Timeout per batch in seconds (30 minutes)
+  timeout_per_batch: 1800
+  # Maximum number of batches to process (null for no limit)
+  max_batches: null
+
+# Data processing settings
+processing:
+  # Batch size for MongoDB bulk operations
+  mongodb_batch_size: 500
+  # Error handling behavior
+  # Options: skip, abort
+  error_handling: "skip"
+
+# Output file settings
+output:
+  # Path to movies JSON output file (relative to script directory)
+  movies_json_file: "movies_data.json"
+  # Path to theaters JSON output file (relative to script directory)
+  theaters_json_file: "theaters.json"
+  # Whether to format JSON output with indentation
+  pretty_json: true
+
+# Logging settings
+logging:
+  # Logging level
+  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_level: "INFO"
+  # Whether to log to console
+  log_to_console: true
+  # Whether to log to file
+  log_to_file: true
+  # Path to log file (relative to script directory)
+  log_file: "logs/movie_fetcher.log" 
