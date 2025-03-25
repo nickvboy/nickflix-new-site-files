@@ -1887,50 +1887,49 @@ def main():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fetch movie and theater data")
-    parser.add_argument("--theaters-only", action="store_true", help="Fetch theater data only")
-    parser.add_argument("--city-theaters", action="store_true", help="Process all cities for theaters, starting with highest population")
-    parser.add_argument("--all-cities", action="store_true", help="Process all cities in batches")
-    parser.add_argument("--random-cities", action="store_true", help="Process a random batch of cities across different population ranges")
-    parser.add_argument("--batch-size", type=int, default=1, help="Number of cities to process in each batch (default: 1)")
-    parser.add_argument("--test-mongodb", action="store_true", help="Test MongoDB connection")
-    parser.add_argument("--update-coordinates", action="store_true", help="Update missing city coordinates using Nominatim")
-    parser.add_argument("--fetch-movies", action="store_true", help="Fetch movie data from TMDB API")
-    parser.add_argument("--movie-count", type=int, default=50, help="Number of movies to fetch (default: 50)")
-    parser.add_argument("--no-images", action="store_true", help="Skip downloading movie images")
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    parser.add_argument("--fetch-movies", action="store_true", help="Only fetch movie data from TMDB API")
+    parser.add_argument("--fetch-theaters", action="store_true", help="Only fetch theater data")
+    
     args = parser.parse_args()
     
-    # Default to verbose logging
-    LOGGING_LEVEL = logging.DEBUG if args.verbose else logging.INFO
+    # Initialize logging
     initialize_logging()
     
-    # Check if any arguments were provided
-    any_args_provided = any([
-        args.theaters_only, args.city_theaters, args.all_cities, args.random_cities,
-        args.test_mongodb, args.update_coordinates, args.fetch_movies
-    ])
-    
-    if args.test_mongodb:
-        test_mongodb_connection()
-    elif args.theaters_only:
-        fetch_theater_data()
-    elif args.city_theaters:
-        fetch_theaters_from_us_cities()
-    elif args.all_cities:
-        process_all_cities_with_theaters(args.batch_size)
-    elif args.random_cities:
-        process_random_cities(args.batch_size)
-    elif args.update_coordinates:
-        # Initialize theater data
+    if args.fetch_movies:
+        # Run just the movie fetching process
+        log_progress("Running movie data collection only", level="info")
+        movie_data = MovieData()
+        movie_stats = movie_data.fetch_and_save_movies(
+            count=get_config().movie.count,
+            download_images=get_config().movie.download_images
+        )
+        log_progress(f"Movie data collection complete. Fetched {movie_stats['fetched']} movies, saved {movie_stats['saved']} to MongoDB.", level="info")
+    elif args.fetch_theaters:
+        # Run just the theater fetching process
+        log_progress("Running theater data collection only", level="info")
         theater_data = TheaterData()
-        # Update coordinates for cities that need them
-        stats = theater_data.update_cities_with_nominatim_coordinates()
-        print(f"Coordinate update complete. Results: {stats}")
-    elif args.fetch_movies:
-        # Fetch movie data from TMDB API
-        download_images = not args.no_images
-        stats = fetch_movie_data(count=args.movie_count, download_images=download_images)
-        print(f"Movie data collection complete. Results: {stats}")
+        theater_data.import_cities_to_mongodb()
+        
+        # Use configured city selection strategy
+        city_selection = get_config().theater.city_selection
+        log_progress(f"Using city selection strategy: {city_selection}", level="info")
+        
+        if city_selection == "random":
+            log_progress("Using random sampling of cities", level="info")
+            process_random_cities(batch_size=get_config().theater.batch_size)
+        else:
+            # Default to population-based processing
+            log_progress("Using population-based city processing", level="info")
+            theater_data.process_all_cities(
+                batch_size=get_config().theater.batch_size,
+                delay_between_batches=get_config().theater.delay_between_batches,
+                max_batches=get_config().theater.max_batches,
+                timeout_per_batch=get_config().theater.timeout_per_batch
+            )
+        
+        # Export theaters to JSON
+        theater_data.export_all_theaters_to_json()
+        log_progress("Theater data collection complete", level="info")
     else:
-        # No arguments provided, run the complete process using main()
+        # No arguments provided, run the complete process
         main()

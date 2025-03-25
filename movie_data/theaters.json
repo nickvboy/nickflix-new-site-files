@@ -11,16 +11,16 @@
     "unique_id": "cinemark-new-york-1",
     "brand": "cinemark",
     "city_geoid": "3651000",
-    "last_updated": "2025-03-25T08:53:43.127485",
-    "name": "Cinemark New York Mall",
+    "last_updated": "2025-03-25T09:11:03.853868",
+    "name": "New York Cinemark",
     "source_city": "New York city, NY"
   },
   {
     "unique_id": "cinemark-new-york-2",
     "brand": "cinemark",
     "city_geoid": "3651000",
-    "last_updated": "2025-03-25T08:53:43.127845",
-    "name": "New York Cinemark",
+    "last_updated": "2025-03-25T09:11:03.854125",
+    "name": "Cinemark New York 20",
     "source_city": "New York city, NY"
   },
   {
@@ -59,8 +59,8 @@
     "unique_id": "regal-new-york-7",
     "brand": "regal",
     "city_geoid": "3651000",
-    "last_updated": "2025-03-25T08:53:43.129242",
-    "name": "New York Regal Cinema",
+    "last_updated": "2025-03-25T09:11:03.855917",
+    "name": "Regal New York 23",
     "source_city": "New York city, NY"
   },
   {
@@ -123,8 +123,8 @@
     "unique_id": "cinemark-los-angeles-6",
     "brand": "cinemark",
     "city_geoid": "0644000",
-    "last_updated": "2025-03-25T08:53:44.220370",
-    "name": "Cinemark Los Angeles 21",
+    "last_updated": "2025-03-25T09:11:04.920109",
+    "name": "Cinemark Los Angeles Mall",
     "source_city": "Los Angeles city, CA"
   },
   {
@@ -155,8 +155,8 @@
     "unique_id": "amc-chicago-2",
     "brand": "amc",
     "city_geoid": "1714000",
-    "last_updated": "2025-03-25T08:53:45.283273",
-    "name": "AMC Chicago Mall 13",
+    "last_updated": "2025-03-25T09:11:05.978945",
+    "name": "AMC Chicago Mall 22",
     "source_city": "Chicago city, IL"
   },
   {
@@ -211,15 +211,15 @@
     "unique_id": "amc-phoenix-1",
     "brand": "amc",
     "city_geoid": "0455000",
-    "last_updated": "2025-03-25T08:53:47.419240",
-    "name": "AMC Phoenix Mall 11",
+    "last_updated": "2025-03-25T09:11:08.092682",
+    "name": "AMC Phoenix Mall 18",
     "source_city": "Phoenix city, AZ"
   },
   {
     "unique_id": "regal-phoenix-2",
     "brand": "regal",
     "city_geoid": "0455000",
-    "last_updated": "2025-03-25T08:53:47.419717",
+    "last_updated": "2025-03-25T09:11:08.093002",
     "name": "Phoenix Regal Cinema",
     "source_city": "Phoenix city, AZ"
   },
@@ -235,15 +235,15 @@
     "unique_id": "cinemark-philadelphia-1",
     "brand": "cinemark",
     "city_geoid": "4260000",
-    "last_updated": "2025-03-25T08:53:48.493627",
-    "name": "Cinemark Philadelphia Mall",
+    "last_updated": "2025-03-25T09:11:09.153116",
+    "name": "Philadelphia Cinemark",
     "source_city": "Philadelphia city, PA"
   },
   {
     "unique_id": "regal-philadelphia-2",
     "brand": "regal",
     "city_geoid": "4260000",
-    "last_updated": "2025-03-25T08:53:48.493983",
+    "last_updated": "2025-03-25T09:11:09.153368",
     "name": "Philadelphia Regal Cinema",
     "source_city": "Philadelphia city, PA"
   },
@@ -267,8 +267,8 @@
     "unique_id": "cinemark-philadelphia-5",
     "brand": "cinemark",
     "city_geoid": "4260000",
-    "last_updated": "2025-03-25T08:53:48.495528",
-    "name": "Philadelphia Cinemark",
+    "last_updated": "2025-03-25T09:11:09.154188",
+    "name": "Cinemark Philadelphia 21",
     "source_city": "Philadelphia city, PA"
   },
   {
@@ -283,8 +283,8 @@
     "unique_id": "regal-san-antonio-1",
     "brand": "regal",
     "city_geoid": "4865000",
-    "last_updated": "2025-03-25T08:53:49.553487",
-    "name": "Regal San Antonio Stadium 24",
+    "last_updated": "2025-03-25T09:11:10.210692",
+    "name": "Regal San Antonio Stadium 20",
     "source_city": "San Antonio city, TX"
   },
   {
@@ -307,16 +307,16 @@
     "unique_id": "regal-san-diego-2",
     "brand": "regal",
     "city_geoid": "0666000",
-    "last_updated": "2025-03-25T08:53:50.611423",
-    "name": "Regal San Diego 12",
+    "last_updated": "2025-03-25T09:11:11.271608",
+    "name": "Regal San Diego 23",
     "source_city": "San Diego city, CA"
   },
   {
     "unique_id": "cinemark-san-diego-3",
     "brand": "cinemark",
     "city_geoid": "0666000",
-    "last_updated": "2025-03-25T08:53:50.611784",
-    "name": "Cinemark San Diego 8",
+    "last_updated": "2025-03-25T09:11:11.271997",
+    "name": "Cinemark San Diego Mall",
     "source_city": "San Diego city, CA"
   },
   {
@@ -355,8 +355,8 @@
     "unique_id": "amc-dallas-2",
     "brand": "amc",
     "city_geoid": "4819000",
-    "last_updated": "2025-03-25T08:53:51.678605",
-    "name": "AMC Dallas Mall 21",
+    "last_updated": "2025-03-25T09:11:12.327512",
+    "name": "Dallas AMC 19",
     "source_city": "Dallas city, TX"
   },
   {
@@ -387,7 +387,7 @@
     "unique_id": "regal-jacksonville-1",
     "brand": "regal",
     "city_geoid": "1235000",
-    "last_updated": "2025-03-25T08:53:52.733980",
+    "last_updated": "2025-03-25T09:11:13.381896",
     "name": "Jacksonville Regal Cinema",
     "source_city": "Jacksonville city, FL"
   },
@@ -419,16 +419,16 @@
     "unique_id": "amc-fort-worth-0",
     "brand": "amc",
     "city_geoid": "4827000",
-    "last_updated": "2025-03-25T08:53:54.847063",
-    "name": "AMC Fort Worth 24",
+    "last_updated": "2025-03-25T09:11:15.495309",
+    "name": "Fort Worth AMC 16",
     "source_city": "Fort Worth city, TX"
   },
   {
     "unique_id": "regal-fort-worth-1",
     "brand": "regal",
     "city_geoid": "4827000",
-    "last_updated": "2025-03-25T08:53:54.847347",
-    "name": "Regal Fort Worth Stadium 16",
+    "last_updated": "2025-03-25T09:11:15.495571",
+    "name": "Regal Fort Worth Stadium 8",
     "source_city": "Fort Worth city, TX"
   },
   {
@@ -459,8 +459,8 @@
     "unique_id": "amc-san-jose-2",
     "brand": "amc",
     "city_geoid": "0668000",
-    "last_updated": "2025-03-25T08:53:55.900037",
-    "name": "AMC San Jose Mall 11",
+    "last_updated": "2025-03-25T09:11:16.552444",
+    "name": "AMC San Jose Mall 9",
     "source_city": "San Jose city, CA"
   },
   {
@@ -491,16 +491,16 @@
     "unique_id": "regal-san-jose-6",
     "brand": "regal",
     "city_geoid": "0668000",
-    "last_updated": "2025-03-25T08:53:55.901191",
-    "name": "Regal San Jose Stadium 24",
+    "last_updated": "2025-03-25T09:11:16.553676",
+    "name": "San Jose Regal Cinema",
     "source_city": "San Jose city, CA"
   },
   {
     "unique_id": "regal-san-jose-7",
     "brand": "regal",
     "city_geoid": "0668000",
-    "last_updated": "2025-03-25T08:53:55.901476",
-    "name": "Regal San Jose Stadium 17",
+    "last_updated": "2025-03-25T09:11:16.554042",
+    "name": "Regal San Jose 13",
     "source_city": "San Jose city, CA"
   },
   {
@@ -587,7 +587,7 @@
     "unique_id": "cinemark-indianapolis-(balance)-1",
     "brand": "cinemark",
     "city_geoid": "1836003",
-    "last_updated": "2025-03-25T08:53:59.073967",
+    "last_updated": "2025-03-25T09:11:19.723946",
     "name": "Indianapolis (balance) Cinemark",
     "source_city": "Indianapolis city (balance), IN"
   },
@@ -595,16 +595,16 @@
     "unique_id": "cinemark-indianapolis-(balance)-2",
     "brand": "cinemark",
     "city_geoid": "1836003",
-    "last_updated": "2025-03-25T08:53:59.074277",
-    "name": "Cinemark Indianapolis (balance) Mall",
+    "last_updated": "2025-03-25T09:11:19.724261",
+    "name": "Indianapolis (balance) Cinemark",
     "source_city": "Indianapolis city (balance), IN"
   },
   {
     "unique_id": "cinemark-san-francisco-0",
     "brand": "cinemark",
     "city_geoid": "0667000",
-    "last_updated": "2025-03-25T08:54:00.128395",
-    "name": "San Francisco Cinemark",
+    "last_updated": "2025-03-25T09:11:20.779890",
+    "name": "Cinemark San Francisco 18",
     "source_city": "San Francisco city, CA"
   },
   {
@@ -643,7 +643,7 @@
     "unique_id": "cinemark-seattle-0",
     "brand": "cinemark",
     "city_geoid": "5363000",
-    "last_updated": "2025-03-25T08:54:01.184776",
+    "last_updated": "2025-03-25T09:11:21.833655",
     "name": "Cinemark Seattle Mall",
     "source_city": "Seattle city, WA"
   },
@@ -699,16 +699,16 @@
     "unique_id": "amc-seattle-7",
     "brand": "amc",
     "city_geoid": "5363000",
-    "last_updated": "2025-03-25T08:54:01.186598",
-    "name": "Seattle AMC 16",
+    "last_updated": "2025-03-25T09:11:21.836189",
+    "name": "AMC Seattle Mall 23",
     "source_city": "Seattle city, WA"
   },
   {
     "unique_id": "cinemark-seattle-8",
     "brand": "cinemark",
     "city_geoid": "5363000",
-    "last_updated": "2025-03-25T08:54:01.186938",
-    "name": "Cinemark Seattle 19",
+    "last_updated": "2025-03-25T09:11:21.836499",
+    "name": "Cinemark Seattle 23",
     "source_city": "Seattle city, WA"
   },
   {
@@ -771,16 +771,16 @@
     "unique_id": "cinemark-oklahoma-city-1",
     "brand": "cinemark",
     "city_geoid": "4055000",
-    "last_updated": "2025-03-25T08:54:03.305758",
-    "name": "Cinemark Oklahoma City 12",
+    "last_updated": "2025-03-25T09:11:23.947381",
+    "name": "Cinemark Oklahoma City Mall",
     "source_city": "Oklahoma City city, OK"
   },
   {
     "unique_id": "regal-oklahoma-city-2",
     "brand": "regal",
     "city_geoid": "4055000",
-    "last_updated": "2025-03-25T08:54:03.306044",
-    "name": "Regal Oklahoma City Stadium 21",
+    "last_updated": "2025-03-25T09:11:23.947758",
+    "name": "Regal Oklahoma City 9",
     "source_city": "Oklahoma City city, OK"
   },
   {
@@ -795,7 +795,7 @@
     "unique_id": "regal-nashville-davidson-metropolitan-government-(balance)-1",
     "brand": "regal",
     "city_geoid": "4752006",
-    "last_updated": "2025-03-25T08:54:04.363227",
+    "last_updated": "2025-03-25T09:11:25.003016",
     "name": "Nashville-Davidson metropolitan government (balance) Regal Cinema",
     "source_city": "Nashville-Davidson metropolitan government (balance), TN"
   },
@@ -803,8 +803,8 @@
     "unique_id": "regal-nashville-davidson-metropolitan-government-(balance)-2",
     "brand": "regal",
     "city_geoid": "4752006",
-    "last_updated": "2025-03-25T08:54:04.363505",
-    "name": "Regal Nashville-Davidson metropolitan government (balance) 10",
+    "last_updated": "2025-03-25T09:11:25.003307",
+    "name": "Nashville-Davidson metropolitan government (balance) Regal Cinema",
     "source_city": "Nashville-Davidson metropolitan government (balance), TN"
   },
   {
@@ -891,8 +891,8 @@
     "unique_id": "amc-el-paso-1",
     "brand": "amc",
     "city_geoid": "4824000",
-    "last_updated": "2025-03-25T08:54:06.473933",
-    "name": "AMC El Paso 12",
+    "last_updated": "2025-03-25T09:11:27.117770",
+    "name": "El Paso AMC 9",
     "source_city": "El Paso city, TX"
   },
   {
@@ -907,7 +907,7 @@
     "unique_id": "cinemark-el-paso-3",
     "brand": "cinemark",
     "city_geoid": "4824000",
-    "last_updated": "2025-03-25T08:54:06.474482",
+    "last_updated": "2025-03-25T09:11:27.118303",
     "name": "El Paso Cinemark",
     "source_city": "El Paso city, TX"
   },
@@ -915,8 +915,8 @@
     "unique_id": "cinemark-el-paso-4",
     "brand": "cinemark",
     "city_geoid": "4824000",
-    "last_updated": "2025-03-25T08:54:06.474917",
-    "name": "Cinemark El Paso Mall",
+    "last_updated": "2025-03-25T09:11:27.118620",
+    "name": "El Paso Cinemark",
     "source_city": "El Paso city, TX"
   },
   {
@@ -955,8 +955,8 @@
     "unique_id": "regal-las-vegas-0",
     "brand": "regal",
     "city_geoid": "3240000",
-    "last_updated": "2025-03-25T08:54:07.531072",
-    "name": "Regal Las Vegas Stadium 17",
+    "last_updated": "2025-03-25T09:11:28.173583",
+    "name": "Regal Las Vegas 16",
     "source_city": "Las Vegas city, NV"
   },
   {
@@ -1019,8 +1019,8 @@
     "unique_id": "regal-detroit-0",
     "brand": "regal",
     "city_geoid": "2622000",
-    "last_updated": "2025-03-25T08:54:09.641423",
-    "name": "Regal Detroit Stadium 8",
+    "last_updated": "2025-03-25T09:11:30.282206",
+    "name": "Detroit Regal Cinema",
     "source_city": "Detroit city, MI"
   },
   {
@@ -1043,8 +1043,8 @@
     "unique_id": "regal-portland-1",
     "brand": "regal",
     "city_geoid": "4159000",
-    "last_updated": "2025-03-25T08:54:10.698458",
-    "name": "Regal Portland 19",
+    "last_updated": "2025-03-25T09:11:31.341665",
+    "name": "Regal Portland Stadium 24",
     "source_city": "Portland city, OR"
   },
   {
@@ -1059,16 +1059,16 @@
     "unique_id": "amc-portland-3",
     "brand": "amc",
     "city_geoid": "4159000",
-    "last_updated": "2025-03-25T08:54:10.699188",
-    "name": "AMC Portland 10",
+    "last_updated": "2025-03-25T09:11:31.342196",
+    "name": "Portland AMC 9",
     "source_city": "Portland city, OR"
   },
   {
     "unique_id": "amc-portland-4",
     "brand": "amc",
     "city_geoid": "4159000",
-    "last_updated": "2025-03-25T08:54:10.699637",
-    "name": "AMC Portland 20",
+    "last_updated": "2025-03-25T09:11:31.342449",
+    "name": "AMC Portland Mall 21",
     "source_city": "Portland city, OR"
   },
   {
@@ -1099,8 +1099,8 @@
     "unique_id": "cinemark-louisville/jefferson-county-metro-government-(balance)-0",
     "brand": "cinemark",
     "city_geoid": "2148006",
-    "last_updated": "2025-03-25T08:54:11.756295",
-    "name": "Louisville/Jefferson County metro government (balance) Cinemark",
+    "last_updated": "2025-03-25T09:11:32.398455",
+    "name": "Cinemark Louisville/Jefferson County metro government (balance) 9",
     "source_city": "Louisville/Jefferson County metro government (balance), KY"
   },
   {
@@ -1187,8 +1187,8 @@
     "unique_id": "regal-memphis-1",
     "brand": "regal",
     "city_geoid": "4748000",
-    "last_updated": "2025-03-25T08:54:12.818324",
-    "name": "Regal Memphis 20",
+    "last_updated": "2025-03-25T09:11:33.454462",
+    "name": "Regal Memphis Stadium 20",
     "source_city": "Memphis city, TN"
   },
   {
@@ -1203,16 +1203,16 @@
     "unique_id": "amc-memphis-3",
     "brand": "amc",
     "city_geoid": "4748000",
-    "last_updated": "2025-03-25T08:54:12.818991",
-    "name": "AMC Memphis 21",
+    "last_updated": "2025-03-25T09:11:33.455016",
+    "name": "AMC Memphis 13",
     "source_city": "Memphis city, TN"
   },
   {
     "unique_id": "amc-memphis-4",
     "brand": "amc",
     "city_geoid": "4748000",
-    "last_updated": "2025-03-25T08:54:12.819301",
-    "name": "Memphis AMC 13",
+    "last_updated": "2025-03-25T09:11:33.455307",
+    "name": "AMC Memphis 15",
     "source_city": "Memphis city, TN"
   },
   {
@@ -1227,8 +1227,8 @@
     "unique_id": "regal-memphis-6",
     "brand": "regal",
     "city_geoid": "4748000",
-    "last_updated": "2025-03-25T08:54:12.820214",
-    "name": "Regal Memphis 8",
+    "last_updated": "2025-03-25T09:11:33.455922",
+    "name": "Memphis Regal Cinema",
     "source_city": "Memphis city, TN"
   },
   {
@@ -1243,16 +1243,16 @@
     "unique_id": "amc-baltimore-0",
     "brand": "amc",
     "city_geoid": "2404000",
-    "last_updated": "2025-03-25T08:54:13.875702",
-    "name": "AMC Baltimore Mall 22",
+    "last_updated": "2025-03-25T09:11:34.513278",
+    "name": "AMC Baltimore Mall 8",
     "source_city": "Baltimore city, MD"
   },
   {
     "unique_id": "amc-baltimore-1",
     "brand": "amc",
     "city_geoid": "2404000",
-    "last_updated": "2025-03-25T08:54:13.875980",
-    "name": "AMC Baltimore Mall 15",
+    "last_updated": "2025-03-25T09:11:34.513539",
+    "name": "AMC Baltimore Mall 24",
     "source_city": "Baltimore city, MD"
   },
   {
@@ -1395,8 +1395,8 @@
     "unique_id": "amc-albuquerque-1",
     "brand": "amc",
     "city_geoid": "3502000",
-    "last_updated": "2025-03-25T08:54:15.990910",
-    "name": "AMC Albuquerque 10",
+    "last_updated": "2025-03-25T09:11:36.627196",
+    "name": "AMC Albuquerque Mall 18",
     "source_city": "Albuquerque city, NM"
   },
   {
@@ -1419,8 +1419,8 @@
     "unique_id": "cinemark-albuquerque-4",
     "brand": "cinemark",
     "city_geoid": "3502000",
-    "last_updated": "2025-03-25T08:54:15.991819",
-    "name": "Cinemark Albuquerque 14",
+    "last_updated": "2025-03-25T09:11:36.628347",
+    "name": "Cinemark Albuquerque 9",
     "source_city": "Albuquerque city, NM"
   },
   {
@@ -7038,5 +7038,1037 @@
     "last_updated": "2025-03-25T08:56:29.541038",
     "name": "Lancaster Cinemark",
     "source_city": "Lancaster city, CA"
+  },
+  {
+    "unique_id": "amc-new-york-0",
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-25T09:11:03.853579",
+    "name": "AMC New York 23",
+    "source_city": "New York city, NY"
+  },
+  {
+    "unique_id": "cinemark-new-york-3",
+    "brand": "cinemark",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-25T09:11:03.854504",
+    "name": "Cinemark New York 20",
+    "source_city": "New York city, NY"
+  },
+  {
+    "unique_id": "cinemark-new-york-4",
+    "brand": "cinemark",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-25T09:11:03.854885",
+    "name": "New York Cinemark",
+    "source_city": "New York city, NY"
+  },
+  {
+    "unique_id": "amc-new-york-5",
+    "brand": "amc",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-25T09:11:03.855235",
+    "name": "AMC New York 24",
+    "source_city": "New York city, NY"
+  },
+  {
+    "unique_id": "cinemark-new-york-6",
+    "brand": "cinemark",
+    "city_geoid": "3651000",
+    "last_updated": "2025-03-25T09:11:03.855559",
+    "name": "Cinemark New York Mall",
+    "source_city": "New York city, NY"
+  },
+  {
+    "unique_id": "cinemark-los-angeles-0",
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.917832",
+    "name": "Cinemark Los Angeles Mall",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "regal-los-angeles-1",
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.918205",
+    "name": "Regal Los Angeles 24",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "amc-los-angeles-2",
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.918561",
+    "name": "AMC Los Angeles Mall 13",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "cinemark-los-angeles-3",
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.918964",
+    "name": "Cinemark Los Angeles 20",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "regal-los-angeles-4",
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.919335",
+    "name": "Regal Los Angeles Stadium 22",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "amc-los-angeles-5",
+    "brand": "amc",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.919688",
+    "name": "AMC Los Angeles Mall 16",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "cinemark-los-angeles-7",
+    "brand": "cinemark",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.920510",
+    "name": "Cinemark Los Angeles Mall",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "regal-los-angeles-8",
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.920838",
+    "name": "Regal Los Angeles 14",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "regal-los-angeles-9",
+    "brand": "regal",
+    "city_geoid": "0644000",
+    "last_updated": "2025-03-25T09:11:04.921172",
+    "name": "Regal Los Angeles 14",
+    "source_city": "Los Angeles city, CA"
+  },
+  {
+    "unique_id": "regal-chicago-0",
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.978420",
+    "name": "Chicago Regal Cinema",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "regal-chicago-1",
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.978686",
+    "name": "Chicago Regal Cinema",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "cinemark-chicago-3",
+    "brand": "cinemark",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.979302",
+    "name": "Cinemark Chicago Mall",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "amc-chicago-4",
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.979583",
+    "name": "AMC Chicago 23",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "regal-chicago-5",
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.980029",
+    "name": "Chicago Regal Cinema",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "amc-chicago-6",
+    "brand": "amc",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.980409",
+    "name": "AMC Chicago 21",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "regal-chicago-7",
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.980740",
+    "name": "Regal Chicago Stadium 10",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "regal-chicago-8",
+    "brand": "regal",
+    "city_geoid": "1714000",
+    "last_updated": "2025-03-25T09:11:05.981053",
+    "name": "Regal Chicago Stadium 23",
+    "source_city": "Chicago city, IL"
+  },
+  {
+    "unique_id": "regal-houston-0",
+    "brand": "regal",
+    "city_geoid": "4835000",
+    "last_updated": "2025-03-25T09:11:07.037688",
+    "name": "Regal Houston Stadium 24",
+    "source_city": "Houston city, TX"
+  },
+  {
+    "unique_id": "cinemark-phoenix-0",
+    "brand": "cinemark",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.092423",
+    "name": "Cinemark Phoenix 10",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "cinemark-phoenix-3",
+    "brand": "cinemark",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.093269",
+    "name": "Cinemark Phoenix 24",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "regal-phoenix-4",
+    "brand": "regal",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.093569",
+    "name": "Regal Phoenix Stadium 8",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "amc-phoenix-5",
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.093930",
+    "name": "AMC Phoenix 21",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "cinemark-phoenix-6",
+    "brand": "cinemark",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.094329",
+    "name": "Phoenix Cinemark",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "cinemark-phoenix-7",
+    "brand": "cinemark",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.094676",
+    "name": "Phoenix Cinemark",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "amc-phoenix-8",
+    "brand": "amc",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.094979",
+    "name": "Phoenix AMC 13",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "regal-phoenix-9",
+    "brand": "regal",
+    "city_geoid": "0455000",
+    "last_updated": "2025-03-25T09:11:08.095308",
+    "name": "Phoenix Regal Cinema",
+    "source_city": "Phoenix city, AZ"
+  },
+  {
+    "unique_id": "amc-philadelphia-0",
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.152860",
+    "name": "AMC Philadelphia 21",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "cinemark-philadelphia-3",
+    "brand": "cinemark",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.153628",
+    "name": "Cinemark Philadelphia Mall",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "cinemark-philadelphia-4",
+    "brand": "cinemark",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.153932",
+    "name": "Cinemark Philadelphia Mall",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "amc-philadelphia-6",
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.154441",
+    "name": "Philadelphia AMC 12",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "cinemark-philadelphia-7",
+    "brand": "cinemark",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.154753",
+    "name": "Philadelphia Cinemark",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "amc-philadelphia-8",
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.155119",
+    "name": "AMC Philadelphia Mall 15",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "amc-philadelphia-9",
+    "brand": "amc",
+    "city_geoid": "4260000",
+    "last_updated": "2025-03-25T09:11:09.155456",
+    "name": "AMC Philadelphia 15",
+    "source_city": "Philadelphia city, PA"
+  },
+  {
+    "unique_id": "regal-san-antonio-0",
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.210413",
+    "name": "Regal San Antonio Stadium 22",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "cinemark-san-antonio-2",
+    "brand": "cinemark",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.210952",
+    "name": "Cinemark San Antonio Mall",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "regal-san-antonio-3",
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.211206",
+    "name": "Regal San Antonio 20",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "regal-san-antonio-4",
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.211467",
+    "name": "Regal San Antonio Stadium 11",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "regal-san-antonio-5",
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.211860",
+    "name": "Regal San Antonio 21",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "cinemark-san-antonio-6",
+    "brand": "cinemark",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.212229",
+    "name": "Cinemark San Antonio Mall",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "regal-san-antonio-7",
+    "brand": "regal",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.212562",
+    "name": "San Antonio Regal Cinema",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "amc-san-antonio-8",
+    "brand": "amc",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.212877",
+    "name": "AMC San Antonio 15",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "amc-san-antonio-9",
+    "brand": "amc",
+    "city_geoid": "4865000",
+    "last_updated": "2025-03-25T09:11:10.213161",
+    "name": "AMC San Antonio 22",
+    "source_city": "San Antonio city, TX"
+  },
+  {
+    "unique_id": "amc-san-diego-0",
+    "brand": "amc",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-25T09:11:11.270851",
+    "name": "San Diego AMC 18",
+    "source_city": "San Diego city, CA"
+  },
+  {
+    "unique_id": "cinemark-san-diego-1",
+    "brand": "cinemark",
+    "city_geoid": "0666000",
+    "last_updated": "2025-03-25T09:11:11.271161",
+    "name": "Cinemark San Diego 10",
+    "source_city": "San Diego city, CA"
+  },
+  {
+    "unique_id": "regal-dallas-0",
+    "brand": "regal",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-25T09:11:12.326986",
+    "name": "Dallas Regal Cinema",
+    "source_city": "Dallas city, TX"
+  },
+  {
+    "unique_id": "cinemark-dallas-1",
+    "brand": "cinemark",
+    "city_geoid": "4819000",
+    "last_updated": "2025-03-25T09:11:12.327250",
+    "name": "Cinemark Dallas Mall",
+    "source_city": "Dallas city, TX"
+  },
+  {
+    "unique_id": "regal-jacksonville-0",
+    "brand": "regal",
+    "city_geoid": "1235000",
+    "last_updated": "2025-03-25T09:11:13.381442",
+    "name": "Regal Jacksonville 23",
+    "source_city": "Jacksonville city, FL"
+  },
+  {
+    "unique_id": "regal-jacksonville-2",
+    "brand": "regal",
+    "city_geoid": "1235000",
+    "last_updated": "2025-03-25T09:11:13.382293",
+    "name": "Regal Jacksonville Stadium 23",
+    "source_city": "Jacksonville city, FL"
+  },
+  {
+    "unique_id": "amc-austin-0",
+    "brand": "amc",
+    "city_geoid": "4805000",
+    "last_updated": "2025-03-25T09:11:14.441082",
+    "name": "AMC Austin Mall 10",
+    "source_city": "Austin city, TX"
+  },
+  {
+    "unique_id": "regal-austin-1",
+    "brand": "regal",
+    "city_geoid": "4805000",
+    "last_updated": "2025-03-25T09:11:14.441343",
+    "name": "Regal Austin 15",
+    "source_city": "Austin city, TX"
+  },
+  {
+    "unique_id": "regal-austin-2",
+    "brand": "regal",
+    "city_geoid": "4805000",
+    "last_updated": "2025-03-25T09:11:14.441602",
+    "name": "Regal Austin Stadium 12",
+    "source_city": "Austin city, TX"
+  },
+  {
+    "unique_id": "regal-austin-3",
+    "brand": "regal",
+    "city_geoid": "4805000",
+    "last_updated": "2025-03-25T09:11:14.441891",
+    "name": "Austin Regal Cinema",
+    "source_city": "Austin city, TX"
+  },
+  {
+    "unique_id": "regal-austin-4",
+    "brand": "regal",
+    "city_geoid": "4805000",
+    "last_updated": "2025-03-25T09:11:14.442242",
+    "name": "Regal Austin 20",
+    "source_city": "Austin city, TX"
+  },
+  {
+    "unique_id": "cinemark-fort-worth-2",
+    "brand": "cinemark",
+    "city_geoid": "4827000",
+    "last_updated": "2025-03-25T09:11:15.495844",
+    "name": "Cinemark Fort Worth 23",
+    "source_city": "Fort Worth city, TX"
+  },
+  {
+    "unique_id": "amc-fort-worth-3",
+    "brand": "amc",
+    "city_geoid": "4827000",
+    "last_updated": "2025-03-25T09:11:15.496101",
+    "name": "AMC Fort Worth Mall 14",
+    "source_city": "Fort Worth city, TX"
+  },
+  {
+    "unique_id": "amc-fort-worth-4",
+    "brand": "amc",
+    "city_geoid": "4827000",
+    "last_updated": "2025-03-25T09:11:15.496357",
+    "name": "AMC Fort Worth 24",
+    "source_city": "Fort Worth city, TX"
+  },
+  {
+    "unique_id": "amc-fort-worth-5",
+    "brand": "amc",
+    "city_geoid": "4827000",
+    "last_updated": "2025-03-25T09:11:15.496774",
+    "name": "AMC Fort Worth 17",
+    "source_city": "Fort Worth city, TX"
+  },
+  {
+    "unique_id": "cinemark-fort-worth-6",
+    "brand": "cinemark",
+    "city_geoid": "4827000",
+    "last_updated": "2025-03-25T09:11:15.497145",
+    "name": "Cinemark Fort Worth Mall",
+    "source_city": "Fort Worth city, TX"
+  },
+  {
+    "unique_id": "regal-fort-worth-7",
+    "brand": "regal",
+    "city_geoid": "4827000",
+    "last_updated": "2025-03-25T09:11:15.497429",
+    "name": "Regal Fort Worth 20",
+    "source_city": "Fort Worth city, TX"
+  },
+  {
+    "unique_id": "amc-san-jose-0",
+    "brand": "amc",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.551818",
+    "name": "San Jose AMC 20",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "amc-san-jose-1",
+    "brand": "amc",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.552126",
+    "name": "San Jose AMC 18",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "regal-san-jose-3",
+    "brand": "regal",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.552710",
+    "name": "Regal San Jose Stadium 23",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "cinemark-san-jose-4",
+    "brand": "cinemark",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.552967",
+    "name": "Cinemark San Jose 9",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "regal-san-jose-5",
+    "brand": "regal",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.553267",
+    "name": "Regal San Jose 8",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "regal-san-jose-8",
+    "brand": "regal",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.554422",
+    "name": "Regal San Jose Stadium 8",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "cinemark-san-jose-9",
+    "brand": "cinemark",
+    "city_geoid": "0668000",
+    "last_updated": "2025-03-25T09:11:16.554737",
+    "name": "Cinemark San Jose Mall",
+    "source_city": "San Jose city, CA"
+  },
+  {
+    "unique_id": "regal-columbus-0",
+    "brand": "regal",
+    "city_geoid": "3918000",
+    "last_updated": "2025-03-25T09:11:17.611965",
+    "name": "Regal Columbus Stadium 19",
+    "source_city": "Columbus city, OH"
+  },
+  {
+    "unique_id": "regal-columbus-1",
+    "brand": "regal",
+    "city_geoid": "3918000",
+    "last_updated": "2025-03-25T09:11:17.612287",
+    "name": "Columbus Regal Cinema",
+    "source_city": "Columbus city, OH"
+  },
+  {
+    "unique_id": "cinemark-columbus-2",
+    "brand": "cinemark",
+    "city_geoid": "3918000",
+    "last_updated": "2025-03-25T09:11:17.612608",
+    "name": "Cinemark Columbus Mall",
+    "source_city": "Columbus city, OH"
+  },
+  {
+    "unique_id": "amc-charlotte-0",
+    "brand": "amc",
+    "city_geoid": "3712000",
+    "last_updated": "2025-03-25T09:11:18.668754",
+    "name": "Charlotte AMC 16",
+    "source_city": "Charlotte city, NC"
+  },
+  {
+    "unique_id": "cinemark-charlotte-1",
+    "brand": "cinemark",
+    "city_geoid": "3712000",
+    "last_updated": "2025-03-25T09:11:18.669032",
+    "name": "Charlotte Cinemark",
+    "source_city": "Charlotte city, NC"
+  },
+  {
+    "unique_id": "cinemark-charlotte-2",
+    "brand": "cinemark",
+    "city_geoid": "3712000",
+    "last_updated": "2025-03-25T09:11:18.669383",
+    "name": "Cinemark Charlotte Mall",
+    "source_city": "Charlotte city, NC"
+  },
+  {
+    "unique_id": "regal-indianapolis-(balance)-0",
+    "brand": "regal",
+    "city_geoid": "1836003",
+    "last_updated": "2025-03-25T09:11:19.723681",
+    "name": "Indianapolis (balance) Regal Cinema",
+    "source_city": "Indianapolis city (balance), IN"
+  },
+  {
+    "unique_id": "cinemark-seattle-1",
+    "brand": "cinemark",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.833921",
+    "name": "Cinemark Seattle Mall",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "amc-seattle-2",
+    "brand": "amc",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.834304",
+    "name": "Seattle AMC 24",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "cinemark-seattle-3",
+    "brand": "cinemark",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.834740",
+    "name": "Cinemark Seattle 20",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "regal-seattle-4",
+    "brand": "regal",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.835127",
+    "name": "Regal Seattle 13",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "regal-seattle-5",
+    "brand": "regal",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.835577",
+    "name": "Seattle Regal Cinema",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "cinemark-seattle-6",
+    "brand": "cinemark",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.835876",
+    "name": "Cinemark Seattle 15",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "regal-seattle-9",
+    "brand": "regal",
+    "city_geoid": "5363000",
+    "last_updated": "2025-03-25T09:11:21.836907",
+    "name": "Seattle Regal Cinema",
+    "source_city": "Seattle city, WA"
+  },
+  {
+    "unique_id": "amc-denver-0",
+    "brand": "amc",
+    "city_geoid": "0820000",
+    "last_updated": "2025-03-25T09:11:22.894787",
+    "name": "AMC Denver 20",
+    "source_city": "Denver city, CO"
+  },
+  {
+    "unique_id": "cinemark-oklahoma-city-0",
+    "brand": "cinemark",
+    "city_geoid": "4055000",
+    "last_updated": "2025-03-25T09:11:23.947069",
+    "name": "Oklahoma City Cinemark",
+    "source_city": "Oklahoma City city, OK"
+  },
+  {
+    "unique_id": "cinemark-oklahoma-city-3",
+    "brand": "cinemark",
+    "city_geoid": "4055000",
+    "last_updated": "2025-03-25T09:11:23.948025",
+    "name": "Cinemark Oklahoma City 13",
+    "source_city": "Oklahoma City city, OK"
+  },
+  {
+    "unique_id": "cinemark-oklahoma-city-4",
+    "brand": "cinemark",
+    "city_geoid": "4055000",
+    "last_updated": "2025-03-25T09:11:23.948304",
+    "name": "Oklahoma City Cinemark",
+    "source_city": "Oklahoma City city, OK"
+  },
+  {
+    "unique_id": "cinemark-oklahoma-city-5",
+    "brand": "cinemark",
+    "city_geoid": "4055000",
+    "last_updated": "2025-03-25T09:11:23.948628",
+    "name": "Cinemark Oklahoma City 14",
+    "source_city": "Oklahoma City city, OK"
+  },
+  {
+    "unique_id": "amc-oklahoma-city-6",
+    "brand": "amc",
+    "city_geoid": "4055000",
+    "last_updated": "2025-03-25T09:11:23.948967",
+    "name": "AMC Oklahoma City Mall 18",
+    "source_city": "Oklahoma City city, OK"
+  },
+  {
+    "unique_id": "amc-nashville-davidson-metropolitan-government-(balance)-0",
+    "brand": "amc",
+    "city_geoid": "4752006",
+    "last_updated": "2025-03-25T09:11:25.002743",
+    "name": "AMC Nashville-Davidson metropolitan government (balance) 10",
+    "source_city": "Nashville-Davidson metropolitan government (balance), TN"
+  },
+  {
+    "unique_id": "regal-nashville-davidson-metropolitan-government-(balance)-3",
+    "brand": "regal",
+    "city_geoid": "4752006",
+    "last_updated": "2025-03-25T09:11:25.003618",
+    "name": "Regal Nashville-Davidson metropolitan government (balance) 17",
+    "source_city": "Nashville-Davidson metropolitan government (balance), TN"
+  },
+  {
+    "unique_id": "cinemark-nashville-davidson-metropolitan-government-(balance)-4",
+    "brand": "cinemark",
+    "city_geoid": "4752006",
+    "last_updated": "2025-03-25T09:11:25.003899",
+    "name": "Cinemark Nashville-Davidson metropolitan government (balance) 12",
+    "source_city": "Nashville-Davidson metropolitan government (balance), TN"
+  },
+  {
+    "unique_id": "amc-nashville-davidson-metropolitan-government-(balance)-5",
+    "brand": "amc",
+    "city_geoid": "4752006",
+    "last_updated": "2025-03-25T09:11:25.004173",
+    "name": "AMC Nashville-Davidson metropolitan government (balance) Mall 17",
+    "source_city": "Nashville-Davidson metropolitan government (balance), TN"
+  },
+  {
+    "unique_id": "amc-nashville-davidson-metropolitan-government-(balance)-6",
+    "brand": "amc",
+    "city_geoid": "4752006",
+    "last_updated": "2025-03-25T09:11:25.004456",
+    "name": "Nashville-Davidson metropolitan government (balance) AMC 8",
+    "source_city": "Nashville-Davidson metropolitan government (balance), TN"
+  },
+  {
+    "unique_id": "amc-washington-0",
+    "brand": "amc",
+    "city_geoid": "1150000",
+    "last_updated": "2025-03-25T09:11:26.060688",
+    "name": "AMC Washington 9",
+    "source_city": "Washington city, DC"
+  },
+  {
+    "unique_id": "cinemark-el-paso-0",
+    "brand": "cinemark",
+    "city_geoid": "4824000",
+    "last_updated": "2025-03-25T09:11:27.117499",
+    "name": "Cinemark El Paso Mall",
+    "source_city": "El Paso city, TX"
+  },
+  {
+    "unique_id": "amc-el-paso-2",
+    "brand": "amc",
+    "city_geoid": "4824000",
+    "last_updated": "2025-03-25T09:11:27.118030",
+    "name": "El Paso AMC 12",
+    "source_city": "El Paso city, TX"
+  },
+  {
+    "unique_id": "cinemark-boston-0",
+    "brand": "cinemark",
+    "city_geoid": "2507000",
+    "last_updated": "2025-03-25T09:11:29.227156",
+    "name": "Boston Cinemark",
+    "source_city": "Boston city, MA"
+  },
+  {
+    "unique_id": "cinemark-boston-1",
+    "brand": "cinemark",
+    "city_geoid": "2507000",
+    "last_updated": "2025-03-25T09:11:29.227459",
+    "name": "Boston Cinemark",
+    "source_city": "Boston city, MA"
+  },
+  {
+    "unique_id": "cinemark-detroit-1",
+    "brand": "cinemark",
+    "city_geoid": "2622000",
+    "last_updated": "2025-03-25T09:11:30.282478",
+    "name": "Cinemark Detroit Mall",
+    "source_city": "Detroit city, MI"
+  },
+  {
+    "unique_id": "cinemark-detroit-2",
+    "brand": "cinemark",
+    "city_geoid": "2622000",
+    "last_updated": "2025-03-25T09:11:30.282744",
+    "name": "Cinemark Detroit 10",
+    "source_city": "Detroit city, MI"
+  },
+  {
+    "unique_id": "cinemark-detroit-3",
+    "brand": "cinemark",
+    "city_geoid": "2622000",
+    "last_updated": "2025-03-25T09:11:30.282996",
+    "name": "Cinemark Detroit Mall",
+    "source_city": "Detroit city, MI"
+  },
+  {
+    "unique_id": "cinemark-detroit-4",
+    "brand": "cinemark",
+    "city_geoid": "2622000",
+    "last_updated": "2025-03-25T09:11:30.283250",
+    "name": "Detroit Cinemark",
+    "source_city": "Detroit city, MI"
+  },
+  {
+    "unique_id": "regal-detroit-5",
+    "brand": "regal",
+    "city_geoid": "2622000",
+    "last_updated": "2025-03-25T09:11:30.283526",
+    "name": "Regal Detroit 18",
+    "source_city": "Detroit city, MI"
+  },
+  {
+    "unique_id": "cinemark-detroit-6",
+    "brand": "cinemark",
+    "city_geoid": "2622000",
+    "last_updated": "2025-03-25T09:11:30.283968",
+    "name": "Cinemark Detroit 8",
+    "source_city": "Detroit city, MI"
+  },
+  {
+    "unique_id": "amc-portland-0",
+    "brand": "amc",
+    "city_geoid": "4159000",
+    "last_updated": "2025-03-25T09:11:31.341388",
+    "name": "AMC Portland 14",
+    "source_city": "Portland city, OR"
+  },
+  {
+    "unique_id": "amc-portland-2",
+    "brand": "amc",
+    "city_geoid": "4159000",
+    "last_updated": "2025-03-25T09:11:31.341932",
+    "name": "Portland AMC 13",
+    "source_city": "Portland city, OR"
+  },
+  {
+    "unique_id": "cinemark-memphis-0",
+    "brand": "cinemark",
+    "city_geoid": "4748000",
+    "last_updated": "2025-03-25T09:11:33.454160",
+    "name": "Memphis Cinemark",
+    "source_city": "Memphis city, TN"
+  },
+  {
+    "unique_id": "cinemark-memphis-2",
+    "brand": "cinemark",
+    "city_geoid": "4748000",
+    "last_updated": "2025-03-25T09:11:33.454743",
+    "name": "Cinemark Memphis 12",
+    "source_city": "Memphis city, TN"
+  },
+  {
+    "unique_id": "amc-memphis-5",
+    "brand": "amc",
+    "city_geoid": "4748000",
+    "last_updated": "2025-03-25T09:11:33.455616",
+    "name": "AMC Memphis 22",
+    "source_city": "Memphis city, TN"
+  },
+  {
+    "unique_id": "amc-baltimore-2",
+    "brand": "amc",
+    "city_geoid": "2404000",
+    "last_updated": "2025-03-25T09:11:34.513795",
+    "name": "Baltimore AMC 18",
+    "source_city": "Baltimore city, MD"
+  },
+  {
+    "unique_id": "cinemark-baltimore-3",
+    "brand": "cinemark",
+    "city_geoid": "2404000",
+    "last_updated": "2025-03-25T09:11:34.514049",
+    "name": "Cinemark Baltimore Mall",
+    "source_city": "Baltimore city, MD"
+  },
+  {
+    "unique_id": "cinemark-baltimore-4",
+    "brand": "cinemark",
+    "city_geoid": "2404000",
+    "last_updated": "2025-03-25T09:11:34.514302",
+    "name": "Cinemark Baltimore Mall",
+    "source_city": "Baltimore city, MD"
+  },
+  {
+    "unique_id": "cinemark-milwaukee-0",
+    "brand": "cinemark",
+    "city_geoid": "5553000",
+    "last_updated": "2025-03-25T09:11:35.569337",
+    "name": "Milwaukee Cinemark",
+    "source_city": "Milwaukee city, WI"
+  },
+  {
+    "unique_id": "amc-milwaukee-1",
+    "brand": "amc",
+    "city_geoid": "5553000",
+    "last_updated": "2025-03-25T09:11:35.569603",
+    "name": "Milwaukee AMC 9",
+    "source_city": "Milwaukee city, WI"
+  },
+  {
+    "unique_id": "regal-milwaukee-2",
+    "brand": "regal",
+    "city_geoid": "5553000",
+    "last_updated": "2025-03-25T09:11:35.569869",
+    "name": "Regal Milwaukee 13",
+    "source_city": "Milwaukee city, WI"
+  },
+  {
+    "unique_id": "amc-milwaukee-3",
+    "brand": "amc",
+    "city_geoid": "5553000",
+    "last_updated": "2025-03-25T09:11:35.570133",
+    "name": "Milwaukee AMC 20",
+    "source_city": "Milwaukee city, WI"
+  },
+  {
+    "unique_id": "amc-albuquerque-0",
+    "brand": "amc",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.626824",
+    "name": "Albuquerque AMC 8",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "cinemark-albuquerque-2",
+    "brand": "cinemark",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.627561",
+    "name": "Cinemark Albuquerque 14",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "regal-albuquerque-3",
+    "brand": "regal",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.627958",
+    "name": "Regal Albuquerque 8",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "amc-albuquerque-5",
+    "brand": "amc",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.628683",
+    "name": "AMC Albuquerque Mall 14",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "cinemark-albuquerque-6",
+    "brand": "cinemark",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.629048",
+    "name": "Albuquerque Cinemark",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "regal-albuquerque-7",
+    "brand": "regal",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.629343",
+    "name": "Regal Albuquerque 23",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "cinemark-albuquerque-8",
+    "brand": "cinemark",
+    "city_geoid": "3502000",
+    "last_updated": "2025-03-25T09:11:36.629723",
+    "name": "Cinemark Albuquerque 15",
+    "source_city": "Albuquerque city, NM"
+  },
+  {
+    "unique_id": "regal-tucson-0",
+    "brand": "regal",
+    "city_geoid": "0477000",
+    "last_updated": "2025-03-25T09:11:37.698724",
+    "name": "Regal Tucson Stadium 21",
+    "source_city": "Tucson city, AZ"
+  },
+  {
+    "unique_id": "cinemark-fresno-0",
+    "brand": "cinemark",
+    "city_geoid": "0627000",
+    "last_updated": "2025-03-25T09:11:38.764339",
+    "name": "Fresno Cinemark",
+    "source_city": "Fresno city, CA"
+  },
+  {
+    "unique_id": "regal-fresno-1",
+    "brand": "regal",
+    "city_geoid": "0627000",
+    "last_updated": "2025-03-25T09:11:38.764857",
+    "name": "Regal Fresno 11",
+    "source_city": "Fresno city, CA"
   }
 ]
