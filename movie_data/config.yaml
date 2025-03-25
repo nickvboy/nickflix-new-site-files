@@ -42,11 +42,133 @@ theater_data:
     min: 0.5
     max: 1.0
   # Delay between batches in seconds
-  delay_between_batches: 1
+  delay_between_batches: .5
   # Timeout per batch in seconds (30 minutes)
   timeout_per_batch: 1800
   # Maximum number of batches to process (null for no limit)
   max_batches: null
+  # Theater generation settings
+  generation:
+    # Population thresholds for city sizes
+    population_thresholds:
+      major_metro: 1000000  # 1M+ population
+      large_city: 500000    # 500K+ population
+      medium_city: 100000   # 100K+ population
+    # Theater counts per brand and city size
+    theater_counts:
+      major_metro:
+        amc: [3, 8]      # Random range for number of theaters
+        regal: [2, 6]
+        cinemark: [2, 5]
+        other: [1, 3]
+      large_city:
+        amc: [2, 5]
+        regal: [1, 4]
+        cinemark: [1, 3]
+        other: [1, 2]
+      medium_city:
+        amc: [1, 3]
+        regal: [1, 2]
+        cinemark: [1, 2]
+        other: [0, 1]
+      small_city:
+        amc: [0, 2]
+        regal: [0, 1]
+        cinemark: [0, 1]
+        other: [0, 0]
+    # Theater naming patterns
+    naming_patterns:
+      amc:
+        major_metro: "{brand} {city} {number}"  # AMC Tampa 24
+        large_city: "{brand} {city} {number}"   # AMC Tampa 16
+        medium_city: "{brand} {city} {number}"  # AMC Tampa 12
+        small_city: "{brand} {city} {number}"   # AMC Tampa 8
+      regal:
+        major_metro: "{brand} {city} {suffix} {number}"  # Regal Tampa Grande 4
+        large_city: "{brand} {city} {suffix}"            # Regal Tampa Grande
+        medium_city: "{brand} {city} {suffix}"           # Regal Tampa Cinema
+        small_city: "{brand} {city} {suffix}"            # Regal Tampa
+      cinemark:
+        major_metro: "{brand} {city} {suffix} {number}"  # Cinemark Tampa Xenon 3
+        large_city: "{brand} {city} {suffix}"            # Cinemark Tampa Xenon
+        medium_city: "{brand} {city} {suffix}"           # Cinemark Tampa
+        small_city: "{brand} {city} {suffix}"            # Cinemark Tampa
+    # Available suffixes for theater names
+    suffixes:
+      regal: ["Cinema", "Stadium", "Grande", "Premiere", "Cineplex"]
+      cinemark: ["Theater", "Movies", "Cinema", "Xenon"]
+    # Theater features by city size
+    features:
+      major_metro: 4  # All features
+      large_city: 3   # 2D, 3D, and one premium
+      medium_city: 2  # 2D and 3D
+      small_city: 2   # 2D and 3D
+    # Available features to choose from
+    available_features:
+      - "2D"
+      - "3D"
+      - "4DX"
+      - "IMAX"
+    # Feature distribution rules
+    feature_distribution:
+      major_metro:
+        "2D": 100  # All theaters have 2D
+        "3D": 100  # All theaters have 3D
+        "4DX": 40  # 40% have 4DX
+        "IMAX": 30  # 30% have IMAX
+      large_city:
+        "2D": 100
+        "3D": 100
+        "4DX": 30
+        "IMAX": 20
+      medium_city:
+        "2D": 100
+        "3D": 100
+        "4DX": 20
+        "IMAX": 10
+      small_city:
+        "2D": 100
+        "3D": 100
+        "4DX": 10
+        "IMAX": 5
+    # Street name templates
+    street_names:
+      - "Main Street"
+      - "Park Avenue"
+      - "Market Street"
+      - "Broadway"
+      - "First Avenue"
+      - "Second Street"
+      - "Oak Street"
+      - "Maple Avenue"
+      - "Pine Street"
+      - "Cedar Avenue"
+      - "Elm Street"
+      - "Washington Avenue"
+      - "Lake Street"
+      - "River Road"
+      - "Highland Avenue"
+      - "Valley View Drive"
+      - "Center Street"
+      - "Theater District"
+      - "Entertainment Boulevard"
+      - "Cinema Plaza"
+      - "Movie Lane"
+      - "Showtime Drive"
+  # Overpass API settings
+  overpass:
+    # Base URL for Overpass API
+    base_url: "https://overpass-api.de/api/interpreter"
+    # Timeout for API requests in seconds
+    timeout: 30
+    # Maximum number of retries for failed requests
+    max_retries: 3
+    # Delay between retries in seconds
+    retry_delay: 5
+    # Query timeout in seconds
+    query_timeout: 25
+    # Whether to use area query (true) or bounding box (false)
+    use_area_query: true
 
 # Data processing settings
 processing:

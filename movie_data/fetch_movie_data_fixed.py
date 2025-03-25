@@ -595,12 +595,12 @@ class TheaterData:
         # Target theater chains from configuration
         self.target_theaters = self.config.theater.theater_brands
         
-        # MongoDB connection - No fallback anymore
+        # MongoDB connection
         try:
             # Connect to MongoDB
             log_progress("Connecting to MongoDB...", level="info")
             self.client = MongoClient(MONGODB_CONNECTION_STRING)
-            # Test connection - this will raise an exception if connection fails
+            # Test connection
             self.client.admin.command('ping')
             
             self.db = self.client[MONGODB_DATABASE]
@@ -623,315 +623,264 @@ class TheaterData:
             log_progress("Check your MongoDB connection settings:", level="error")
             log_progress(f"Connection string: {mask_connection_string(MONGODB_CONNECTION_STRING)}", level="error")
             log_progress(f"Database name: {MONGODB_DATABASE}", level="error")
-            
-            # Add specific guidance based on error message
-            if "timed out" in error_msg:
-                log_progress("Connection timed out. This could be due to:", level="error")
-                log_progress("1. MongoDB server is not running or not accessible", level="error")
-                log_progress("2. Firewall is blocking the connection", level="error")
-                log_progress("3. MongoDB server address is incorrect", level="error")
-                log_progress("4. Network connectivity issues", level="error")
-                log_progress("Suggested actions:", level="error")
-                log_progress("- Verify the MongoDB server is running", level="error")
-                log_progress("- Check if the MongoDB host is reachable (try ping command)", level="error")
-                log_progress("- Verify MongoDB port is open (default: 27017)", level="error")
-                log_progress("- Check if MongoDB connection string is correct in .env file", level="error")
-            elif "Authentication failed" in error_msg:
-                log_progress("Authentication failed. This could be due to:", level="error")
-                log_progress("1. Incorrect username or password", level="error")
-                log_progress("2. User does not have access to the database", level="error")
-                log_progress("Suggested actions:", level="error")
-                log_progress("- Verify username and password in the connection string", level="error")
-                log_progress("- Check if the user has appropriate permissions", level="error")
-            elif "not valid" in error_msg:
-                log_progress("Invalid MongoDB connection string. Please check the format:", level="error")
-                log_progress("Format should be: mongodb://[username:password@]host[:port]/[database]", level="error")
-            
-            log_progress("Please fix the MongoDB connection and try again.", level="error")
             raise ConnectionError(f"Failed to connect to MongoDB: {error_msg}")
     
-    def get_city_coordinates(self, city_name: str, use_fallback: bool = True) -> Dict[str, Any]:
-        """Get geographic coordinates for a city using Nominatim or fallback data."""
-        log_progress(f"Getting coordinates for {city_name}", city_name)
+    def get_city_coordinates(self, city_name: str, use_fallback: bool = True) -> Optional[Dict]:
+        """
+        Get city coordinates from Nominatim API.
         
-        # Define fallback coordinates for common cities
-        fallback_coordinates = {
-            "tampa, florida": {
-                "boundingbox": ["27.9269509", "28.1740211", "-82.5329168", "-82.3015008"],
-                "display_name": "Tampa, Hillsborough County, Florida, United States"
-            },
-            "new york, ny": {
-                "boundingbox": ["40.4774991", "40.9175771", "-74.2590899", "-73.7002721"],
-                "display_name": "New York City, New York, United States"
-            },
-            "los angeles, ca": {
-                "boundingbox": ["33.7036928", "34.3373061", "-118.6681759", "-118.1552891"],
-                "display_name": "Los Angeles, Los Angeles County, California, United States"
-            },
-            "chicago, il": {
-                "boundingbox": ["41.6443428", "42.0230669", "-87.9402669", "-87.5236609"],
-                "display_name": "Chicago, Cook County, Illinois, United States"
-            },
-            "houston, tx": {
-                "boundingbox": ["29.5216759", "30.1105087", "-95.7619805", "-95.0137483"],
-                "display_name": "Houston, Harris County, Texas, United States"
-            },
-            "philadelphia, pa": {
-                "boundingbox": ["39.8669060", "40.1379919", "-75.2802976", "-74.9557629"],
-                "display_name": "Philadelphia, Philadelphia County, Pennsylvania, United States"
-            },
-            "san antonio, tx": {
-                "boundingbox": ["29.2733861", "29.7604981", "-98.7261377", "-98.2699455"],
-                "display_name": "San Antonio, Bexar County, Texas, United States"
-            },
-            "san diego, ca": {
-                "boundingbox": ["32.5343699", "33.0845412", "-117.2897284", "-116.9072855"],
-                "display_name": "San Diego, San Diego County, California, United States"
-            },
-            "dallas, tx": {
-                "boundingbox": ["32.6170157", "33.0164441", "-97.0084028", "-96.5559534"],
-                "display_name": "Dallas, Dallas County, Texas, United States"
-            },
-            "jacksonville, fl": {
-                "boundingbox": ["30.1009328", "30.5868733", "-82.0261417", "-81.3892418"],
-                "display_name": "Jacksonville, Duval County, Florida, United States"
-            }
-        }
-        
-        # Clean and simplify the city name for better results
-        # Remove suffixes like "city" and simplify state codes
-        simplified_city = city_name.lower()
-        simplified_city = simplified_city.replace(" city", "").strip()
-        
-        # Extract primary city name for searching
-        primary_city = simplified_city.split(',')[0].strip() if ',' in simplified_city else simplified_city
-        
-        # Create a mapping of simplified city names
-        city_key = simplified_city
-        
-        # Try to get from Nominatim API
-        try:
-            nominatim_url = "https://nominatim.openstreetmap.org/search"
-            nominatim_params = {
-                "q": primary_city,  # Use simplified primary city name
-                "format": "json",
-                "limit": 1
-            }
+        Args:
+            city_name: Name of the city to get coordinates for
+            use_fallback: Whether to try alternative city name formats if first attempt fails
             
-            log_progress(f"Making request to Nominatim API for {primary_city}", city_name, "debug")
-            nominatim_response = requests.get(
-                nominatim_url, 
-                params=nominatim_params, 
+        Returns:
+            Dictionary containing city coordinates and bounding box, or None if not found
+        """
+        # Clean city name
+        city_name = city_name.replace(" city", "").replace(" town", "").replace(" village", "")
+        
+        # Try different query formats
+        query_formats = [
+            city_name,  # Original name
+            f"{city_name}, USA",  # Add country
+            city_name.split(",")[0].strip() if "," in city_name else city_name,  # Remove state if present
+            f"{city_name.split(',')[0].strip()}, USA" if "," in city_name else f"{city_name}, USA"  # Remove state and add country
+        ]
+        
+        for query in query_formats:
+            try:
+                # Add delay to respect Nominatim's rate limits
+                time.sleep(1)
+                
+                # Make request to Nominatim
+                response = requests.get(
+                    "https://nominatim.openstreetmap.org/search",
+                    params={
+                        "q": query,
+                "format": "json",
+                        "limit": 1,
+                        "addressdetails": 1,
+                        "extratags": 1
+                    },
+                    headers=self.headers,
+                    timeout=10
+                )
+                
+                if response.status_code == 200:
+                    results = response.json()
+                    if results:
+                        result = results[0]
+                        return {
+                            "lat": float(result["lat"]),
+                            "lon": float(result["lon"]),
+                            "boundingbox": [float(x) for x in result["boundingbox"]],
+                            "display_name": result.get("display_name", ""),
+                            "osm_type": result.get("osm_type", ""),
+                            "osm_id": result.get("osm_id", "")
+                        }
+                        
+            except Exception as e:
+                log_progress(f"Error getting coordinates for {query}: {str(e)}", level="warning")
+                continue
+                
+        if use_fallback:
+            # Try one last time with a simplified query
+            try:
+                time.sleep(1)
+                simplified_name = city_name.split(",")[0].strip()
+                response = requests.get(
+                    "https://nominatim.openstreetmap.org/search",
+                    params={
+                        "q": simplified_name,
+                        "format": "json",
+                        "limit": 1,
+                        "addressdetails": 1,
+                        "extratags": 1
+                    },
                 headers=self.headers,
                 timeout=10
             )
             
-            if nominatim_response.status_code != 200:
-                log_progress(f"Nominatim API returned status code {nominatim_response.status_code}", city_name, "warning")
-                
-                if use_fallback and city_key in fallback_coordinates:
-                    log_progress(f"Using fallback coordinates for {city_name}", city_name)
-                    return self._expand_bounding_box(fallback_coordinates[city_key])
-                else:
-                    raise ValueError(f"Failed to get data from Nominatim API. Status code: {nominatim_response.status_code}")
-                    
-            nominatim_data = nominatim_response.json()
+                if response.status_code == 200:
+                    results = response.json()
+                    if results:
+                        result = results[0]
+                        return {
+                            "lat": float(result["lat"]),
+                            "lon": float(result["lon"]),
+                            "boundingbox": [float(x) for x in result["boundingbox"]],
+                            "display_name": result.get("display_name", ""),
+                            "osm_type": result.get("osm_type", ""),
+                            "osm_id": result.get("osm_id", "")
+                        }
+                        
+            except Exception as e:
+                log_progress(f"Error in fallback coordinate lookup for {simplified_name}: {str(e)}", level="warning")
+        
+        return None
+    
+    def fetch_theaters_from_overpass(self, city_data: Dict[str, Any], brand: str) -> List[Dict[str, Any]]:
+        """
+        Generate synthetic theater data for a city and brand.
+        
+        Args:
+            city_data: Dictionary containing city information
+            brand: Theater brand to generate data for
             
-            if not nominatim_data:
-                log_progress(f"No data returned from Nominatim API for {city_name}", city_name, "warning")
+        Returns:
+            List of theater dictionaries
+        """
+        try:
+            # Get city size based on population
+            population = city_data.get('population', 0)
+            thresholds = self.config.theater.generation.population_thresholds
+            
+            if population >= thresholds['major_metro']:
+                city_size = 'major_metro'
+            elif population >= thresholds['large_city']:
+                city_size = 'large_city'
+            elif population >= thresholds['medium_city']:
+                city_size = 'medium_city'
+            else:
+                city_size = 'small_city'
+            
+            # Get theater count range for this brand and city size
+            count_range = self.config.theater.generation.theater_counts[city_size].get(brand, [0, 0])
+            num_theaters = random.randint(count_range[0], count_range[1])
+            
+            if num_theaters == 0:
+                return []
+            
+            theaters = []
+            city_name = city_data['name']
+            state = city_data.get('state', '')
+            
+            # Get naming pattern for this brand and city size
+            naming_pattern = self.config.theater.generation.naming_patterns[brand][city_size]
+            
+            # Get feature distribution for this city size
+            feature_distribution = self.config.theater.generation.feature_distribution[city_size]
+            
+            for i in range(num_theaters):
+                # Generate theater name based on pattern
+                theater_name = naming_pattern.format(
+                    brand=brand.upper(),
+                    city=city_name,
+                    number=str(random.randint(8, 24)) if '{number}' in naming_pattern else '',
+                    suffix=random.choice(self.config.theater.generation.suffixes.get(brand, ['']))
+                ).strip()
                 
-                # Try with just the city name without state
-                if "," in simplified_city:
-                    primary_city = simplified_city.split(',')[0].strip()
-                    log_progress(f"Retrying with just city name: {primary_city}", city_name)
-                    
-                    nominatim_params["q"] = primary_city
-                    nominatim_response = requests.get(
-                        nominatim_url, 
-                        params=nominatim_params, 
-                        headers=self.headers,
-                        timeout=10
-                    )
-                    
-                    if nominatim_response.status_code == 200:
-                        nominatim_data = nominatim_response.json()
+                # Generate address
+                street_number = random.randint(100, 9999)
+                street_name = random.choice(self.config.theater.generation.street_names)
+                address = f"{street_number} {street_name}"
                 
-                # If still no data, use fallback
-                if not nominatim_data:
-                    if use_fallback and city_key in fallback_coordinates:
-                        log_progress(f"Using fallback coordinates for {city_name}", city_name)
-                        return self._expand_bounding_box(fallback_coordinates[city_key])
-                    else:
-                        raise ValueError(f"City not found: {city_name}")
-                    
-            log_progress(f"Successfully retrieved coordinates for {city_name}", city_name)
-            return self._expand_bounding_box(nominatim_data[0])
+                # Generate random coordinates (US coordinates)
+                lat = random.uniform(24.396308, 49.384358)  # US latitude range
+                lon = random.uniform(-125.000000, -66.934570)  # US longitude range
+                
+                # Generate features based on distribution rules
+                features = ["2D", "3D"]  # All theaters have 2D and 3D
+                
+                # Add 4DX based on distribution
+                if random.random() * 100 < feature_distribution["4DX"]:
+                    features.append("4DX")
+                
+                # Add IMAX based on distribution
+                if random.random() * 100 < feature_distribution["IMAX"]:
+                    features.append("IMAX")
+                
+                # Generate random phone number
+                area_code = random.randint(200, 999)
+                prefix = random.randint(200, 999)
+                line_number = random.randint(1000, 9999)
+                phone = f"({area_code}) {prefix}-{line_number}"
+                
+                # Generate website
+                website = f"https://www.{brand.lower()}.com/theaters/{city_name.lower().replace(' ', '-')}-{i+1}"
+                
+                theater = {
+                    'unique_id': f"{brand}_{city_name}_{i+1}",
+                    'name': theater_name,
+                    'brand': brand,
+                    'source_city': city_name,
+                    'city_geoid': city_data.get('geoid', ''),
+                    'location': {
+                        'type': 'Point',
+                        'coordinates': [lon, lat]
+                    },
+                    'address': {
+                        'street': address,
+                        'city': city_name,
+                        'state': state,
+                        'zip': f"{random.randint(10000, 99999)}"
+                    },
+                    'contact': {
+                        'phone': phone,
+                        'website': website,
+                        'opening_hours': {
+                            'monday': "10:00-23:00",
+                            'tuesday': "10:00-23:00",
+                            'wednesday': "10:00-23:00",
+                            'thursday': "10:00-23:00",
+                            'friday': "10:00-00:00",
+                            'saturday': "10:00-00:00",
+                            'sunday': "10:00-23:00"
+                        }
+                    },
+                    'features': features,
+                    'last_updated': datetime.utcnow().isoformat()
+                }
+                
+                theaters.append(theater)
+            
+            return theaters
             
         except Exception as e:
-            log_progress(f"Error getting coordinates for {city_name}: {str(e)}", city_name, "error")
-            
-            if use_fallback and city_key in fallback_coordinates:
-                log_progress(f"Using fallback coordinates for {city_name}", city_name)
-                return self._expand_bounding_box(fallback_coordinates[city_key])
-            else:
-                raise
-    
-    def _expand_bounding_box(self, location_data: Dict) -> Dict:
-        """Expand the bounding box to ensure it covers a reasonable area around the city center."""
-        # Ensure we have a bounding box
-        if "boundingbox" not in location_data or len(location_data["boundingbox"]) < 4:
-            # If no bounding box but we have lat/lon, create one
-            if "lat" in location_data and "lon" in location_data:
-                try:
-                    lat = float(location_data["lat"])
-                    lon = float(location_data["lon"])
-                    # Create a 10km x 10km bounding box around the point (approximately)
-                    # 0.1 degrees is roughly 11km at the equator
-                    location_data["boundingbox"] = [
-                        str(lat - 0.05),  # south
-                        str(lat + 0.05),  # north
-                        str(lon - 0.05),  # west
-                        str(lon + 0.05)   # east
-                    ]
-                    log_progress(f"Created bounding box around point: {location_data['boundingbox']}")
-                except (ValueError, KeyError) as e:
-                    log_progress(f"Failed to create bounding box from lat/lon: {str(e)}", level="warning")
-            return location_data
-        
-        try:
-            # Convert bounding box values to float
-            south = float(location_data["boundingbox"][0])
-            north = float(location_data["boundingbox"][1])
-            west = float(location_data["boundingbox"][2])
-            east = float(location_data["boundingbox"][3])
-            
-            # Calculate current dimensions
-            lat_span = north - south
-            lon_span = east - west
-            
-            # Check if bounding box is too small (less than ~5km)
-            min_span = 0.05  # approximately 5.5km at the equator
-            
-            # Expand box if needed to ensure minimum coverage
-            if lat_span < min_span:
-                center_lat = (north + south) / 2
-                south = center_lat - min_span / 2
-                north = center_lat + min_span / 2
-                log_progress(f"Expanded latitude range to ensure minimum coverage: {south} to {north}")
-                
-            if lon_span < min_span:
-                center_lon = (east + west) / 2
-                west = center_lon - min_span / 2
-                east = center_lon + min_span / 2
-                log_progress(f"Expanded longitude range to ensure minimum coverage: {west} to {east}")
-            
-            # Update the bounding box
-            location_data["boundingbox"] = [str(south), str(north), str(west), str(east)]
-            
-        except (ValueError, IndexError) as e:
-            log_progress(f"Error expanding bounding box: {str(e)}", level="warning")
-            
-        return location_data
+            logger.error(f"Error generating theater data: {str(e)}")
+            return []
     
     def fetch_theaters(self, city_name: str = "Tampa, Florida", city_data: Dict = None) -> List[Dict[str, Any]]:
         """
-        Generate theaters for a city based on the city name and target theater brands.
-        No API calls are made - simply generates theaters using brand names.
+        Generate theater data for a city.
         
         Args:
             city_name: Name of the city to generate theaters for
             city_data: Optional city data dictionary with additional info
             
         Returns:
-            List of theater dictionaries with name and brand information
+            List of theater dictionaries
         """
-        log_progress(f"Generating theaters for {city_name}", city_name)
+        if not city_data:
+            # Try to get city data from MongoDB
+            city_data = self.cities_collection.find_one({"name": city_name.split(",")[0].strip()})
+            if not city_data:
+                log_progress(f"City data not found for {city_name}", city_name, "error")
+                return []
         
-        # Clean city name
-        query_city_name = city_name
-        for suffix in [" city", " town", " village", " CDP"]:
-            query_city_name = query_city_name.replace(suffix, "")
-        
-        # If city name has a comma (e.g., "Tampa, Florida"), extract the main city part
-        if "," in query_city_name:
-            query_city_name = query_city_name.split(",")[0].strip()
+        try:
+            theaters = []
+            city_name = city_data['name']
+            state = city_data.get('state', '')
             
-        # Extract geoid from city_data if available
-        city_geoid = city_data.get("geoid") if city_data else None
-        
-        # Generate a reasonable number of theaters based on city size
-        # This is just a starting point - no hard limits
-        num_theaters = random.randint(1, 10)  # Base number of theaters
-        
-        log_progress(f"Generating {num_theaters} theaters for {query_city_name}", city_name)
-        
-        # Generate theaters
-        theaters = []
-        target_theaters = self.target_theaters
-        
-        # Theater name templates for different brands
-        theater_templates = {
-            "amc": [
-                "{city} AMC {number}",
-                "AMC {city} {number}",
-                "AMC {city} Mall {number}"
-            ],
-            "regal": [
-                "Regal {city} {number}",
-                "Regal {city} Stadium {number}",
-                "{city} Regal Cinema"
-            ],
-            "cinemark": [
-                "Cinemark {city} {number}",
-                "Cinemark {city} Mall",
-                "{city} Cinemark"
-            ]
-        }
-        
-        # Add additional templates for any other configured brands
-        for brand in target_theaters:
-            if brand not in theater_templates:
-                theater_templates[brand] = [
-                    f"{brand.upper()} {query_city_name} {{number}}",
-                    f"{brand.title()} {query_city_name}",
-                    f"{query_city_name} {brand.title()}"
-                ]
-        
-        # Generate theaters for each brand
-        for i in range(num_theaters):
-            # Randomly select a brand
-            brand = random.choice(target_theaters)
+            # Generate theaters for each brand
+            for brand in self.target_theaters:
+                brand_theaters = self.fetch_theaters_from_overpass(city_data, brand)
+                theaters.extend(brand_theaters)
             
-            # Get templates for this brand
-            brand_templates = theater_templates.get(brand, theater_templates["amc"])
+            # Add delay between cities as configured
+            delay = random.uniform(
+                self.config.theater.delay_between_cities["min"],
+                self.config.theater.delay_between_cities["max"]
+            )
+            log_progress(f"Adding delay of {delay:.2f} seconds before next city", level="debug")
+            time.sleep(delay)
             
-            # Randomly select a template for this brand
-            template = random.choice(brand_templates)
+            return theaters
             
-            # Generate a number for the theater (if the template has {number})
-            number = random.randint(8, 24)
-            
-            # Generate theater name
-            name = template.format(city=query_city_name, number=number)
-            
-            # Generate a unique ID
-            unique_id = f"{brand}-{query_city_name.lower().replace(' ', '-')}-{i}"
-            
-            # Create theater info
-            theater_info = {
-                "unique_id": unique_id,
-                "name": name,
-                "brand": brand,
-                "source_city": city_name,
-                "city_geoid": city_geoid,
-                "last_updated": datetime.now().isoformat()
-            }
-            
-            theaters.append(theater_info)
-            log_progress(f"Added theater: {name} ({brand})", city_name)
-        
-        log_progress(f"Generated {len(theaters)} theaters for {query_city_name}", city_name)
-        return theaters
+        except Exception as e:
+            log_progress(f"Error generating theaters for {city_name}: {str(e)}", city_name, "error")
+            return []
     
     def load_cities_from_json(self, json_file=US_CITIES_JSON_FILE) -> Dict[str, Dict]:
         """Load cities from the JSON file."""

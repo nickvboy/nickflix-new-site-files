@@ -149,6 +149,194 @@ class MovieConfig:
         return self.config.get(self.section, "language", "en-US")
 
 
+class OverpassConfig:
+    """Configuration for Overpass API settings."""
+    
+    def __init__(self, config_manager: ConfigManager):
+        """
+        Initialize with a ConfigManager.
+        
+        Args:
+            config_manager: ConfigManager instance
+        """
+        self.config = config_manager
+        self.section = "theater_data.overpass"
+        
+    @property
+    def base_url(self) -> str:
+        """Base URL for Overpass API."""
+        return self.config.get(self.section, "base_url", "https://overpass-api.de/api/interpreter")
+        
+    @property
+    def timeout(self) -> int:
+        """Timeout for API requests in seconds."""
+        return self.config.get(self.section, "timeout", 30)
+        
+    @property
+    def max_retries(self) -> int:
+        """Maximum number of retries for failed requests."""
+        return self.config.get(self.section, "max_retries", 3)
+        
+    @property
+    def retry_delay(self) -> int:
+        """Delay between retries in seconds."""
+        return self.config.get(self.section, "retry_delay", 5)
+        
+    @property
+    def query_timeout(self) -> int:
+        """Query timeout in seconds."""
+        return self.config.get(self.section, "query_timeout", 25)
+        
+    @property
+    def use_area_query(self) -> bool:
+        """Whether to use area query (true) or bounding box (false)."""
+        return self.config.get(self.section, "use_area_query", True)
+
+
+class TheaterGenerationConfig:
+    """Configuration for theater data generation."""
+    
+    def __init__(self, config_manager: ConfigManager):
+        """
+        Initialize with a ConfigManager.
+        
+        Args:
+            config_manager: ConfigManager instance
+        """
+        self.config = config_manager
+        self.section = "theater_data.generation"
+        
+    @property
+    def population_thresholds(self) -> Dict[str, int]:
+        """Population thresholds for different city sizes."""
+        return self.config.get(self.section, "population_thresholds", {
+            "major_metro": 1000000,
+            "large_city": 500000,
+            "medium_city": 100000
+        })
+        
+    @property
+    def theater_counts(self) -> Dict[str, Dict[str, List[int]]]:
+        """Theater counts per brand and city size."""
+        return self.config.get(self.section, "theater_counts", {
+            "major_metro": {
+                "amc": [3, 8],
+                "regal": [2, 6],
+                "cinemark": [2, 5],
+                "other": [1, 3]
+            },
+            "large_city": {
+                "amc": [2, 5],
+                "regal": [1, 4],
+                "cinemark": [1, 3],
+                "other": [1, 2]
+            },
+            "medium_city": {
+                "amc": [1, 3],
+                "regal": [1, 2],
+                "cinemark": [1, 2],
+                "other": [0, 1]
+            },
+            "small_city": {
+                "amc": [0, 2],
+                "regal": [0, 1],
+                "cinemark": [0, 1],
+                "other": [0, 0]
+            }
+        })
+        
+    @property
+    def naming_patterns(self) -> Dict[str, Dict[str, str]]:
+        """Naming patterns for different brands and city sizes."""
+        return self.config.get(self.section, "naming_patterns", {
+            "amc": {
+                "major_metro": "{brand} {city} {number}",
+                "large_city": "{brand} {city} {number}",
+                "medium_city": "{brand} {city} {number}",
+                "small_city": "{brand} {city} {number}"
+            },
+            "regal": {
+                "major_metro": "{brand} {city} {suffix} {number}",
+                "large_city": "{brand} {city} {suffix}",
+                "medium_city": "{brand} {city} {suffix}",
+                "small_city": "{brand} {city} {suffix}"
+            },
+            "cinemark": {
+                "major_metro": "{brand} {city} {suffix} {number}",
+                "large_city": "{brand} {city} {suffix}",
+                "medium_city": "{brand} {city} {suffix}",
+                "small_city": "{brand} {city} {suffix}"
+            }
+        })
+        
+    @property
+    def suffixes(self) -> Dict[str, List[str]]:
+        """Available suffixes for theater names."""
+        return self.config.get(self.section, "suffixes", {
+            "regal": ["Cinema", "Stadium", "Grande", "Premiere", "Cineplex"],
+            "cinemark": ["Theater", "Movies", "Cinema", "Xenon"]
+        })
+        
+    @property
+    def features(self) -> Dict[str, int]:
+        """Number of features to include by city size."""
+        return self.config.get(self.section, "features", {
+            "major_metro": 4,  # All features
+            "large_city": 3,   # 2D, 3D, and one premium
+            "medium_city": 2,  # 2D and 3D
+            "small_city": 2    # 2D and 3D
+        })
+        
+    @property
+    def available_features(self) -> List[str]:
+        """Available features to choose from."""
+        return self.config.get(self.section, "available_features", [
+            "2D", "3D", "4DX", "IMAX"
+        ])
+        
+    @property
+    def feature_distribution(self) -> Dict[str, Dict[str, int]]:
+        """Feature distribution rules by city size."""
+        return self.config.get(self.section, "feature_distribution", {
+            "major_metro": {
+                "2D": 100,  # All theaters have 2D
+                "3D": 100,  # All theaters have 3D
+                "4DX": 40,  # 40% have 4DX
+                "IMAX": 30  # 30% have IMAX
+            },
+            "large_city": {
+                "2D": 100,
+                "3D": 100,
+                "4DX": 30,
+                "IMAX": 20
+            },
+            "medium_city": {
+                "2D": 100,
+                "3D": 100,
+                "4DX": 20,
+                "IMAX": 10
+            },
+            "small_city": {
+                "2D": 100,
+                "3D": 100,
+                "4DX": 10,
+                "IMAX": 5
+            }
+        })
+        
+    @property
+    def street_names(self) -> List[str]:
+        """Street name templates."""
+        return self.config.get(self.section, "street_names", [
+            "Main Street", "Park Avenue", "Market Street", "Broadway",
+            "First Avenue", "Second Street", "Oak Street", "Maple Avenue",
+            "Pine Street", "Cedar Avenue", "Elm Street", "Washington Avenue",
+            "Lake Street", "River Road", "Highland Avenue", "Valley View Drive",
+            "Center Street", "Theater District", "Entertainment Boulevard",
+            "Cinema Plaza", "Movie Lane", "Showtime Drive"
+        ])
+
+
 class TheaterConfig:
     """Configuration for theater data collection."""
     
@@ -161,6 +349,8 @@ class TheaterConfig:
         """
         self.config = config_manager
         self.section = "theater_data"
+        self.overpass = OverpassConfig(config_manager)
+        self.generation = TheaterGenerationConfig(config_manager)
         
     @property
     def theater_brands(self) -> List[str]:
