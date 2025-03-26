@@ -485,6 +485,73 @@ class LoggingConfig:
         return self.config.get(self.section, "log_file", default)
 
 
+class ShowtimeGenerationConfig:
+    """Configuration for showtime generation."""
+    
+    def __init__(self, config_manager: ConfigManager):
+        """
+        Initialize with a ConfigManager.
+        
+        Args:
+            config_manager: ConfigManager instance
+        """
+        self.config = config_manager
+        self.section = "showtime_generation"
+    
+    @property
+    def operating_hours(self) -> Dict[str, Dict]:
+        """Operating hours configuration."""
+        return self.config.get(self.section, "operating_hours", {
+            "weekday": {
+                "opening_time_range": {
+                    "min": "08:00",
+                    "max": "11:00"
+                },
+                "closing_time_range": {
+                    "min": "22:00",
+                    "max": "02:00"
+                }
+            },
+            "weekend": {
+                "opening_time_range": {
+                    "min": "09:00",
+                    "max": "11:00"
+                },
+                "closing_time_range": {
+                    "min": "23:00",
+                    "max": "03:00"
+                }
+            }
+        })
+    
+    @property
+    def showtimes(self) -> Dict[str, Any]:
+        """Showtime generation settings."""
+        return self.config.get(self.section, "showtimes", {
+            "buffer_time_range": {
+                "min": 5,
+                "max": 15
+            },
+            "release_window_weeks": 3,
+            "min_movies_per_theater": 1,
+            "max_movies_per_theater": None,
+            "distribution": "random",
+            "peak_hours": {
+                "start": "17:00",
+                "end": "22:00",
+                "density_multiplier": 1.5
+            }
+        })
+    
+    @property
+    def collections(self) -> Dict[str, str]:
+        """MongoDB collection names."""
+        return self.config.get(self.section, "collections", {
+            "showtimes": "showtimes",
+            "operational_hours": "operational_hours"
+        })
+
+
 # Main configuration object
 class Config:
     """Main configuration object providing access to all configuration sections."""
@@ -502,6 +569,7 @@ class Config:
         self.processing = ProcessingConfig(self.config_manager)
         self.output = OutputConfig(self.config_manager)
         self.logging = LoggingConfig(self.config_manager)
+        self.showtime_generation = ShowtimeGenerationConfig(self.config_manager)
     
     def initialize_logging(self) -> None:
         """Initialize logging based on configuration."""

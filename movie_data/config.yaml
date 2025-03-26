@@ -4,7 +4,7 @@
 # Movie data collection settings
 movie_data:
   # Number of movies to fetch
-  count: 50
+  count: 75
   # Minimum vote count for movie to be included
   min_vote_count: 1000
   # Minimum vote average rating (out of 10)
@@ -39,10 +39,10 @@ theater_data:
   batch_size: 1
   # Delay between cities in seconds (min and max for random range)
   delay_between_cities:
-    min: 0.5
-    max: 1.0
+    min: 0.2
+    max: 0.3
   # Delay between batches in seconds
-  delay_between_batches: .5
+  delay_between_batches: 0.1
   # Timeout per batch in seconds (30 minutes)
   timeout_per_batch: 1800
   # Maximum number of batches to process (null for no limit)
@@ -68,13 +68,13 @@ theater_data:
         other: [1, 2]
       medium_city:
         amc: [1, 3]
-        regal: [1, 2]
-        cinemark: [1, 2]
+        regal: [1, 3]
+        cinemark: [1, 5]
         other: [0, 1]
       small_city:
-        amc: [0, 2]
-        regal: [0, 1]
-        cinemark: [0, 1]
+        amc: [1, 3]
+        regal: [1, 2]
+        cinemark: [1, 2]
         other: [0, 0]
     # Theater naming patterns
     naming_patterns:
@@ -197,4 +197,51 @@ logging:
   # Whether to log to file
   log_to_file: true
   # Path to log file (relative to script directory)
-  log_file: "logs/movie_fetcher.log" 
+  log_file: "logs/movie_fetcher.log"
+
+# Showtime generation settings
+showtime_generation:
+  # Operating hours configuration
+  operating_hours:
+    # Weekday hours (Monday-Friday)
+    weekday:
+      opening_time_range:
+        min: "08:00"  # 8:00 AM
+        max: "11:00"  # 11:00 AM
+      closing_time_range:
+        min: "22:00"  # 10:00 PM
+        max: "02:00"  # 2:00 AM
+    # Weekend hours (Saturday-Sunday)
+    weekend:
+      opening_time_range:
+        min: "09:00"  # 9:00 AM
+        max: "11:00"  # 11:00 AM
+      closing_time_range:
+        min: "23:00"  # 11:00 PM
+        max: "03:00"  # 3:00 AM
+  
+  # Showtime generation settings
+  showtimes:
+    # Buffer time between screenings (in minutes)
+    buffer_time_range:
+      min: 5
+      max: 15
+    # Number of weeks to look back for movie releases
+    release_window_weeks: 3
+    # Minimum number of movies per theater
+    min_movies_per_theater: 1
+    # Maximum number of movies per theater (null for no limit)
+    max_movies_per_theater: 20
+    # Distribution of movies across theaters
+    # Options: random, even, weighted
+    distribution: "random"
+    # Peak hours configuration (for showtime density)
+    peak_hours:
+      start: "17:00"  # 5:00 PM
+      end: "22:00"    # 10:00 PM
+      density_multiplier: 1.5  # 50% more showings during peak hours
+  
+  # MongoDB collection names
+  collections:
+    showtimes: "showtimes"
+    operational_hours: "operational_hours" 
