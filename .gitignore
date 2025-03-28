@@ -49,7 +49,7 @@ movie_data/images/**/*.jpg
 movie_data/images/**/*.jpeg
 movie_data/theaters/**/*.jpg
 movie_data/theaters/**/*.jpeg
-movie_data/**/*.json
+movie_data/data/*.json
 **/*theater*/**/*.jpg
 **/*theater*/**/*.jpeg
 
