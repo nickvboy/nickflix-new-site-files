@@ -49,5 +49,13 @@ movie_data/images/**/*.jpg
 movie_data/images/**/*.jpeg
 movie_data/theaters/**/*.jpg
 movie_data/theaters/**/*.jpeg
+movie_data/data/*.json
 **/*theater*/**/*.jpg
 **/*theater*/**/*.jpeg
+
+# JSON files
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!vite.config.json
