@@ -13,7 +13,7 @@ import logging
 import random
 import re
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Union
 
 import requests
 from dotenv import load_dotenv
@@ -25,7 +25,7 @@ from tqdm import tqdm
 import argparse
 
 # Import configuration module
-from config import get_config, reload_config
+from config import get_config, reload_config, Config
 
 # Load environment variables from project root .env file
 load_dotenv()  # This will look for .env in the current working directory
@@ -63,8 +63,8 @@ MONGODB_COLLECTION_THEATERS = "theaters"
 MONGODB_COLLECTION_PROGRESS = "progress"
 
 # Output file paths from configuration
-OUTPUT_JSON_FILE = config.output.movies_json_file
-THEATERS_JSON_FILE = config.output.theaters_json_file
+OUTPUT_JSON_FILE = config.output.get_file_path("movies")
+THEATERS_JSON_FILE = config.output.get_file_path("theaters")
 US_CITIES_JSON_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "us_cities.json")
 
 # Custom progress logger for theater processing
@@ -501,6 +501,7 @@ class MovieData:
     def fetch_and_save_movies(self, count: int = 50, download_images: bool = True) -> Dict[str, Any]:
         """
         Fetch popular movies, process them, and save to MongoDB.
+        Only fetches additional movies if needed to reach the target count.
         
         Args:
             count: Number of movies to fetch
@@ -509,7 +510,7 @@ class MovieData:
         Returns:
             Dictionary with statistics about the process
         """
-        log_progress(f"Starting movie data collection. Fetching {count} movies...", level="info")
+        log_progress(f"Starting movie data collection. Target count: {count} movies...", level="info")
         
         stats = {
             "requested": count,
@@ -522,15 +523,42 @@ class MovieData:
         }
         
         try:
+            # Check current movie count in database
+            current_count = self.movies_collection.count_documents({})
+            log_progress(f"Current movie count in database: {current_count}", level="info")
+            
+            # If we already have enough movies, skip fetching
+            if current_count >= count:
+                log_progress(f"Database already has {current_count} movies, which meets or exceeds target of {count}. Skipping fetch.", level="info")
+                stats["fetched"] = 0
+                stats["saved"] = current_count
+                stats["end_time"] = datetime.now().isoformat()
+                return stats
+            
+            # Calculate how many more movies we need
+            movies_needed = count - current_count
+            log_progress(f"Need to fetch {movies_needed} more movies to reach target", level="info")
+            
             # Get popular movies
-            movies = self.get_popular_movies(count=count)
+            movies = self.get_popular_movies(count=movies_needed)
             stats["fetched"] = len(movies)
             
-            log_progress(f"Processing and saving {len(movies)} movies to MongoDB...", level="info")
+            if not movies:
+                log_progress("No new movies found to fetch", level="warning")
+                stats["end_time"] = datetime.now().isoformat()
+                return stats
+            
+            log_progress(f"Processing and saving {len(movies)} new movies to MongoDB...", level="info")
             
             # Process each movie
             for movie in tqdm(movies, desc="Saving movies to MongoDB"):
                 try:
+                    # Check if movie already exists
+                    existing_movie = self.movies_collection.find_one({"id": movie.get("id")})
+                    if existing_movie:
+                        log_progress(f"Movie {movie.get('title')} already exists in database, skipping", level="debug")
+                        continue
+                    
                     # Save original genres before processing
                     movie["genres_original"] = movie.get("genres", [])
                     
@@ -558,7 +586,9 @@ class MovieData:
             stats["end_time"] = datetime.now().isoformat()
             stats["genres"] = list(stats["genres"])
             
-            log_progress(f"Movie data collection complete. Saved {stats['saved']} out of {stats['fetched']} movies.", level="info")
+            # Get final count
+            final_count = self.movies_collection.count_documents({})
+            log_progress(f"Movie data collection complete. Total movies in database: {final_count}", level="info")
             
             # Generate summary statistics
             genres_summary = {}
@@ -624,6 +654,118 @@ class TheaterData:
             log_progress(f"Connection string: {mask_connection_string(MONGODB_CONNECTION_STRING)}", level="error")
             log_progress(f"Database name: {MONGODB_DATABASE}", level="error")
             raise ConnectionError(f"Failed to connect to MongoDB: {error_msg}")
+    
+    def process_all_cities(self, batch_size: int = None, delay_between_batches: int = None, max_batches: int = None, timeout_per_batch: int = None) -> Dict:
+        """
+        Process all cities in the database in batches.
+        
+        Args:
+            batch_size: Number of cities to process in each batch
+            delay_between_batches: Delay in seconds between batches
+            max_batches: Maximum number of batches to process
+            timeout_per_batch: Maximum time in seconds to process each batch
+            
+        Returns:
+            Dictionary with processing statistics
+        """
+        # Use config values if not provided
+        if batch_size is None:
+            batch_size = self.config.theater.batch_size
+        if delay_between_batches is None:
+            delay_between_batches = self.config.theater.delay_between_batches
+        if max_batches is None:
+            max_batches = self.config.theater.max_batches
+        if timeout_per_batch is None:
+            timeout_per_batch = self.config.theater.timeout_per_batch
+            
+        # Initialize statistics
+        stats = {
+            "total_cities": 0,
+            "processed_cities": 0,
+            "theaters_found": 0,
+            "errors": 0,
+            "batches_completed": 0,
+            "start_time": datetime.now().isoformat()
+        }
+        
+        try:
+            # Get total number of unprocessed cities
+            stats["total_cities"] = self.cities_collection.count_documents({
+                "processed": {"$ne": True},
+                "population": {"$exists": True, "$ne": None}
+            })
+            
+            if stats["total_cities"] == 0:
+                log_progress("No unprocessed cities found", level="info")
+                return stats
+            
+            log_progress(f"Found {stats['total_cities']} unprocessed cities to process", level="info")
+            
+            # Process cities in batches
+            batch_num = 1
+            while True:
+                # Check if we've reached max batches
+                if max_batches and batch_num > max_batches:
+                    log_progress(f"Reached maximum number of batches ({max_batches})", level="info")
+                    break
+                
+                # Get next batch of cities
+                cities = list(self.cities_collection.find(
+                    {"processed": {"$ne": True}, "population": {"$exists": True, "$ne": None}},
+                    sort=[("population", -1)],  # Process largest cities first
+                    limit=batch_size
+                ))
+                
+                if not cities:
+                    log_progress("No more cities to process", level="info")
+                    break
+                
+                log_progress(f"Processing batch {batch_num} with {len(cities)} cities", level="info")
+                
+                # Process this batch
+                batch_stats = self.process_batch_of_cities(cities)
+                
+                # Update overall statistics
+                stats["processed_cities"] += batch_stats["processed_cities"]
+                stats["theaters_found"] += batch_stats["theaters_found"]
+                stats["errors"] += batch_stats["errors"]
+                stats["batches_completed"] += 1
+                
+                # Log progress
+                progress = (stats["processed_cities"] / stats["total_cities"]) * 100
+                log_progress(f"Progress: {progress:.1f}% ({stats['processed_cities']}/{stats['total_cities']} cities)", level="info")
+                
+                # Add delay between batches
+                if delay_between_batches > 0:
+                    log_progress(f"Waiting {delay_between_batches} seconds before next batch", level="info")
+                    time.sleep(delay_between_batches)
+                
+                batch_num += 1
+            
+            stats["end_time"] = datetime.now().isoformat()
+            log_progress("City processing complete", level="info")
+            return stats
+            
+        except Exception as e:
+            log_progress(f"Error processing cities: {str(e)}", level="error")
+            stats["errors"] += 1
+            stats["end_time"] = datetime.now().isoformat()
+            return stats
+
+    def generate_theater_id(self) -> str:
+        """
+        Generate a unique 9-digit theater ID.
+        
+        Returns:
+            str: A 9-digit theater ID
+        """
+        while True:
+            # Generate a random 9-digit number
+            theater_id = str(random.randint(100000000, 999999999))
+            
+            # Check if this ID already exists
+            if not self.theaters_collection.find_one({"theater_id": theater_id}):
+                return theater_id
     
     def get_city_coordinates(self, city_name: str, use_fallback: bool = True) -> Optional[Dict]:
         """
@@ -970,7 +1112,7 @@ class TheaterData:
         existing_ids = set(self.theaters_collection.distinct("theater_id"))
         for theater in theaters:
             while True:
-                theater_id = generate_theater_id()
+                theater_id = self.generate_theater_id()
                 if theater_id not in existing_ids:
                     existing_ids.add(theater_id)
                     theater["theater_id"] = theater_id
@@ -1031,7 +1173,7 @@ class TheaterData:
         """Save theater data to a JSON file for backup or offline use."""
         # Use config if output_file not provided
         if output_file is None:
-            output_file = self.config.output.theaters_json_file
+            output_file = self.config.output.get_file_path("theaters")
             
         log_progress(f"Saving {len(theaters)} theaters to {output_file}")
         
@@ -1043,793 +1185,129 @@ class TheaterData:
             indent = 2 if self.config.output.pretty_json else None
             json.dump(theaters, f, ensure_ascii=False, indent=indent)
 
-    def update_cities_with_nominatim_coordinates(self, batch_size=None, delay_between_requests=1) -> Dict[str, int]:
+    def export_all_theaters_to_json(self, output_file=None) -> bool:
         """
-        Fetch bounding box coordinates from Nominatim for cities that need them.
-        Updates MongoDB with the coordinates and finds theaters for these cities.
+        Export all theaters from MongoDB to JSON file and generate brand summary.
         
         Args:
-            batch_size: Number of cities to process at once
-            delay_between_requests: Delay in seconds between Nominatim API requests
+            output_file: Optional custom output file path
             
         Returns:
-            Dictionary with statistics about the process
+            bool: True if export was successful, False otherwise
         """
-        # Use default batch size from processing config if not provided
-        if batch_size is None:
-            batch_size = self.config.processing.mongodb_batch_size
-            
-        log_progress("Starting Nominatim coordinate update for cities", level="info")
-        
-        # Get cities that have no bounding box coordinates but have names
-        # We look for cities that haven't been processed and have a name
-        cities_to_update = list(self.cities_collection.find({
-            "$or": [
-                {"boundingbox": {"$exists": False}},
-                {"boundingbox": None}
-            ],
-            "processed": False,
-            "$or": [
-                {"city": {"$exists": True, "$ne": ""}},
-                {"name": {"$exists": True, "$ne": ""}}
-            ]
-        }).limit(batch_size))
-        
-        if not cities_to_update:
-            log_progress("No cities found that need coordinate updates", level="info")
-            return {"cities_processed": 0, "cities_updated": 0, "cities_with_errors": 0, "theaters_found": 0}
-        
-        log_progress(f"Found {len(cities_to_update)} cities that need coordinate updates", level="info")
-        
-        stats = {
-            "cities_processed": 0,
-            "cities_updated": 0,
-            "cities_with_errors": 0,
-            "theaters_found": 0
-        }
-        
-        for city in cities_to_update:
-            stats["cities_processed"] += 1
-            city_geoid = city.get("geoid")
-            
-            # Get city name for Nominatim query
-            city_name = city.get("name") or city.get("city", "")
-            state_name = city.get("state_name") or city.get("state", "")
-            
-            # Format city name for Nominatim query
-            if state_name:
-                query_city_name = f"{city_name}, {state_name}"
-            else:
-                query_city_name = city_name
-                
-            log_progress(f"Processing city: {query_city_name} (GEOID: {city_geoid})", query_city_name)
-            
-            try:
-                # Get coordinates from Nominatim
-                location_data = self.get_city_coordinates(query_city_name, use_fallback=False)
-                
-                if not location_data or "boundingbox" not in location_data:
-                    log_progress(f"No coordinates found for {query_city_name}", query_city_name, "warning")
-                    stats["cities_with_errors"] += 1
-                    continue
-                
-                # Update city with bounding box coordinates
-                update_data = {
-                    "boundingbox": location_data["boundingbox"],
-                    "display_name": location_data.get("display_name", ""),
-                    "coordinates_updated": datetime.now().isoformat()
-                }
-                
-                # Add lat/lon if available
-                if "lat" in location_data and "lon" in location_data:
-                    update_data["lat"] = float(location_data["lat"])
-                    update_data["lon"] = float(location_data["lon"])
-                
-                # Update the city in MongoDB
-                self.cities_collection.update_one(
-                    {"geoid": city_geoid},
-                    {"$set": update_data}
-                )
-                
-                log_progress(f"Updated coordinates for {query_city_name}", query_city_name)
-                stats["cities_updated"] += 1
-                
-                # Optional: Fetch theaters for this city now that we have coordinates
-                try:
-                    # Use the updated city data to fetch theaters
-                    updated_city = self.cities_collection.find_one({"geoid": city_geoid})
-                    theaters = self.fetch_theaters(query_city_name, updated_city)
-                    
-                    if theaters:
-                        # Save theaters to MongoDB
-                        saved_count = self.save_theaters_to_mongodb(theaters, city_geoid)
-                        stats["theaters_found"] += saved_count
-                        
-                        # Mark city as processed
-                        self.mark_city_as_processed(city_geoid, saved_count)
-                        log_progress(f"Found and saved {saved_count} theaters for {query_city_name}", query_city_name)
-                    else:
-                        # Mark as processed but with 0 theaters
-                        self.mark_city_as_processed(city_geoid, 0)
-                        log_progress(f"No theaters found for {query_city_name}", query_city_name)
-                except Exception as e:
-                    log_progress(f"Error fetching theaters for {query_city_name}: {str(e)}", query_city_name, "error")
-                    # Mark as processed but with error
-                    self.mark_city_as_processed(city_geoid, 0, str(e))
-            
-            except Exception as e:
-                log_progress(f"Error updating coordinates for {query_city_name}: {str(e)}", query_city_name, "error")
-                stats["cities_with_errors"] += 1
-            
-            # Add delay between requests to avoid rate limiting
-            if delay_between_requests > 0:
-                time.sleep(delay_between_requests)
-        
-        log_progress(f"Finished Nominatim coordinate update. Stats: {stats}", level="info")
-        return stats
-    
-    def get_cities_by_population(self, limit=None, skip=0) -> List[Dict[str, Any]]:
-        """Get cities sorted by population (highest first)."""
-        # Find cities with population data and sort by population (descending)
-        cursor = self.cities_collection.find(
-            {"population": {"$exists": True, "$ne": None}},
-            {"_id": 0}
-        ).sort("population", -1).skip(skip)
-        
-        if limit:
-            cursor = cursor.limit(limit)
-            
-        cities = list(cursor)
-        log_progress(f"Retrieved {len(cities)} cities sorted by population (skip={skip}, limit={limit})")
-        return cities
-    
-    def get_pending_cities(self, limit=None) -> List[Dict[str, Any]]:
-        """Get a list of cities that haven't been processed yet, sorted by population."""
-        log_progress(f"Retrieving pending cities (limit: {limit})")
-        
-        # Create index on population field for faster sorting if it doesn't exist
-        if "population_-1" not in [idx["name"] for idx in self.cities_collection.list_indexes()]:
-            self.cities_collection.create_index([("population", -1)])
-            
-        # Create index on processed field for faster filtering if it doesn't exist
-        if "processed_1" not in [idx["name"] for idx in self.cities_collection.list_indexes()]:
-            self.cities_collection.create_index([("processed", 1)])
-            
-        # Query with projection to only fetch needed fields
-        cursor = self.cities_collection.find(
-            {
-                "processed": {"$ne": True},
-                "population": {"$exists": True, "$ne": None}
-            },
-            {"_id": 0, "name": 1, "state": 1, "geoid": 1, "population": 1}  # Only fetch needed fields
-        ).sort("population", -1)
-        
-        if limit:
-            cursor = cursor.limit(limit)
-            
-        cities = list(cursor)
-        log_progress(f"Retrieved {len(cities)} pending cities")
-        return cities
-    
-    def process_batch_of_cities(self, batch_size_or_cities=None, delay_between_cities=None, timeout=None) -> Dict[str, Any]:
-        """
-        Process a batch of cities to find theaters.
-        
-        Args:
-            batch_size_or_cities: Either a number of cities to process or a list of city documents
-            delay_between_cities: Delay in seconds between cities
-            timeout: Optional timeout in seconds for the entire batch
-            
-        Returns:
-            Dictionary with statistics about the processed batch
-        """
-        # Get configuration
-        config = get_config()
-        
-        # Use config if delay parameter not provided
-        if delay_between_cities is None:
-            delay_between_cities = config.theater.delay_between_cities
-            
-        if timeout is None:
-            timeout = config.theater.timeout_per_batch
-        
-        # Determine if we received a batch size or a list of cities
-        if isinstance(batch_size_or_cities, list):
-            # We received a list of city documents
-            cities = batch_size_or_cities
-            batch_size = len(cities)
-            log_progress(f"Starting processing batch of {batch_size} cities")
-        else:
-            # We received a batch size (or None)
-            batch_size = batch_size_or_cities
-            if batch_size is None:
-                batch_size = config.theater.batch_size
-                
-            log_progress(f"Starting processing batch of {batch_size} cities")
-            
-            # Get batch of cities to process
-            cities = self.get_pending_cities(limit=batch_size)
-        
-        # Statistics for this batch
-        stats = {
-            "batch_size": batch_size,
-            "processed_cities": 0,
-            "pending_cities": len(cities),
-            "theaters_found": 0,
-            "errors": 0,
-            "batch_start": datetime.now().isoformat(),
-            "status": "completed"  # Default status
-        }
-        
-        if not cities:
-            log_progress("No pending cities found to process")
-            return stats
-        
-        start_time = time.time()
-        
-        # Process each city
-        for i, city in enumerate(cities):
-            city_name = f"{city['name']}, {city['state']}"
-            geoid = city["geoid"]
-            
-            log_progress(f"Processing city {i+1}/{len(cities)}: {city_name} (Population: {city.get('population', 'N/A')})", city_name)
-            
-            try:
-                # Check if timeout is reached
-                if timeout and (time.time() - start_time) > timeout:
-                    log_progress(f"Timeout reached after processing {i} cities", level="warning")
-                    stats["status"] = "timeout"
-                    break
-                
-                # Fetch theaters for this city
-                theaters = self.fetch_theaters(city_name, city)
-                theaters_count = len(theaters)
-                
-                # Save theaters to MongoDB
-                saved_count = self.save_theaters_to_mongodb(theaters, city_geoid=geoid)
-                log_progress(f"Saved {saved_count} theaters to MongoDB", city_name)
-                
-                # Mark city as processed
-                self.mark_city_as_processed(geoid, theaters_found=theaters_count)
-                
-                # Update stats
-                stats["processed_cities"] += 1
-                stats["theaters_found"] += theaters_count
-                
-                # Add delay between cities to avoid rate limits (except for the last city)
-                if i < len(cities) - 1:
-                    # Use delay range from config if it's a dictionary
-                    if isinstance(delay_between_cities, dict):
-                        delay_min = delay_between_cities.get("min", 0.5)
-                        delay_max = delay_between_cities.get("max", 1.0)
-                        actual_delay = random.uniform(delay_min, delay_max)
-                    else:
-                        actual_delay = delay_between_cities
-                        
-                    log_progress(f"Adding delay of {actual_delay:.2f} seconds before next city", level="debug")
-                    time.sleep(actual_delay)
-            
-            except Exception as e:
-                log_progress(f"Error processing city {city_name}: {str(e)}", city_name, "error")
-                # Mark city as processed with error
-                self.mark_city_as_processed(geoid, error=str(e))
-                stats["errors"] += 1
-                
-                if config.processing.error_handling == "abort":
-                    log_progress("Aborting batch due to error handling configuration", level="error")
-                    stats["status"] = "aborted"
-                    break
-        
-        # Calculate time taken
-        end_time = time.time()
-        stats["duration_seconds"] = end_time - start_time
-        stats["batch_end"] = datetime.now().isoformat()
-        
-        # Save progress
-        self.save_progress(stats)
-        
-        # Log summary
-        log_progress(f"Batch processing complete. Processed {stats['processed_cities']} cities, found {stats['theaters_found']} theaters, encountered {stats['errors']} errors")
-        return stats
-    
-    def process_all_cities(self, batch_size=None, delay_between_batches=None, max_batches=None, timeout_per_batch=None):
-        """
-        Process all cities in batches, with the ability to resume from where it left off.
-        
-        Args:
-            batch_size: Number of cities to process in each batch
-            delay_between_batches: Delay in seconds between batches
-            max_batches: Maximum number of batches to process (None = no limit)
-            timeout_per_batch: Timeout in seconds for each batch
-        """
-        # Use config if parameters not provided
-        if batch_size is None:
-            batch_size = self.config.theater.batch_size
-            
-        if delay_between_batches is None:
-            delay_between_batches = self.config.theater.delay_between_batches
-            
-        if max_batches is None:
-            max_batches = self.config.theater.max_batches
-            
-        if timeout_per_batch is None:
-            timeout_per_batch = self.config.theater.timeout_per_batch
-            
-        log_progress(f"Starting processing of all cities in batches of {batch_size}")
-        
-        # Get the total number of cities
-        total_pending = self.cities_collection.count_documents({
-            "processed": {"$ne": True},
-            "population": {"$exists": True, "$ne": None}
-        })
-        
-        # Calculate the estimated number of batches
-        estimated_batches = (total_pending + batch_size - 1) // batch_size
-        max_batches = min(estimated_batches, max_batches) if max_batches else estimated_batches
-        
-        log_progress(f"Found {total_pending} pending cities, estimated {estimated_batches} batches needed")
-        
-        # Summary stats
-        summary = {
-            "total_pending_start": total_pending,
-            "start_time": datetime.now().isoformat(),
-            "batches_completed": 0,
-            "cities_processed": 0,
-            "theaters_found": 0,
-            "errors": 0
-        }
-        
-        # Process batches
-        for batch_num in range(1, max_batches + 1):
-            try:
-                # Get updated pending count
-                pending_count = self.cities_collection.count_documents({
-                    "processed": {"$ne": True},
-                    "population": {"$exists": True, "$ne": None}
-                })
-                
-                if pending_count == 0:
-                    log_progress("No more pending cities, processing complete!")
-                    break
-                    
-                log_progress(f"Starting batch {batch_num}/{max_batches} ({pending_count} cities remaining)")
-                
-                # Process a batch
-                batch_stats = self.process_batch_of_cities(
-                    batch_size_or_cities=batch_size,
-                    timeout=timeout_per_batch
-                )
-                
-                # Update summary
-                summary["batches_completed"] += 1
-                summary["cities_processed"] += batch_stats.get("processed_cities", 0)
-                summary["theaters_found"] += batch_stats.get("theaters_found", 0)
-                summary["errors"] += batch_stats.get("errors", 0)
-                
-                # Save summary progress
-                summary["last_update"] = datetime.now().isoformat()
-                self.save_progress({"type": "summary", **summary})
-                
-                # Log batch summary
-                log_progress(f"Completed batch {batch_num}/{max_batches}: processed {batch_stats.get('processed_cities', 0)} cities, found {batch_stats.get('theaters_found', 0)} theaters")
-                
-                # If batch was aborted and error handling is set to abort, stop processing
-                if batch_stats.get("status") == "aborted" and self.config.processing.error_handling == "abort":
-                    log_progress("Stopping all processing due to batch abort", level="warning")
-                    break
-                
-                # Check if we should continue
-                if batch_num < max_batches and pending_count > 0:
-                    log_progress(f"Adding delay of {delay_between_batches} seconds before next batch")
-                    time.sleep(delay_between_batches)
-                else:
-                    log_progress("All batches completed or no more pending cities")
-                    break
-                    
-            except KeyboardInterrupt:
-                log_progress("Processing interrupted by user", level="warning")
-                break
-            except Exception as e:
-                log_progress(f"Error during batch {batch_num}: {str(e)}", level="error")
-                summary["errors"] += 1
-                
-                # Check if we should abort on error
-                if self.config.processing.error_handling == "abort":
-                    log_progress("Stopping all processing due to error", level="error")
-                    break
-                    
-                # Continue with next batch after a delay
-                log_progress(f"Continuing with next batch after delay of {delay_between_batches} seconds")
-                time.sleep(delay_between_batches)
-        
-        # Calculate final stats
-        summary["end_time"] = datetime.now().isoformat()
-        total_pending_end = self.cities_collection.count_documents({
-            "processed": {"$ne": True},
-            "population": {"$exists": True, "$ne": None}
-        })
-        summary["total_pending_end"] = total_pending_end
-        
-        # Save final summary
-        self.save_progress({"type": "final_summary", **summary})
-        
-        # Export all theaters to JSON
-        self.export_all_theaters_to_json()
-        
-        log_progress(f"Theater data collection complete. Processed {summary['cities_processed']} cities, found {summary['theaters_found']} theaters.")
-    
-    def export_all_theaters_to_json(self, output_file=None):
-        """Export all theaters from MongoDB to a JSON file."""
-        # Use config if output_file not provided
-        if output_file is None:
-            output_file = self.config.output.theaters_json_file
-            
         try:
+            if output_file is None:
+                output_file = config.output.get_file_path("theaters")
+            
             # Get all theaters from MongoDB
             theaters = list(self.theaters_collection.find({}, {"_id": 0}))
             
+            # Create directory if it doesn't exist
+            os.makedirs(os.path.dirname(os.path.abspath(output_file)), exist_ok=True)
+            
             # Save to JSON file
-            self.save_theaters(theaters, output_file)
+            with open(output_file, 'w', encoding='utf-8') as f:
+                if config.output.pretty_json:
+                    json.dump(theaters, f, ensure_ascii=False, indent=2)
+                else:
+                    json.dump(theaters, f, ensure_ascii=False)
             
             # Generate brand summary
             brands = {}
             for theater in theaters:
                 brand = theater.get("brand", "other")
-                if brand not in brands:
-                    brands[brand] = 0
-                brands[brand] += 1
+                brands[brand] = brands.get(brand, 0) + 1
             
+            # Log summary
             log_progress("Theater brand summary:")
             for brand, count in brands.items():
                 log_progress(f"  {brand}: {count} theaters")
-                
+            
+            log_progress(f"Successfully exported {len(theaters)} theaters to {output_file}", level="info")
+            return True
+            
         except Exception as e:
             log_progress(f"Error exporting theaters to JSON: {str(e)}", level="error")
-            if self.config.processing.error_handling == "abort":
-                raise
-    
-    def fetch_theaters_in_cities(self, cities: List[str]) -> List[Dict[str, Any]]:
-        """Fetch theaters in multiple cities and combine results."""
-        all_theaters = []
-        
-        for city in cities:
-            try:
-                log_progress(f"Fetching theaters in {city}", city)
-                city_theaters = self.fetch_theaters(city)
-                all_theaters.extend(city_theaters)
-                
-                # Add delay between cities to avoid rate limits
-                if city != cities[-1]:  # Skip delay after last city
-                    delay = random.uniform(0.5, 1.0)  # Reduced from 2-5 seconds to 0.5-1 second
-                    log_progress(f"Adding delay of {delay:.2f} seconds before next city", city, "debug")
-                    time.sleep(delay)
-            except Exception as e:
-                log_progress(f"Error fetching theaters in {city}: {str(e)}", city, "error")
-                # Continue with next city even if one fails
-        
-        return all_theaters
-    
-    def fetch_and_save_theaters(self, cities: List[str] = None) -> None:
-        """Fetch theaters in specified cities and save them to JSON."""
-        if cities is None:
-            cities = ["Tampa, Florida", "Orlando, Florida", "New York, NY", "Los Angeles, CA"]
-            
-        log_progress(f"Fetching theaters in {len(cities)} cities: {', '.join(cities)}")
-        
-        all_theaters = self.fetch_theaters_in_cities(cities)
-        self.save_theaters(all_theaters)
-        
-        log_progress(f"Completed theater data collection: {len(all_theaters)} theaters saved")
+            return False
 
-
-class ShowtimeGenerator:
-    """Class for generating synthetic showtime data for theaters."""
-    
-    def __init__(self):
-        """Initialize the ShowtimeGenerator with MongoDB connection."""
-        # MongoDB connection
-        try:
-            # Connect to MongoDB
-            log_progress("Connecting to MongoDB for showtime generation...", level="info")
-            self.client = MongoClient(MONGODB_CONNECTION_STRING)
-            # Test connection
-            self.client.admin.command('ping')
-            
-            self.db = self.client[MONGODB_DATABASE]
-            
-            # Initialize collections
-            self.theaters_collection = self.db[MONGODB_COLLECTION_THEATERS]
-            self.movies_collection = self.db[MONGODB_COLLECTION_MOVIES]
-            self.showtimes_collection = self.db[config.showtime_generation.collections["showtimes"]]
-            self.operational_hours_collection = self.db[config.showtime_generation.collections["operational_hours"]]
-            
-            # Create indexes
-            self.showtimes_collection.create_index([
-                ("theater_id", 1),
-                ("movie_id", 1),
-                ("showtime", 1)
-            ])
-            self.operational_hours_collection.create_index("theater_id", unique=True)
-            
-            log_progress("MongoDB connection successful for showtime generation", level="info")
-        except Exception as e:
-            error_msg = str(e)
-            log_progress(f"CRITICAL ERROR: Failed to connect to MongoDB: {error_msg}", level="error")
-            log_progress("Check your MongoDB connection settings", level="error")
-            raise ConnectionError(f"Failed to connect to MongoDB: {error_msg}")
-    
-    def _parse_time(self, time_str: str) -> datetime:
-        """Convert time string to datetime object."""
-        return datetime.strptime(time_str, "%H:%M")
-    
-    def _format_time(self, dt: datetime, format_24h: bool = False) -> str:
-        """Format datetime to time string in 12h or 24h format."""
-        if format_24h:
-            return dt.strftime("%H:%M")
-        return dt.strftime("%I:%M %p")
-    
-    def _generate_operational_hours(self, theater_id: str) -> Dict[str, Any]:
+    def process_batch_of_cities(self, batch_size_or_cities: Union[int, List[Dict]], stats: Dict = None) -> Dict:
         """
-        Generate realistic operational hours for a theater.
+        Process a batch of cities to find theaters.
         
         Args:
-            theater_id: ID of the theater
+            batch_size_or_cities: Either the number of cities to process or a list of city documents
+            stats: Optional stats dictionary to update
             
         Returns:
-            Dictionary containing operational hours
+            Dictionary with processing statistics
         """
-        # Get weekday and weekend ranges from config
-        weekday_config = config.showtime_generation.operating_hours["weekday"]
-        weekend_config = config.showtime_generation.operating_hours["weekend"]
+        if stats is None:
+            stats = {
+                "processed_cities": 0,
+                "theaters_found": 0,
+                "errors": 0,
+                "status": "success"
+            }
         
-        # Generate random times within ranges
-        weekday_opening = self._parse_time(random.choice([
-            weekday_config["opening_time_range"]["min"],
-            weekday_config["opening_time_range"]["max"]
-        ]))
-        weekday_closing = self._parse_time(random.choice([
-            weekday_config["closing_time_range"]["min"],
-            weekday_config["closing_time_range"]["max"]
-        ]))
-        
-        weekend_opening = self._parse_time(random.choice([
-            weekend_config["opening_time_range"]["min"],
-            weekend_config["opening_time_range"]["max"]
-        ]))
-        weekend_closing = self._parse_time(random.choice([
-            weekend_config["closing_time_range"]["min"],
-            weekend_config["closing_time_range"]["max"]
-        ]))
-        
-        # Create operational hours document
-        operational_hours = {
-            "theater_id": theater_id,
-            "weekday": {
-                "opening": {
-                    "12h": self._format_time(weekday_opening),
-                    "24h": self._format_time(weekday_opening, True)
-                },
-                "closing": {
-                    "12h": self._format_time(weekday_closing),
-                    "24h": self._format_time(weekday_closing, True)
-                }
-            },
-            "weekend": {
-                "opening": {
-                    "12h": self._format_time(weekend_opening),
-                    "24h": self._format_time(weekend_opening, True)
-                },
-                "closing": {
-                    "12h": self._format_time(weekend_closing),
-                    "24h": self._format_time(weekend_closing, True)
-                }
-            },
-            "last_updated": datetime.now().isoformat()
-        }
-        
-        return operational_hours
-    
-    def _get_available_movies(self) -> List[Dict[str, Any]]:
-        """
-        Get list of movies available for showings.
-        
-        Returns:
-            List of movie documents
-        """
         try:
-            # Calculate the date range (current date plus release window)
-            current_date = datetime.now()
-            end_date = current_date + timedelta(weeks=config.showtime_generation.showtimes["release_window_weeks"])
+            # Get cities to process
+            if isinstance(batch_size_or_cities, int):
+                # Get next batch of unprocessed cities
+                cities = list(self.cities_collection.find(
+                    {"processed": {"$ne": True}},
+                    limit=batch_size_or_cities
+                ))
+            else:
+                cities = batch_size_or_cities
             
-            # Format dates for comparison
-            current_str = current_date.strftime("%Y-%m-%d")
-            end_str = end_date.strftime("%Y-%m-%d")
-            
-            log_progress(f"Looking for movies with release dates up to {end_str}", level="info")
-            
-            # First, let's see what movies we have
-            total_movies = self.movies_collection.count_documents({})
-            log_progress(f"Total movies in database: {total_movies}", level="info")
-            
-            # Query for movies
-            movies = list(self.movies_collection.find({
-                "release_date": {"$exists": True}  # Just make sure release_date exists
-            }))
-            
-            if not movies:
-                # If no movies found, let's check the date formats in the database
-                sample_movie = self.movies_collection.find_one({})
-                if sample_movie:
-                    log_progress(f"Sample movie release date format: {sample_movie.get('release_date')}", level="info")
-                
-                # Let's get all movies and their release dates for debugging
-                all_dates = list(self.movies_collection.find({}, {"release_date": 1, "title": 1}))
-                log_progress("Movies in database:", level="info")
-                for movie in all_dates:  # Show all movies since we're debugging
-                    log_progress(f"Title: {movie.get('title')}, Release Date: {movie.get('release_date')}", level="info")
-            
-            log_progress(f"Found {len(movies)} available movies", level="info")
-            return movies
-            
-        except Exception as e:
-            log_progress(f"Error in _get_available_movies: {str(e)}", level="error")
-            return []
-    
-    def _generate_showtimes_for_movie(
-        self,
-        movie: Dict[str, Any],
-        theater: Dict[str, Any],
-        operational_hours: Dict[str, Any],
-        buffer_minutes: int
-    ) -> List[Dict[str, Any]]:
-        """
-        Generate showtimes for a movie at a theater.
-        
-        Args:
-            movie: Movie dictionary
-            theater: Theater dictionary
-            operational_hours: Operational hours dictionary
-            buffer_minutes: Buffer time between screenings
-            
-        Returns:
-            List of showtime dictionaries
-        """
-        showtimes = []
-        current_date = datetime.now()
-        end_date = current_date + timedelta(days=30)
-        
-        # Get theater ID from theater document
-        theater_id = theater.get("theater_id")
-        if not theater_id:
-            logger.error(f"Theater {theater.get('name')} missing theater_id")
-            return showtimes
-            
-        while current_date <= end_date:
-            day_of_week = current_date.strftime("%A").lower()
-            day_hours = operational_hours.get(day_of_week, {})
-            
-            if not day_hours:
-                current_date += timedelta(days=1)
-                continue
-                
-            opening_time = self._parse_time(day_hours["opening"])
-            closing_time = self._parse_time(day_hours["closing"])
-            
-            current_time = opening_time
-            while current_time < closing_time:
-                showtime = {
-                    "theater_id": theater_id,  # Use the 9-digit theater ID
-                    "movie_id": movie["id"],
-                    "movie_title": movie["title"],
-                    "date": current_date.strftime("%Y-%m-%d"),
-                    "time": self._format_time(current_time),
-                    "time_24h": self._format_time(current_time, format_24h=True),
-                    "view_type": random.choice(theater.get("features", ["2D"])),
-                    "created_at": datetime.now().isoformat()
-                }
-                showtimes.append(showtime)
-                
-                # Add buffer time
-                current_time += timedelta(minutes=buffer_minutes)
-            
-            current_date += timedelta(days=1)
-        
-        return showtimes
-    
-    def generate_showtimes(self) -> Dict[str, Any]:
-        """
-        Generate synthetic showtimes for all theaters.
-
-        Returns:
-            Dictionary with statistics about the generation process
-        """
-        stats = {
-            "theaters_processed": 0,
-            "movies_processed": 0,
-            "showtimes_generated": 0,
-            "start_time": datetime.now().isoformat()
-        }
-
-        try:
-            # Get all theaters
-            theaters = list(self.theaters_collection.find())
-            if not theaters:
-                log_progress("No theaters found in database", level="error")
+            if not cities:
+                log_progress("No cities to process in this batch", level="info")
                 return stats
-
-            # Get available movies
-            movies = self._get_available_movies()
-            if not movies:
-                log_progress("No recent movies found in database", level="error")
-                return stats
-
-            total_theaters = len(theaters)
-            log_progress(f"Starting showtime generation for {total_theaters} theaters with {len(movies)} available movies", level="info")
-
-            # Process each theater
-            for i, theater in enumerate(theaters, 1):
-                theater_id = theater["unique_id"]
-                theater_name = theater["name"]
-
-                # Generate and save operational hours
-                operational_hours = self._generate_operational_hours(theater_id)
-                self.operational_hours_collection.update_one(
-                    {"theater_id": theater_id},
-                    {"$set": operational_hours},
-                    upsert=True
-                )
-
-                # Determine number of movies for this theater
-                min_movies = config.showtime_generation.showtimes["min_movies_per_theater"]
-                max_movies = config.showtime_generation.showtimes["max_movies_per_theater"]
-
-                if max_movies is None:
-                    max_movies = len(movies)
-
-                num_movies = random.randint(min_movies, max_movies)
-
-                # Select movies for this theater
-                theater_movies = random.sample(movies, num_movies)
-
-                # Generate buffer time for this theater
-                buffer_minutes = random.randint(
-                    config.showtime_generation.showtimes["buffer_time_range"]["min"],
-                    config.showtime_generation.showtimes["buffer_time_range"]["max"]
-                )
-
-                theater_showtimes = 0
-                # Generate showtimes for each movie
-                for movie in theater_movies:
-                    stats["movies_processed"] += 1
-                    showtimes = self._generate_showtimes_for_movie(
-                        movie,
-                        theater,
-                        operational_hours,
-                        buffer_minutes
+            
+            log_progress(f"Processing batch of {len(cities)} cities", level="info")
+            
+            # Process each city
+            for city in cities:
+                try:
+                    city_name = f"{city['name']}, {city.get('state', '')}"
+                    population = city.get('population', 'N/A')
+                    log_progress(f"Processing city: {city_name} (Population: {population:,})", level="info")
+                    
+                    theaters = self.fetch_theaters(city_name, city)
+                    
+                    if theaters:
+                        # Save theaters to MongoDB
+                        saved_count = self.save_theaters_to_mongodb(theaters, city.get('geoid'))
+                        stats["theaters_found"] += saved_count
+                        
+                        # Mark city as processed
+                        self.mark_city_as_processed(city.get('geoid'), saved_count)
+                    else:
+                        # Mark city as processed with 0 theaters
+                        self.mark_city_as_processed(city.get('geoid'), 0)
+                    
+                    stats["processed_cities"] += 1
+                    
+                    # Add delay between cities
+                    delay = random.uniform(
+                        self.config.theater.delay_between_cities["min"],
+                        self.config.theater.delay_between_cities["max"]
                     )
-
-                    # Save showtimes to database
-                    if showtimes:
-                        self.showtimes_collection.insert_many(showtimes)
-                        theater_showtimes += len(showtimes)
-                        stats["showtimes_generated"] += len(showtimes)
-
-                stats["theaters_processed"] += 1
-                progress = (i / total_theaters) * 100
-                log_progress(f"[{progress:.1f}%] Theater {i}/{total_theaters}: Generated {theater_showtimes} showtimes for {theater_name} ({num_movies} movies)", level="info")
-
-            stats["end_time"] = datetime.now().isoformat()
-            duration = datetime.fromisoformat(stats["end_time"]) - datetime.fromisoformat(stats["start_time"])
-            log_progress(f"Showtime generation complete in {duration.total_seconds():.1f}s:", level="info")
-            log_progress(f"- Processed {stats['theaters_processed']} theaters", level="info")
-            log_progress(f"- Generated {stats['showtimes_generated']} total showtimes", level="info")
-            log_progress(f"- Average {stats['showtimes_generated'] / stats['theaters_processed']:.0f} showtimes per theater", level="info")
+                    time.sleep(delay)
+                    
+                except Exception as e:
+                    log_progress(f"Error processing city {city_name}: {str(e)}", level="error")
+                    stats["errors"] += 1
+                    if self.config.processing.error_handling == "abort":
+                        stats["status"] = "aborted"
+                        return stats
+            
             return stats
-
+            
         except Exception as e:
-            log_progress(f"Error generating showtimes: {str(e)}", level="error")
-            stats["error"] = str(e)
-            stats["end_time"] = datetime.now().isoformat()
+            log_progress(f"Error processing batch: {str(e)}", level="error")
+            stats["errors"] += 1
+            stats["status"] = "error"
             return stats
 
 
@@ -1928,7 +1406,7 @@ def fetch_theaters_from_us_cities():
             logger.info(f"Processing batch {i//batch_size + 1}: cities {i+1}-{i+len(batch)} of {len(cities)}")
             
             # Fetch theaters for this batch
-            theaters = theater_data.fetch_theaters_in_cities(city_names)
+            theaters = theater_data.fetch_theaters(city_names)
             
             # Save theaters to MongoDB
             for city_data, city_name in zip(batch, city_names):
@@ -2099,6 +1577,320 @@ def export_collection_to_json(collection: Collection, output_file: str) -> None:
         log_progress(f"Error exporting collection to {output_file}: {str(e)}", level="error")
 
 
+class DataExporter:
+    """Class for exporting data from MongoDB collections to JSON files."""
+    
+    def __init__(self, config: Config):
+        """Initialize the DataExporter with configuration."""
+        self.config = config
+        try:
+            # Connect to MongoDB
+            log_progress("Connecting to MongoDB for data export...", level="info")
+            self.client = MongoClient(MONGODB_CONNECTION_STRING)
+            # Test connection
+            self.client.admin.command('ping')
+            
+            self.db = self.client[MONGODB_DATABASE]
+            
+            # Initialize collections
+            self.movies_collection = self.db[MONGODB_COLLECTION_MOVIES]
+            self.theaters_collection = self.db[MONGODB_COLLECTION_THEATERS]
+            self.showtimes_collection = self.db[self.config.showtime_generation.collections["showtimes"]]
+            
+            log_progress("MongoDB connection successful for data export", level="info")
+        except Exception as e:
+            error_msg = str(e)
+            log_progress(f"CRITICAL ERROR: Failed to connect to MongoDB for export: {error_msg}", level="error")
+            log_progress("Check your MongoDB connection settings:", level="error")
+            log_progress(f"Connection string: {mask_connection_string(MONGODB_CONNECTION_STRING)}", level="error")
+            raise ConnectionError(f"Failed to connect to MongoDB: {error_msg}")
+
+    def _write_documents_to_file(self, documents: List[Dict], file_type: str) -> bool:
+        """Write documents to a JSON file."""
+        try:
+            output_path = self.config.output.get_file_path(file_type)
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            
+            with open(output_path, 'w', encoding='utf-8') as f:
+                if self.config.output.pretty_json:
+                    json.dump(documents, f, indent=2, ensure_ascii=False)
+                else:
+                    json.dump(documents, f, ensure_ascii=False)
+            return True
+        except Exception as e:
+            log_progress(f"Failed to write {file_type} to file: {e}", level="error")
+            return False
+
+    def export_collection(self, collection: Collection, file_type: str) -> bool:
+        """Export a MongoDB collection to JSON file."""
+        try:
+            documents = list(collection.find({}, {'_id': 0}))
+            if not documents:
+                log_progress(f"No documents found in {collection.name} collection", level="warning")
+                return False
+            
+            success = self._write_documents_to_file(documents, file_type)
+            if success:
+                log_progress(f"Successfully exported {len(documents)} {collection.name} to {self.config.output.get_file_path(file_type)}", level="info")
+            return success
+        except Exception as e:
+            log_progress(f"Failed to export {collection.name}: {e}", level="error")
+            return False
+
+    def export_movies(self) -> bool:
+        """Export movies collection to JSON."""
+        return self.export_collection(self.movies_collection, "movies")
+
+    def export_theaters(self) -> bool:
+        """Export theaters collection to JSON."""
+        return self.export_collection(self.theaters_collection, "theaters")
+
+    def export_showtimes(self) -> bool:
+        """Export showtimes collection to JSON."""
+        return self.export_collection(self.showtimes_collection, "showtimes")
+
+    def export_all_data(self) -> bool:
+        """Export all collections to JSON files."""
+        try:
+            log_progress("Starting export of all data collections...", level="info")
+            
+            movies_success = self.export_movies()
+            theaters_success = self.export_theaters()
+            showtimes_success = self.export_showtimes()
+            
+            all_success = movies_success and theaters_success and showtimes_success
+            if all_success:
+                log_progress("Successfully exported all collections", level="info")
+            else:
+                log_progress("Some collections failed to export", level="warning")
+            return all_success
+        except Exception as e:
+            log_progress(f"Failed to export all data: {e}", level="error")
+            return False
+
+
+class ShowtimeGenerator:
+    """Class for generating synthetic showtime data."""
+    
+    def __init__(self):
+        """Initialize the ShowtimeGenerator with configuration."""
+        self.config = get_config()
+        try:
+            # Connect to MongoDB
+            log_progress("Connecting to MongoDB for showtime generation...", level="info")
+            self.client = MongoClient(MONGODB_CONNECTION_STRING)
+            # Test connection
+            self.client.admin.command('ping')
+            
+            self.db = self.client[MONGODB_DATABASE]
+            
+            # Initialize collections
+            self.movies_collection = self.db[MONGODB_COLLECTION_MOVIES]
+            self.theaters_collection = self.db[MONGODB_COLLECTION_THEATERS]
+            self.showtimes_collection = self.db[self.config.showtime_generation.collections["showtimes"]]
+            
+            log_progress("MongoDB connection successful for showtime generation", level="info")
+        except Exception as e:
+            error_msg = str(e)
+            log_progress(f"CRITICAL ERROR: Failed to connect to MongoDB for showtime generation: {error_msg}", level="error")
+            log_progress("Check your MongoDB connection settings:", level="error")
+            log_progress(f"Connection string: {mask_connection_string(MONGODB_CONNECTION_STRING)}", level="error")
+            raise ConnectionError(f"Failed to connect to MongoDB: {error_msg}")
+    
+    def generate_showtimes(self) -> Dict[str, int]:
+        """
+        Generate synthetic showtime data for movies and theaters.
+        
+        Returns:
+            Dict containing statistics about the generation process
+        """
+        stats = {
+            "theaters_processed": 0,
+            "showtimes_generated": 0,
+            "errors": 0,
+            "start_time": datetime.now().isoformat()
+        }
+        
+        try:
+            # Get all theaters
+            theaters = list(self.theaters_collection.find())
+            if not theaters:
+                log_progress("No theaters found in database", level="error")
+                return stats
+            
+            log_progress(f"Found {len(theaters)} theaters to process", level="info")
+            
+            # Get all movies within release window
+            release_window = datetime.now() - timedelta(weeks=self.config.showtime_generation.showtimes["release_window_weeks"])
+            movies = list(self.movies_collection.find({
+                "release_date": {"$exists": True, "$ne": None}
+            }))
+            
+            if not movies:
+                log_progress("No movies found in database", level="error")
+                return stats
+            
+            # Filter movies within release window
+            movies_in_window = []
+            for movie in movies:
+                try:
+                    release_date = datetime.strptime(movie["release_date"], "%Y-%m-%d")
+                    if release_date >= release_window:
+                        movies_in_window.append(movie)
+                except (ValueError, TypeError):
+                    # Skip movies with invalid release dates
+                    continue
+            
+            if not movies_in_window:
+                log_progress(f"No movies found within {self.config.showtime_generation.showtimes['release_window_weeks']} week release window", level="error")
+                return stats
+            
+            log_progress(f"Found {len(movies_in_window)} movies within release window", level="info")
+            
+            # Process each theater
+            for theater_idx, theater in enumerate(theaters, 1):
+                try:
+                    theater_name = theater.get("name", "Unknown Theater")
+                    log_progress(f"Processing theater {theater_idx}/{len(theaters)}: {theater_name}", level="info")
+                    
+                    # Determine number of movies for this theater
+                    min_movies = self.config.showtime_generation.showtimes["min_movies_per_theater"]
+                    max_movies = self.config.showtime_generation.showtimes["max_movies_per_theater"]
+                    
+                    if max_movies is None:
+                        max_movies = len(movies_in_window)
+                    
+                    num_movies = random.randint(min_movies, min(max_movies, len(movies_in_window)))
+                    log_progress(f"  Will show {num_movies} movies at this theater", level="info")
+                    
+                    # Select random movies for this theater
+                    theater_movies = random.sample(movies_in_window, num_movies)
+                    
+                    # Generate showtimes for each movie
+                    theater_showtimes = 0
+                    for movie_idx, movie in enumerate(theater_movies, 1):
+                        movie_title = movie.get("title", "Unknown Movie")
+                        log_progress(f"    Generating showtimes for movie {movie_idx}/{num_movies}: {movie_title}", level="info")
+                        
+                        showtimes = self._generate_movie_showtimes(movie, theater)
+                        if showtimes:
+                            # Save showtimes to MongoDB
+                            result = self.showtimes_collection.insert_many(showtimes)
+                            num_showtimes = len(result.inserted_ids)
+                            theater_showtimes += num_showtimes
+                            stats["showtimes_generated"] += num_showtimes
+                            log_progress(f"      Generated {num_showtimes} showtimes for {movie_title}", level="info")
+                        else:
+                            log_progress(f"      No showtimes generated for {movie_title}", level="warning")
+                    
+                    log_progress(f"  Total showtimes generated for {theater_name}: {theater_showtimes}", level="info")
+                    stats["theaters_processed"] += 1
+                    
+                except Exception as e:
+                    log_progress(f"Error processing theater {theater.get('theater_id')}: {str(e)}", level="error")
+                    stats["errors"] += 1
+            
+            stats["end_time"] = datetime.now().isoformat()
+            log_progress(f"Showtime generation complete. Generated {stats['showtimes_generated']} showtimes for {stats['theaters_processed']} theaters", level="info")
+            return stats
+            
+        except Exception as e:
+            log_progress(f"Error generating showtimes: {str(e)}", level="error")
+            stats["errors"] += 1
+            stats["end_time"] = datetime.now().isoformat()
+            return stats
+    
+    def _generate_movie_showtimes(self, movie: Dict, theater: Dict) -> List[Dict]:
+        """
+        Generate showtimes for a specific movie at a theater.
+        
+        Args:
+            movie: Movie document from MongoDB
+            theater: Theater document from MongoDB
+            
+        Returns:
+            List of showtime documents
+        """
+        showtimes = []
+        runtime = movie.get("runtime", 120)  # Default to 120 minutes if not specified
+        
+        # Get operating hours for each day
+        for day in range(7):  # 0 = Monday, 6 = Sunday
+            day_name = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"][day]
+            hours = theater["contact"]["opening_hours"][day_name].split("-")
+            
+            if not hours or len(hours) != 2:
+                continue
+            
+            opening_time = datetime.strptime(hours[0], "%H:%M").time()
+            closing_time = datetime.strptime(hours[1], "%H:%M").time()
+            
+            # Convert closing time to next day if it's past midnight
+            if closing_time < opening_time:
+                closing_time = datetime.strptime("23:59", "%H:%M").time()
+            
+            # Generate showtimes for this day
+            current_time = opening_time
+            while current_time < closing_time:
+                # Check if we have enough time for the movie
+                if (datetime.combine(datetime.today(), closing_time) - 
+                    datetime.combine(datetime.today(), current_time)).total_seconds() / 60 < runtime:
+                    break
+                
+                # Create showtime document
+                showtime = {
+                    "movie_id": movie["id"],
+                    "theater_id": theater["theater_id"],
+                    "date": (datetime.now() + timedelta(days=day)).strftime("%Y-%m-%d"),
+                    "time": current_time.strftime("%H:%M"),
+                    "runtime": runtime,
+                    "features": self._get_available_features(movie, theater),
+                    "available": True,
+                    "created_at": datetime.now().isoformat()
+                }
+                
+                showtimes.append(showtime)
+                
+                # Add buffer time and movie runtime
+                buffer_time = random.randint(
+                    self.config.showtime_generation.showtimes["buffer_time_range"]["min"],
+                    self.config.showtime_generation.showtimes["buffer_time_range"]["max"]
+                )
+                total_time = runtime + buffer_time
+                
+                # Move to next showtime
+                current_time = (datetime.combine(datetime.today(), current_time) + 
+                              timedelta(minutes=total_time)).time()
+        
+        return showtimes
+    
+    def _get_available_features(self, movie: Dict, theater: Dict) -> List[str]:
+        """
+        Determine available features for a showtime based on movie and theater capabilities.
+        
+        Args:
+            movie: Movie document from MongoDB
+            theater: Theater document from MongoDB
+            
+        Returns:
+            List of available features
+        """
+        features = ["2D"]  # All showings have 2D
+        
+        # Add 3D if available
+        if "3D" in theater["features"]:
+            features.append("3D")
+        
+        # Add 4DX if available
+        if "4DX" in theater["features"]:
+            features.append("4DX")
+        
+        # Add IMAX if available
+        if "IMAX" in theater["features"]:
+            features.append("IMAX")
+        
+        return features
+
 def main():
     """Main function to run the complete data fetching process."""
     # Setup
@@ -2118,9 +1910,6 @@ def main():
         download_images=config.movie.download_images
     )
     log_progress(f"Movie data collection complete. Fetched {movie_stats['fetched']} movies, saved {movie_stats['saved']} to MongoDB.", level="info")
-    
-    # Export movies to JSON
-    export_collection_to_json(movie_data.movies_collection, OUTPUT_JSON_FILE)
         
     # Step 2: Import US cities data (if needed)
     log_progress("STEP 2: IMPORTING US CITIES DATA", level="info")
@@ -2147,27 +1936,18 @@ def main():
             timeout_per_batch=config.theater.timeout_per_batch
         )
     
-    # Step 5: Export all theaters to JSON
-    log_progress("STEP 5: EXPORTING THEATER DATA", level="info")
-    export_collection_to_json(theater_data.theaters_collection, THEATERS_JSON_FILE)
+    # Step 5: Export all data
+    log_progress("STEP 5: EXPORTING ALL DATA", level="info")
+    exporter = DataExporter(config)
+    export_results = exporter.export_all_data()
     
-    # Step 6: Generate showtimes
-    log_progress("STEP 6: GENERATING SHOWTIMES", level="info")
-    generator = ShowtimeGenerator()
-    showtime_stats = generator.generate_showtimes()
-    log_progress(f"Showtime generation complete. Generated {showtime_stats['showtimes_generated']} showtimes for {showtime_stats['theaters_processed']} theaters", level="info")
-    
-    # Export showtimes and operational hours to JSON
-    export_collection_to_json(generator.showtimes_collection, SHOWTIMES_JSON_FILE)
-    export_collection_to_json(generator.operational_hours_collection, OPERATIONAL_HOURS_JSON_FILE)
-    
-    log_progress("DATA FETCHING COMPLETE", level="info")
-
+    log_progress("DATA FETCHING AND EXPORT COMPLETE", level="info")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fetch movie and theater data")
     parser.add_argument("--fetch-movies", action="store_true", help="Only fetch movie data from TMDB API")
     parser.add_argument("--fetch-theaters", action="store_true", help="Only fetch theater data")
+    parser.add_argument("--export-data", action="store_true", help="Only export data from MongoDB to JSON")
     parser.add_argument("--generate-showtimes", action="store_true", help="Generate synthetic showtime data")
     
     args = parser.parse_args()
@@ -2206,10 +1986,11 @@ if __name__ == "__main__":
                 max_batches=get_config().theater.max_batches,
                 timeout_per_batch=get_config().theater.timeout_per_batch
             )
-        
-        # Export theaters to JSON
-        theater_data.export_all_theaters_to_json()
-        log_progress("Theater data collection complete", level="info")
+    elif args.export_data:
+        # Run just the data export process
+        log_progress("Running data export only", level="info")
+        exporter = DataExporter(config)
+        export_results = exporter.export_all_data()
     elif args.generate_showtimes:
         # Run just the showtime generation process
         log_progress("Running showtime generation only", level="info")

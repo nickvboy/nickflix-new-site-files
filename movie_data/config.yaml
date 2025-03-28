@@ -36,7 +36,7 @@ theater_data:
   # Options: population, random, region
   city_selection: "population"
   # Number of cities to process in each batch
-  batch_size: 1
+  batch_size: 1600
   # Delay between cities in seconds (min and max for random range)
   delay_between_cities:
     min: 0.2
@@ -180,12 +180,18 @@ processing:
 
 # Output file settings
 output:
-  # Path to movies JSON output file (relative to script directory)
-  movies_json_file: "movies_data.json"
-  # Path to theaters JSON output file (relative to script directory)
-  theaters_json_file: "theaters.json"
-  # Whether to format JSON output with indentation
-  pretty_json: true
+  # Base directory for all exports
+  export_dir: "data"
+  
+  # File names for exports (will be joined with export_dir)
+  file_names:
+    movies: "new_movies_data.json"
+    theaters: "theaters.json"
+    showtimes: "showtimes.json"
+  
+  # JSON formatting options
+  pretty_json: true  # If true, JSON files will be formatted with indentation
+  export_batch_size: 1000  # Number of documents to process at once during export
 
 # Logging settings
 logging:
@@ -227,7 +233,7 @@ showtime_generation:
       min: 5
       max: 15
     # Number of weeks to look back for movie releases
-    release_window_weeks: 3
+    release_window_weeks: 52
     # Minimum number of movies per theater
     min_movies_per_theater: 1
     # Maximum number of movies per theater (null for no limit)

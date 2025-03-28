@@ -9,6 +9,7 @@ import os
 import yaml
 import logging
 from typing import Dict, Any, List, Optional
+from dataclasses import dataclass
 
 # Default configuration file path
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.yaml")
@@ -418,35 +419,36 @@ class ProcessingConfig:
         return self.config.get(self.section, "error_handling", "skip")
 
 
-class OutputConfig:
+@dataclass
+class Output:
     """Configuration for data output."""
+    export_dir: str
+    file_names: Dict[str, str]
+    pretty_json: bool
+    export_batch_size: int
+
+    def __post_init__(self):
+        """Process the configuration after initialization."""
+        # Ensure export directory is absolute
+        self.export_dir = os.path.abspath(self.export_dir)
+        
+        # Create export directory if it doesn't exist
+        os.makedirs(self.export_dir, exist_ok=True)
     
-    def __init__(self, config_manager: ConfigManager):
+    def get_file_path(self, file_type: str) -> str:
         """
-        Initialize with a ConfigManager.
+        Get the full path for a specific file type.
         
         Args:
-            config_manager: ConfigManager instance
+            file_type: Type of file (movies, theaters, showtimes)
+            
+        Returns:
+            str: Full path to the output file
         """
-        self.config = config_manager
-        self.section = "output"
-        
-    @property
-    def movies_json_file(self) -> str:
-        """Path to the movies JSON output file."""
-        default = os.path.join(os.path.dirname(os.path.abspath(__file__)), "movies_data.json")
-        return self.config.get(self.section, "movies_json_file", default)
-        
-    @property
-    def theaters_json_file(self) -> str:
-        """Path to the theaters JSON output file."""
-        default = os.path.join(os.path.dirname(os.path.abspath(__file__)), "theaters.json")
-        return self.config.get(self.section, "theaters_json_file", default)
-        
-    @property
-    def pretty_json(self) -> bool:
-        """Whether to format JSON output with indentation."""
-        return self.config.get(self.section, "pretty_json", True)
+        if file_type not in self.file_names:
+            raise ValueError(f"Unknown file type: {file_type}")
+            
+        return os.path.join(self.export_dir, self.file_names[file_type])
 
 
 class LoggingConfig:
@@ -552,7 +554,6 @@ class ShowtimeGenerationConfig:
         })
 
 
-# Main configuration object
 class Config:
     """Main configuration object providing access to all configuration sections."""
     
@@ -564,10 +565,24 @@ class Config:
             config_file: Path to the YAML configuration file
         """
         self.config_manager = ConfigManager(config_file)
+        
+        # Initialize output configuration first since it's needed by other sections
+        output_config = self.config_manager.get_section("output")
+        self.output = Output(
+            export_dir=output_config.get("export_dir", "data"),
+            file_names=output_config.get("file_names", {
+                "movies": "movies_data.json",
+                "theaters": "theaters.json",
+                "showtimes": "showtimes.json"
+            }),
+            pretty_json=output_config.get("pretty_json", True),
+            export_batch_size=output_config.get("export_batch_size", 1000)
+        )
+        
+        # Initialize other configurations
         self.movie = MovieConfig(self.config_manager)
         self.theater = TheaterConfig(self.config_manager)
         self.processing = ProcessingConfig(self.config_manager)
-        self.output = OutputConfig(self.config_manager)
         self.logging = LoggingConfig(self.config_manager)
         self.showtime_generation = ShowtimeGenerationConfig(self.config_manager)
     
