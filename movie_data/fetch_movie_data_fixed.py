@@ -23,6 +23,7 @@ from pymongo.database import Database
 from pymongo.operations import UpdateOne
 from tqdm import tqdm
 import argparse
+import concurrent.futures
 
 # Import configuration module
 from config import get_config, reload_config, Config
@@ -1688,6 +1689,7 @@ class ShowtimeGenerator:
             self.movies_collection = self.db[MONGODB_COLLECTION_MOVIES]
             self.theaters_collection = self.db[MONGODB_COLLECTION_THEATERS]
             self.showtimes_collection = self.db[self.config.showtime_generation.collections["showtimes"]]
+            self.cities_collection = self.db[MONGODB_COLLECTION_CITIES]
             
             log_progress("MongoDB connection successful for showtime generation", level="info")
         except Exception as e:
@@ -1697,172 +1699,28 @@ class ShowtimeGenerator:
             log_progress(f"Connection string: {mask_connection_string(MONGODB_CONNECTION_STRING)}", level="error")
             raise ConnectionError(f"Failed to connect to MongoDB: {error_msg}")
     
-    def generate_showtimes(self) -> Dict[str, int]:
+    def _get_theaters_by_state(self, state: str) -> List[Dict]:
         """
-        Generate synthetic showtime data for movies and theaters.
-        
-        Returns:
-            Dict containing statistics about the generation process
-        """
-        stats = {
-            "theaters_processed": 0,
-            "showtimes_generated": 0,
-            "errors": 0,
-            "start_time": datetime.now().isoformat()
-        }
-        
-        try:
-            # Get all theaters
-            theaters = list(self.theaters_collection.find())
-            if not theaters:
-                log_progress("No theaters found in database", level="error")
-                return stats
-            
-            log_progress(f"Found {len(theaters)} theaters to process", level="info")
-            
-            # Get all movies within release window
-            release_window = datetime.now() - timedelta(weeks=self.config.showtime_generation.showtimes["release_window_weeks"])
-            movies = list(self.movies_collection.find({
-                "release_date": {"$exists": True, "$ne": None}
-            }))
-            
-            if not movies:
-                log_progress("No movies found in database", level="error")
-                return stats
-            
-            # Filter movies within release window
-            movies_in_window = []
-            for movie in movies:
-                try:
-                    release_date = datetime.strptime(movie["release_date"], "%Y-%m-%d")
-                    if release_date >= release_window:
-                        movies_in_window.append(movie)
-                except (ValueError, TypeError):
-                    # Skip movies with invalid release dates
-                    continue
-            
-            if not movies_in_window:
-                log_progress(f"No movies found within {self.config.showtime_generation.showtimes['release_window_weeks']} week release window", level="error")
-                return stats
-            
-            log_progress(f"Found {len(movies_in_window)} movies within release window", level="info")
-            
-            # Process each theater
-            for theater_idx, theater in enumerate(theaters, 1):
-                try:
-                    theater_name = theater.get("name", "Unknown Theater")
-                    log_progress(f"Processing theater {theater_idx}/{len(theaters)}: {theater_name}", level="info")
-                    
-                    # Determine number of movies for this theater
-                    min_movies = self.config.showtime_generation.showtimes["min_movies_per_theater"]
-                    max_movies = self.config.showtime_generation.showtimes["max_movies_per_theater"]
-                    
-                    if max_movies is None:
-                        max_movies = len(movies_in_window)
-                    
-                    num_movies = random.randint(min_movies, min(max_movies, len(movies_in_window)))
-                    log_progress(f"  Will show {num_movies} movies at this theater", level="info")
-                    
-                    # Select random movies for this theater
-                    theater_movies = random.sample(movies_in_window, num_movies)
-                    
-                    # Generate showtimes for each movie
-                    theater_showtimes = 0
-                    for movie_idx, movie in enumerate(theater_movies, 1):
-                        movie_title = movie.get("title", "Unknown Movie")
-                        log_progress(f"    Generating showtimes for movie {movie_idx}/{num_movies}: {movie_title}", level="info")
-                        
-                        showtimes = self._generate_movie_showtimes(movie, theater)
-                        if showtimes:
-                            # Save showtimes to MongoDB
-                            result = self.showtimes_collection.insert_many(showtimes)
-                            num_showtimes = len(result.inserted_ids)
-                            theater_showtimes += num_showtimes
-                            stats["showtimes_generated"] += num_showtimes
-                            log_progress(f"      Generated {num_showtimes} showtimes for {movie_title}", level="info")
-                        else:
-                            log_progress(f"      No showtimes generated for {movie_title}", level="warning")
-                    
-                    log_progress(f"  Total showtimes generated for {theater_name}: {theater_showtimes}", level="info")
-                    stats["theaters_processed"] += 1
-                    
-                except Exception as e:
-                    log_progress(f"Error processing theater {theater.get('theater_id')}: {str(e)}", level="error")
-                    stats["errors"] += 1
-            
-            stats["end_time"] = datetime.now().isoformat()
-            log_progress(f"Showtime generation complete. Generated {stats['showtimes_generated']} showtimes for {stats['theaters_processed']} theaters", level="info")
-            return stats
-            
-        except Exception as e:
-            log_progress(f"Error generating showtimes: {str(e)}", level="error")
-            stats["errors"] += 1
-            stats["end_time"] = datetime.now().isoformat()
-            return stats
-    
-    def _generate_movie_showtimes(self, movie: Dict, theater: Dict) -> List[Dict]:
-        """
-        Generate showtimes for a specific movie at a theater.
+        Get all theaters in a specific state.
         
         Args:
-            movie: Movie document from MongoDB
-            theater: Theater document from MongoDB
-            
+            state: State code or full name
+        
         Returns:
-            List of showtime documents
+            List of theater documents
         """
-        showtimes = []
-        runtime = movie.get("runtime", 120)  # Default to 120 minutes if not specified
+        # First get all cities in the state
+        cities = list(self.cities_collection.find({"state": state}))
+        if not cities:
+            log_progress(f"No cities found for state: {state}", level="warning")
+            return []
+            
+        city_geoids = [city["geoid"] for city in cities]
         
-        # Get operating hours for each day
-        for day in range(7):  # 0 = Monday, 6 = Sunday
-            day_name = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"][day]
-            hours = theater["contact"]["opening_hours"][day_name].split("-")
-            
-            if not hours or len(hours) != 2:
-                continue
-            
-            opening_time = datetime.strptime(hours[0], "%H:%M").time()
-            closing_time = datetime.strptime(hours[1], "%H:%M").time()
-            
-            # Convert closing time to next day if it's past midnight
-            if closing_time < opening_time:
-                closing_time = datetime.strptime("23:59", "%H:%M").time()
-            
-            # Generate showtimes for this day
-            current_time = opening_time
-            while current_time < closing_time:
-                # Check if we have enough time for the movie
-                if (datetime.combine(datetime.today(), closing_time) - 
-                    datetime.combine(datetime.today(), current_time)).total_seconds() / 60 < runtime:
-                    break
-                
-                # Create showtime document
-                showtime = {
-                    "movie_id": movie["id"],
-                    "theater_id": theater["theater_id"],
-                    "date": (datetime.now() + timedelta(days=day)).strftime("%Y-%m-%d"),
-                    "time": current_time.strftime("%H:%M"),
-                    "runtime": runtime,
-                    "features": self._get_available_features(movie, theater),
-                    "available": True,
-                    "created_at": datetime.now().isoformat()
-                }
-                
-                showtimes.append(showtime)
-                
-                # Add buffer time and movie runtime
-                buffer_time = random.randint(
-                    self.config.showtime_generation.showtimes["buffer_time_range"]["min"],
-                    self.config.showtime_generation.showtimes["buffer_time_range"]["max"]
-                )
-                total_time = runtime + buffer_time
-                
-                # Move to next showtime
-                current_time = (datetime.combine(datetime.today(), current_time) + 
-                              timedelta(minutes=total_time)).time()
-        
-        return showtimes
+        # Then get all theaters in those cities
+        theaters = list(self.theaters_collection.find({"city_geoid": {"$in": city_geoids}}))
+        log_progress(f"Found {len(theaters)} theaters in state: {state}", level="info")
+        return theaters
     
     def _get_available_features(self, movie: Dict, theater: Dict) -> List[str]:
         """
@@ -1890,113 +1748,318 @@ class ShowtimeGenerator:
             features.append("IMAX")
         
         return features
+    
+    def _generate_theater_showtimes(self, theater: Dict) -> List[Dict]:
+        showtimes = []
+        release_window = datetime.now() - timedelta(weeks=self.config.showtime_generation.showtimes["release_window_weeks"])
+        movies = list(self.movies_collection.find({
+            "release_date": {"$exists": True, "$ne": None}
+        }))
+        
+        if not movies:
+            log_progress(f"No movies found for theater {theater.get('name')}", level="warning")
+            return showtimes
+        
+        movies_in_window = []
+        for movie in movies:
+            try:
+                release_date = datetime.strptime(movie["release_date"], "%Y-%m-%d")
+                if release_date >= release_window:
+                    movies_in_window.append(movie)
+            except (ValueError, TypeError):
+                continue
+        
+        if not movies_in_window:
+            log_progress(f"No movies found within {self.config.showtime_generation.showtimes['release_window_weeks']} week release window for theater {theater.get('name')}", level="warning")
+            return showtimes
+        
+        min_movies = self.config.showtime_generation.showtimes["min_movies_per_theater"]
+        max_movies = self.config.showtime_generation.showtimes["max_movies_per_theater"]
+        
+        if max_movies is None:
+            max_movies = len(movies_in_window)
+        
+        num_movies = random.randint(min_movies, min(max_movies, len(movies_in_window)))
+        theater_movies = random.sample(movies_in_window, num_movies)
+        
+        for movie in theater_movies:
+            try:
+                runtime = movie.get("runtime", 120)
+                
+                for day in range(7):
+                    day_name = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"][day]
+                    hours = theater["contact"]["opening_hours"][day_name].split("-")
+                    
+                    if not hours or len(hours) != 2:
+                        continue
+                    
+                    opening_time = datetime.strptime(hours[0], "%H:%M").time()
+                    closing_time = datetime.strptime(hours[1], "%H:%M").time()
+                    
+                    if closing_time < opening_time:
+                        closing_time = datetime.strptime("23:59", "%H:%M").time()
+                    
+                    current_time = opening_time
+                    while current_time < closing_time:
+                        if (datetime.combine(datetime.today(), closing_time) - 
+                            datetime.combine(datetime.today(), current_time)).total_seconds() / 60 < runtime:
+                            break
+                        
+                        showtime = {
+                            "movie_id": movie["id"],
+                            "theater_id": theater["theater_id"],
+                            "date": (datetime.now() + timedelta(days=day)).strftime("%Y-%m-%d"),
+                            "time": current_time.strftime("%H:%M"),
+                            "runtime": runtime,
+                            "features": self._get_available_features(movie, theater),
+                            "available": True,
+                            "created_at": datetime.now().isoformat()
+                        }
+                        
+                        showtimes.append(showtime)
+                        
+                        buffer_time = random.randint(
+                            self.config.showtime_generation.showtimes["buffer_time_range"]["min"],
+                            self.config.showtime_generation.showtimes["buffer_time_range"]["max"]
+                        )
+                        total_time = runtime + buffer_time
+                        
+                        current_time = (datetime.combine(datetime.today(), current_time) + 
+                                      timedelta(minutes=total_time)).time()
+                        
+            except Exception as e:
+                log_progress(f"Error generating showtimes for movie {movie.get('title')} at theater {theater.get('name')}: {str(e)}", level="error")
+                continue
+        
+        return showtimes
+    
+    def _process_state(self, state: str) -> Dict[str, int]:
+        """
+        Process showtime generation for a specific state.
+        
+        Args:
+            state: State code or full name
+            
+        Returns:
+            Dictionary with processing statistics
+        """
+        stats = {
+            "theaters_processed": 0,
+            "showtimes_generated": 0,
+            "errors": 0
+        }
+        
+        try:
+            # Get theaters in this state
+            theaters = self._get_theaters_by_state(state)
+            if not theaters:
+                return stats
+                
+            log_progress(f"Processing {len(theaters)} theaters in state: {state}", level="info")
+            
+            # Create progress bar for theaters in this state
+            with tqdm(total=len(theaters), desc=f"Processing {state}", unit="theater", leave=False) as pbar:
+                # Process each theater
+                for theater in theaters:
+                    try:
+                        # Generate showtimes for this theater
+                        showtimes = self._generate_theater_showtimes(theater)
+                        if showtimes:
+                            # Save showtimes to MongoDB
+                            self.showtimes_collection.insert_many(showtimes)
+                            stats["showtimes_generated"] += len(showtimes)
+                        stats["theaters_processed"] += 1
+                        pbar.update(1)
+                        pbar.set_postfix({
+                            "showtimes": stats["showtimes_generated"],
+                            "errors": stats["errors"]
+                        })
+                    except Exception as e:
+                        log_progress(f"Error processing theater {theater.get('name')} in {state}: {str(e)}", level="error")
+                        stats["errors"] += 1
+                        pbar.update(1)
+                    
+            return stats
+            
+        except Exception as e:
+            log_progress(f"Error processing state {state}: {str(e)}", level="error")
+            stats["errors"] += 1
+            return stats
+    
+    def generate_showtimes(self, states: Optional[List[str]] = None) -> Dict[str, int]:
+        stats = {
+            "theaters_processed": 0,
+            "showtimes_generated": 0,
+            "errors": 0,
+            "start_time": datetime.now().isoformat()
+        }
+        
+        try:
+            if states is None:
+                if self.config.showtime_generation.state_filter_enabled:
+                    states = self.config.showtime_generation.state_filter_states
+                else:
+                    theaters = list(self.theaters_collection.find())
+                    if not theaters:
+                        log_progress("No theaters found in database", level="error")
+                        return stats
+                    
+                    log_progress(f"Processing {len(theaters)} theaters across all states", level="info")
+                    return self._process_all_theaters(theaters)
+            
+            if not states:
+                log_progress("No states specified for processing", level="error")
+                return stats
+            
+            log_progress(f"Processing showtimes for states: {', '.join(states)}", level="info")
+            
+            if self.config.showtime_generation.parallel_processing_enabled:
+                with concurrent.futures.ThreadPoolExecutor(max_workers=len(states)) as executor:
+                    future_to_state = {executor.submit(self._process_state, state): state for state in states}
+                    
+                    # Create progress bar for states
+                    with tqdm(total=len(states), desc="Processing States", unit="state") as pbar:
+                        for future in concurrent.futures.as_completed(future_to_state):
+                            state = future_to_state[future]
+                            try:
+                                state_stats = future.result()
+                                stats["theaters_processed"] += state_stats["theaters_processed"]
+                                stats["showtimes_generated"] += state_stats["showtimes_generated"]
+                                stats["errors"] += state_stats["errors"]
+                                pbar.update(1)
+                                pbar.set_postfix({
+                                    "theaters": stats["theaters_processed"],
+                                    "showtimes": stats["showtimes_generated"],
+                                    "errors": stats["errors"]
+                                })
+                            except Exception as e:
+                                log_progress(f"Error processing state {state}: {str(e)}", level="error")
+                                stats["errors"] += 1
+                                pbar.update(1)
+            else:
+                # Create progress bar for states
+                with tqdm(total=len(states), desc="Processing States", unit="state") as pbar:
+                    for state in states:
+                        state_stats = self._process_state(state)
+                        stats["theaters_processed"] += state_stats["theaters_processed"]
+                        stats["showtimes_generated"] += state_stats["showtimes_generated"]
+                        stats["errors"] += state_stats["errors"]
+                        pbar.update(1)
+                        pbar.set_postfix({
+                            "theaters": stats["theaters_processed"],
+                            "showtimes": stats["showtimes_generated"],
+                            "errors": stats["errors"]
+                        })
+            
+            stats["end_time"] = datetime.now().isoformat()
+            return stats
+            
+        except Exception as e:
+            log_progress(f"Error in generate_showtimes: {str(e)}", level="error")
+            stats["errors"] += 1
+            stats["end_time"] = datetime.now().isoformat()
+            return stats
+    
+    def _process_all_theaters(self, theaters: List[Dict]) -> Dict[str, int]:
+        """
+        Process showtime generation for all theaters.
+        
+        Args:
+            theaters: List of theater documents
+            
+        Returns:
+            Dictionary with processing statistics
+        """
+        stats = {
+            "theaters_processed": 0,
+            "showtimes_generated": 0,
+            "errors": 0
+        }
+        
+        for theater in theaters:
+            try:
+                # Generate showtimes for this theater
+                showtimes = self._generate_theater_showtimes(theater)
+                if showtimes:
+                    # Save showtimes to MongoDB
+                    self.showtimes_collection.insert_many(showtimes)
+                    stats["showtimes_generated"] += len(showtimes)
+                stats["theaters_processed"] += 1
+            except Exception as e:
+                log_progress(f"Error processing theater {theater.get('name')}: {str(e)}", level="error")
+                stats["errors"] += 1
+                
+        return stats
 
 def main():
-    """Main function to run the complete data fetching process."""
-    # Setup
-    initialize_logging()
-    
-    # Get configuration
-    config = get_config()
-    
-    # Step 1: Always fetch movie data
-    log_progress("STEP 1: FETCHING MOVIE DATA", level="info")
-    movie_data = MovieData()
-    
-    # Always fetch movies each time the program runs
-    logger.info("Fetching movie data from TMDB API...")
-    movie_stats = movie_data.fetch_and_save_movies(
-        count=config.movie.count,
-        download_images=config.movie.download_images
-    )
-    log_progress(f"Movie data collection complete. Fetched {movie_stats['fetched']} movies, saved {movie_stats['saved']} to MongoDB.", level="info")
-        
-    # Step 2: Import US cities data (if needed)
-    log_progress("STEP 2: IMPORTING US CITIES DATA", level="info")
-    theater_data = TheaterData()
-    theater_data.import_cities_to_mongodb()
-
-    # Step 3: Determine city selection strategy
-    log_progress("STEP 3: SELECTING THEATER DATA COLLECTION STRATEGY", level="info")
-    city_selection = config.theater.city_selection
-    logger.info(f"Using city selection strategy: {city_selection}")
-    
-    # Step 4: Process cities based on selection strategy
-    log_progress("STEP 4: PROCESSING CITIES FOR THEATERS", level="info")
-    if city_selection == "random":
-        logger.info("Using random sampling of cities")
-        process_random_cities(batch_size=config.theater.batch_size)
-    else:
-        # Default to population-based processing
-        logger.info("Using population-based city processing")
-        theater_data.process_all_cities(
-            batch_size=config.theater.batch_size,
-            delay_between_batches=config.theater.delay_between_batches,
-            max_batches=config.theater.max_batches,
-            timeout_per_batch=config.theater.timeout_per_batch
-        )
-    
-    # Step 5: Export all data
-    log_progress("STEP 5: EXPORTING ALL DATA", level="info")
-    exporter = DataExporter(config)
-    export_results = exporter.export_all_data()
-    
-    log_progress("DATA FETCHING AND EXPORT COMPLETE", level="info")
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Fetch movie and theater data")
-    parser.add_argument("--fetch-movies", action="store_true", help="Only fetch movie data from TMDB API")
-    parser.add_argument("--fetch-theaters", action="store_true", help="Only fetch theater data")
-    parser.add_argument("--export-data", action="store_true", help="Only export data from MongoDB to JSON")
-    parser.add_argument("--generate-showtimes", action="store_true", help="Generate synthetic showtime data")
+    parser = argparse.ArgumentParser(description="Movie and Theater Data Collection Tool")
+    parser.add_argument("--movies-only", action="store_true", help="Only fetch movie data")
+    parser.add_argument("--theaters-only", action="store_true", help="Only fetch theater data")
+    parser.add_argument("--export-data", action="store_true", help="Only export data to JSON")
+    parser.add_argument("--generate-showtimes", action="store_true", help="Only generate showtimes")
+    parser.add_argument("--states", type=str, help="Comma-separated list of states to process (e.g., 'CA,NY,TX' or 'California,New York,Texas')")
+    parser.add_argument("--config", type=str, help="Path to custom configuration file")
     
     args = parser.parse_args()
     
-    # Initialize logging
-    initialize_logging()
-    
-    if args.fetch_movies:
-        # Run just the movie fetching process
-        log_progress("Running movie data collection only", level="info")
-        movie_data = MovieData()
-        movie_stats = movie_data.fetch_and_save_movies(
-            count=get_config().movie.count,
-            download_images=get_config().movie.download_images
-        )
-        log_progress(f"Movie data collection complete. Fetched {movie_stats['fetched']} movies, saved {movie_stats['saved']} to MongoDB.", level="info")
-    elif args.fetch_theaters:
-        # Run just the theater fetching process
-        log_progress("Running theater data collection only", level="info")
-        theater_data = TheaterData()
-        theater_data.import_cities_to_mongodb()
-        
-        # Use configured city selection strategy
-        city_selection = get_config().theater.city_selection
-        log_progress(f"Using city selection strategy: {city_selection}", level="info")
-        
-        if city_selection == "random":
-            log_progress("Using random sampling of cities", level="info")
-            process_random_cities(batch_size=get_config().theater.batch_size)
-        else:
-            # Default to population-based processing
-            log_progress("Using population-based city processing", level="info")
-            theater_data.process_all_cities(
-                batch_size=get_config().theater.batch_size,
-                delay_between_batches=get_config().theater.delay_between_batches,
-                max_batches=get_config().theater.max_batches,
-                timeout_per_batch=get_config().theater.timeout_per_batch
-            )
-    elif args.export_data:
-        # Run just the data export process
-        log_progress("Running data export only", level="info")
-        exporter = DataExporter(config)
-        export_results = exporter.export_all_data()
-    elif args.generate_showtimes:
-        # Run just the showtime generation process
-        log_progress("Running showtime generation only", level="info")
-        generator = ShowtimeGenerator()
-        stats = generator.generate_showtimes()
-        log_progress(f"Showtime generation complete. Generated {stats['showtimes_generated']} showtimes for {stats['theaters_processed']} theaters", level="info")
+    if args.config:
+        config = reload_config(args.config)
     else:
-        # No arguments provided, run the complete process
+        config = get_config()
+    
+    config.initialize_logging()
+    
+    try:
+        if args.movies_only:
+            log_progress("Running movie data collection only", level="info")
+            fetch_movie_data()
+        elif args.theaters_only:
+            log_progress("Running theater data collection only", level="info")
+            theater_data = TheaterData()
+            theater_data.process_all_cities(
+                batch_size=config.theater.batch_size,
+                delay_between_batches=config.theater.delay_between_batches,
+                max_batches=config.theater.max_batches,
+                timeout_per_batch=config.theater.timeout_per_batch
+            )
+        elif args.export_data:
+            log_progress("Running data export only", level="info")
+            exporter = DataExporter(config)
+            export_results = exporter.export_all_data()
+        elif args.generate_showtimes:
+            log_progress("Running showtime generation only", level="info")
+            generator = ShowtimeGenerator()
+            
+            states = None
+            if args.states:
+                states = [state.strip() for state in args.states.split(",")]
+                log_progress(f"Processing showtimes for states: {', '.join(states)}", level="info")
+            
+            stats = generator.generate_showtimes(states)
+            log_progress(f"Showtime generation complete. Generated {stats['showtimes_generated']} showtimes for {stats['theaters_processed']} theaters", level="info")
+        else:
+            log_progress("Running complete data collection process", level="info")
+            
+            fetch_movie_data()
+            
+            theater_data = TheaterData()
+            theater_data.process_all_cities(
+                batch_size=config.theater.batch_size,
+                delay_between_batches=config.theater.delay_between_batches,
+                max_batches=config.theater.max_batches,
+                timeout_per_batch=config.theater.timeout_per_batch
+            )
+            
+            generator = ShowtimeGenerator()
+            stats = generator.generate_showtimes()
+            log_progress(f"Showtime generation complete. Generated {stats['showtimes_generated']} showtimes for {stats['theaters_processed']} theaters", level="info")
+            
+            exporter = DataExporter(config)
+            export_results = exporter.export_all_data()
+            
+    except Exception as e:
+        log_progress(f"Error in main process: {str(e)}", level="error")
+        raise
+
+if __name__ == "__main__":
         main()

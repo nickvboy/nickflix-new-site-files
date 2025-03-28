@@ -246,6 +246,11 @@ showtime_generation:
       start: "17:00"  # 5:00 PM
       end: "22:00"    # 10:00 PM
       density_multiplier: 1.5  # 50% more showings during peak hours
+    # State filtering configuration
+    state_filter:
+      enabled: true  # Whether to filter by state
+      states: ["FL", "AL", "GA"]      # List of state codes or full names to filter by
+      parallel_processing: true  # Whether to process states in parallel
   
   # MongoDB collection names
   collections:

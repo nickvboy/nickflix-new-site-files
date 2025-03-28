@@ -542,6 +542,11 @@ class ShowtimeGenerationConfig:
                 "start": "17:00",
                 "end": "22:00",
                 "density_multiplier": 1.5
+            },
+            "state_filter": {
+                "enabled": False,
+                "states": [],
+                "parallel_processing": True
             }
         })
     
@@ -552,6 +557,21 @@ class ShowtimeGenerationConfig:
             "showtimes": "showtimes",
             "operational_hours": "operational_hours"
         })
+    
+    @property
+    def state_filter_enabled(self) -> bool:
+        """Whether state filtering is enabled."""
+        return self.showtimes.get("state_filter", {}).get("enabled", False)
+    
+    @property
+    def state_filter_states(self) -> List[str]:
+        """List of states to filter by."""
+        return self.showtimes.get("state_filter", {}).get("states", [])
+    
+    @property
+    def parallel_processing_enabled(self) -> bool:
+        """Whether parallel state processing is enabled."""
+        return self.showtimes.get("state_filter", {}).get("parallel_processing", True)
 
 
 class Config:
